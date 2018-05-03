@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Register
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page13">
+  <form [formGroup]="formgroup" id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)">
+    <!-- <form id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)"> -->
+   
+     <ion-list id="register-list11">
+      <ion-item id="register-input8">
+        <ion-label>
+          Phone Number
+        </ion-label>
+        <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder=""></ion-input>
+        <!-- <ion-input type="number" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="order.Id"></ion-input> -->
+      </ion-item>
+      <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
+        <p style="color:red;"> *MobileNumber is required</p>
+      </ion-item>
+    </ion-list>   
+    <button [disabled]="registrationForm.invalid"  id="register-button7" ion-button color="positive" block>
+      Search Bank
+    </button>
+    
+  </form>
+  <div class="row" *ngIf="userClaims">
+    <div class="col s12 m7">
+      <div class="card">
+          <!--interpolation-->
+        <div class="card-content">     
+        <div *ngFor="let order of userClaims" (click)="OnPress(order.Id)" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+        
+        <span>Name : {{ order.Name | json }}</span> <br>
+        <!-- <ion-item id="register-input9">
+          <ion-label>
+            Name
+          </ion-label>
+          <ion-input type="text" placeholder="" name="Name" #Name="ngModel" [(ngModel)]="order.Name"></ion-input>
+        </ion-item> -->
+        <span>Address : {{ order.Address }}</span> <br>
+        <!-- <ion-item id="register-input9">
+          <ion-label>
+            Address
+          </ion-label>
+          <ion-input type="text" placeholder="" name="Address" #Address="ngModel" [(ngModel)]="order.Address"></ion-input>
+        </ion-item> -->
+      </div> 
+  
+        </div>       
+      </div>
+    </div>
+    <!-- <button id="register-button8" ion-button color="positive" type="button" (click)="OnPress()" block>
+      Request OTP
+    </button> -->
+  </div>
+</ion-content>

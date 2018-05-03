@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Favourites  {{ActiveBankName}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+      <ion-item color="assertive" id="favourites-list-item28" (click)="OnClick(Id)">
+          <ion-thumbnail item-start>
+              <img src="assets/imgs/thumbnail-totoro.png">
+            </ion-thumbnail>
+        <h2>New Recharge</h2>
+        </ion-item>
+        <div class="row" *ngIf="favourites">
+          <ion-item *ngFor="let order of favourites">
+    <button ion-item  (click)="OnPress(order)">
+      {{ order.NickName }}
+    </button>
+    <button ion-button clear item-end (click)="OnSubmit(order)">Delete</button>
+  </ion-item>
+  </div>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Change Bank  {{ActiveBankName}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page3">
+  <div style="background-color:red" class="col s12 m7">
+    <div class="card">
+      <div class="card-content">
+    <h2 style="text-align:center">
+      My Banks
+    </h2>
+      </div>
+    </div>
+        </div>
+        <ion-list>
+            <!-- <div class="row" *ngIf="userClaims">
+                <ion-item *ngFor="let order of userClaims" (click)="OnPress()">
+                    <ion-thumbnail item-start>
+                        <img src="assets/imgs/thumbnail-totoro.png">
+                      </ion-thumbnail>
+                  <h2>{{ order.Name }}</h2>
+                  <span>{{ order.Address }}</span>
+         <div *ngIf="(order.Id!=Active)">
+          <button ion-button clear item-end (click)="OnSubmit(order)">Select</button>       </div>
+         <div *ngIf="(order.Id==Active)">
+          <ion-icon name='rose' item-end color="secondary"></ion-icon>
+         </div>
+        </ion-item>
+        </div> -->
+              <ion-item *ngFor="let order of Tenants" (click)="OnPress()">
+                  <ion-thumbnail item-start>
+                      <img src="assets/imgs/thumbnail-totoro.png">
+                    </ion-thumbnail>
+                <h2>{{ order.Name }}</h2>
+                <span>{{ order.Address }}</span>
+        <!-- <button ion-button clear item-end (click)="OnSubmit(order)">Delete</button> -->
+       <!-- <div *ngIf="showIcon">
+        <ion-icon name='rose' item-end color="secondary"></ion-icon>
+       </div> -->
+       <div *ngIf="(order.TenantId!=Active)">
+        <button ion-button clear item-end (click)="OnPress(order)">Select</button>       
+       </div>
+       <div *ngIf="(order.TenantId==Active)">
+        <ion-icon name='rose' item-end color="secondary"></ion-icon>
+       </div>
+      </ion-item>
+      </ion-list>
+      <button  id="register-button7" ion-button color="positive" (click)="OnClick()" block>
+        Add Bank Account
+      </button>
+      <div *ngIf="showHide">
+        <form id="mobileRecharge-form2" (ngSubmit)="OnSubmit(MobileRecharegeform)" #MobileRechargeform="ngForm">
+              <ion-item id="mobileRecharge-select1">
+                <ion-label>Select Your Bank</ion-label>
+                  <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="tenant.TenantId" (ionChange)="OnSubmit(tenant.TenantId)">
+                    <ion-option *ngFor="let order of userClaims" [value]="order.Id">
+                      {{order.Name}}
+                      <!-- {{order.Address}} -->
+                    </ion-option>
+                </ion-select> 
+            </ion-item>         
+          </form>
+      </div>
+</ion-content>

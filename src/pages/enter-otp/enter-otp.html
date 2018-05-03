@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Enter OTP
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page15">
+  <form [formGroup]="formgroup" id="enterOTP-form4" #enterOTPForm="ngForm" (ngSubmit)="OnSubmit(OTPNo.value)">
+    <ion-list id="enterOTP-list18">
+      <ion-item id="enterOTP-input12">
+        <ion-label>
+          OTP
+        </ion-label>
+        <ion-input formControlName="otp" type="number" #OTPNo ngModel name="OTPNo" placeholder=""></ion-input>
+        <!-- <ion-input type="number" placeholder="" name="OTPNo" #OTPNo="ngModel" [(ngModel)]="order.Id"></ion-input> -->
+     
+      </ion-item>
+      <ion-item *ngIf="otp.hasError('required') && otp.touched">
+        <p style="color:red;"> *OTP is required</p>
+      </ion-item>
+    </ion-list>
+    <div class="spacer" style="height:40px;" id="enterOTP-spacer8"></div>
+    <button [disabled]="enterOTPForm.invalid" id="enterOTP-button8" ion-button color="positive" block>
+      Submit
+    </button>
+  </form>
+  <div *ngIf="showHide">
+  <form id="enterOTP-form2" [formGroup]="SavePasswordForm"  #NewPasswordEntryForm="ngForm" (ngSubmit)="OnPress(CPassword.value)">
+          <ion-item id="enterOTP-input3">
+      <ion-label>
+        New Password
+      </ion-label>
+      <!-- <ion-input type="text" placeholder="" name="NPassword" #NPassword="ngModel" [(ngModel)]="npef.NPassword"></ion-input> -->
+      <ion-input formControlName="password" type="text" required #NPassword ngModel name="NPassword" placeholder=""></ion-input>      
+    </ion-item>
+    <ion-item *ngIf="password.hasError('required') && password.touched">
+      <p style="color:red;"> *Password with minimum 8 characters is required</p>
+    </ion-item>
+    <ion-item id="enterOTP-input5">
+      <ion-label>
+        Confirm Password
+      </ion-label>
+      <!-- <ion-input type="text" placeholder="" name="CPassword" #CPassword="ngModel" [(ngModel)]="npef.CPassword"></ion-input> -->
+      <ion-input formControlName="confirmpwd" type="password" required Equalvalidate="password" #CPassword ngModel name="CPassword" placeholder=""></ion-input>
+      <div [hidden]="CPassword.valid || CPassword.pristine" class="alert alert-danger">
+        Password mismatch
+    </div>
+    </ion-item>
+    <ion-item *ngIf="confirmpwd.hasError('required') && confirmpwd.touched">
+      <p style="color:red;"> *Confirmation is required</p>
+    </ion-item>
+    <button [disabled]="NewPasswordEntryForm.invalid" id="enterOTP-button9" ion-button color="positive" block>
+      Save Password
+    </button>
+  </form>
+  <!-- <span *ngIf="!NewPasswordEntryForm.SavePasswordForm.valid" class="help-block text-danger">
+    <div *ngIf="NewPasswordEntryForm.SavePasswordForm?.errors?.notSame">
+      The two passwords aren't the same
+    </div>
+  </span> -->
+  <div style="color:red;" *ngIf="NewPasswordEntryForm.errors?.notSame"><span>Passwords do not match</span></div>
+</div>
+</ion-content>

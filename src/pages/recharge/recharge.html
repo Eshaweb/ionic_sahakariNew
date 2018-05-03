@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Recharge   {{ActiveBankName}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page7">
+  <!-- <ion-list id="recharge-list6" >
+    <ion-item color="assertive" id="recharge-list-item21">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Pre-Paid
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item22">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Post-Paid
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item23">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        DTH
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item24">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Data Card
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item25">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Electricity Bill
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item26">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Land Line
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item27">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Water Bill
+      </h2>
+    </ion-item>
+  </ion-list> -->
+
+
+
+  <ion-list id="recharge-list6" *ngFor="let row of categories">
+    <ion-item color="assertive" id="recharge-list-item21" (click)="OnOperatorSelection(row.Id)">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        {{row.Operator}}
+      </h2>
+    </ion-item>
+  </ion-list>
+</ion-content>

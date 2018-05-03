@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Banking {{ActiveBankName}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page4">
+  <ion-list id="banking-list4">
+    <ion-item color="assertive" id="banking-list-item13" (click)="OnFundTransfer()">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Fund Transfer
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="banking-list-item15" (click)="OnBalanceEnquiry()">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Balance Inquiry
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="banking-list-item16" (click)="OnMiniStatement()">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Mini Statement
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="banking-list-item14">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Stop Cheque
+      </h2>
+    </ion-item>
+  </ion-list>
+</ion-content>

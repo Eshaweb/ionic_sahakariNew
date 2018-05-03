@@ -1,0 +1,124 @@
+<!-- <ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Home
+    </ion-title>
+  </ion-navbar>
+</ion-header> -->
+<!-- <ion-content padding id="page1">
+  <ion-list id="home-list2">
+    <ion-item color="assertive" on-click="goToBanking()" id="home-list-item6">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Banking
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" on-click="goToMobileRecharge()" id="home-list-item9">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Recharge/Payment
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="home-list-item8">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Reports
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="home-list-item7">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Settings
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="home-list-item10">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Help
+      </h2>
+    </ion-item>
+    <ion-item color="assertive" id="home-list-item11">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Products
+      </h2>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<div class="row" *ngIf="userClaims">
+  <div class="col s12 m7">
+    <div class="card"> -->
+      <!-- <div class="card-content">
+        <span>Username :{{userClaims.UserName}}</span>
+        <br>
+        <span>Email : {{userClaims.Email}}</span>
+        <br>
+        <span>Full Name : {{userClaims.FirstName}} {{userClaims.LastName}}</span>
+        <br>
+        <span>Logged On : {{userClaims.LoggedOn}}</span>
+      </div> -->
+      
+      <!-- <div class="card-content"> -->
+        <!-- <span>Username :{{userClaims.Name}}</span>
+        <br>
+        <span>Email : {{userClaims.Address}}</span>
+        <br> -->
+        <!-- <div *ngFor="let order of userClaims" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+          <span> OrderNumber : {{ order }}</span> <br>
+          <span>P_O_Number : {{ order}}</span> <br>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  -->
+
+<!-- <form id="home-form2" (ngSubmit)="OnSubmit(userForm)" #userForm="ngForm">
+  <ion-item id="home-input7">
+    <ion-label>
+      First Name
+    </ion-label>
+    <ion-input type="text" placeholder="" name="FirstName" #FirstName="ngModel" [(ngModel)]="person.FirstName" ></ion-input>
+  </ion-item>
+  <ion-item id="home-input4">
+    <ion-label>
+      Last Name
+    </ion-label>
+    <ion-input type="text" placeholder="" name="LastName" #LastName="ngModel" [(ngModel)]="person.LastName"></ion-input>
+  </ion-item>
+  <button id="home-button1" ion-button color="positive" block>
+    Submit
+  </button>
+</form> -->
+
+<div class="row" *ngIf="userClaims">
+  <div class="col s12 m7">
+    <div class="card">
+        <!--interpolation-->
+      <div class="card-content">     
+           <div *ngFor="let order of userClaims" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+      <span> Id : {{ order.Id |json }}</span> <br>
+      <span>Name : {{ order.Name | json }}</span> <br>
+      <span>Address : {{ order.Address }}</span> <br>
+
+    </div> 
+
+      </div>       
+    </div>
+  </div>
+</div>

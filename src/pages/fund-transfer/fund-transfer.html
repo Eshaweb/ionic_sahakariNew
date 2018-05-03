@@ -1,0 +1,152 @@
+<ion-header>
+    <ion-navbar>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>
+        Fund-Transfer  {{ActiveBankName}}
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content padding id="page3">
+    <div *ngIf="ShowHide">
+          <ion-card>
+
+            <ion-card-header style="background-color:red">
+              From Account
+            </ion-card-header>
+          
+            <ion-card-content>
+              Bank Name: {{HeadName}}
+              <br/>
+              Acount No: {{AcNo}}
+            </ion-card-content>
+          
+          </ion-card>
+          <br/>
+          <ion-card>
+
+            <ion-card-header style="background-color:red">
+              To Account
+            </ion-card-header>
+          <br/>
+            <ion-card-content>
+                <form [formGroup]="formgroup1" id="register-form3" #fundtransferForm1="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)">
+
+              <ion-list id="register-list11">
+                <ion-item id="register-input8">
+                  <ion-label>
+                    Phone Number
+                  </ion-label>
+                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder=""></ion-input>
+                  <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
+                </ion-item>
+                <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
+                    <p style="color:red;"> *MobileNumber is required</p>
+                  </ion-item>
+              </ion-list> 
+              <button [disabled]="fundtransferForm1.invalid" id="register-button7" ion-button color="positive" block>
+                  Search
+                </button>
+                </form>          
+            </ion-card-content>
+              <div *ngIf="fundTransferResponse">
+                <ion-card-content>
+                  Name: {{fundTransferResponse.Name}}
+                  <br/>
+                  Acount No: {{fundTransferResponse.AcNo}}
+                </ion-card-content>
+              </div>
+              <br/>
+        </ion-card>
+        <br/>
+        <ion-card>
+
+          <ion-card-content>
+              <form [formGroup]="formgroup2" id="register-form4" #fundtransferForm2="ngForm" (ngSubmit)="OnClick(Amount.value)">
+            <ion-list id="register-list11">
+              <ion-item id="register-input8">
+                <ion-label>
+                  Amount
+                </ion-label>
+                <ion-input formControlName="amount" type="text" #Amount ngModel name="Amount" placeholder=""></ion-input>
+              </ion-item>
+            
+            </ion-list>
+            <button [disabled]="fundtransferForm2.invalid" id="register-button8" ion-button color="positive" block>
+                Next
+              </button>
+            </form>               
+          </ion-card-content>
+            
+        </ion-card>
+      </div>
+        <div *ngIf="confirm">
+          <ion-card>
+      
+            <ion-card-header style="background-color:red">
+              From Account
+            </ion-card-header>
+          
+            <ion-card-content>
+              Bank Name: {{HeadName}}
+              <br/>
+              Acount No: {{AcNo}}
+            </ion-card-content>
+          
+          </ion-card>
+          <br/>
+          <ion-card>
+      
+            <ion-card-header style="background-color:red">
+              To Account
+            </ion-card-header>
+          <br/>
+          <ion-card-content>
+            Name: {{confirm.Name}}
+            <br/>
+            Acount No: {{confirm.AcNo}}
+            <br/>
+            Amount: {{Rs}}
+          </ion-card-content>
+            <button id="register-button9" (click)="OnPress()" ion-button color="positive" block>
+              Confirm
+            </button>
+        </ion-card>
+        </div>
+  </ion-content>
+  <!-- <ion-content padding id="page4">
+      <div *ngIf="confirm">
+    <ion-card>
+
+      <ion-card-header style="background-color:red">
+        From Account
+      </ion-card-header>
+    
+      <ion-card-content>
+        Bank Name: {{HeadName}}
+        <br/>
+        Acount No: {{AcNo}}
+      </ion-card-content>
+    
+    </ion-card>
+    <br/>
+    <ion-card>
+
+      <ion-card-header style="background-color:red">
+        To Account
+      </ion-card-header>
+    <br/>
+    <ion-card-content>
+      Name: {{confirm.Name}}
+      <br/>
+      Acount No: {{confirm.AcNo}}
+      <br/>
+      Amount: {{Amount}}
+    </ion-card-content>
+      <button id="register-button9" ion-button color="positive" block>
+        Confirm
+      </button>
+  </ion-card>
+  </div>
+</ion-content> -->
