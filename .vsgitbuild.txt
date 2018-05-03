@@ -1,0 +1,6 @@
+{
+    "username": "[ShaileshBhatNP]",
+    "password": "[Parathpare3*]",
+    "strictTls": true,
+    "pooling": 10
+}
