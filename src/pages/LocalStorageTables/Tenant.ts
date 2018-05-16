@@ -2,8 +2,8 @@ export class Tenant{
   
   [x: string]: any;
     Id:string;
-    TenantId:string;
+    //TenantId:string;
     Name:string;
     Address:string;
-    Logo:string;
+    IconHtml:string;
 }

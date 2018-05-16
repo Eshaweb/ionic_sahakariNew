@@ -17,7 +17,6 @@ import { RegisterService } from '../pages/services/app-data.service';
 import { SCRequest } from '../pages/View Models/SCRequest';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
-//import { RechargePage } from '../pages/recharge/recharge';
 
 @Component({
   templateUrl: 'app.html'
@@ -41,11 +40,8 @@ SCReq: any;
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-       //if(localStorage["UserName"]||localStorage["TenantName"]==null){
-        //if(localStorage.getItem('TenantName')==null||localStorage.getItem('UserName')==null){
-  //localStorage.removeItem(this.constant.GetUserKey.UniqueKey);
+        //localStorage.removeItem(this.constant.GetUserKey.UniqueKey);
         //  localStorage.removeItem("User");
-        //  StorageService.RemoveItem(this.constant.SetUser);
         //  StorageService.RemoveItem("Tenant");
         //  StorageService.RemoveItem("DigiParty");
         //  StorageService.RemoveItem("OS");
@@ -57,11 +53,9 @@ SCReq: any;
         //  StorageService.RemoveItem("lastAction");
 
 
-         //localStorage.clear();
+        //localStorage.clear();
 
-
-          //if(StorageService.GetItem(param1)==null||StorageService.GetItem(param2)==null){
-            if(StorageService.GetItem(this.constant.DB.User)==null||StorageService.GetItem(this.constant.DB.Tenant)==null){
+      if(StorageService.GetItem(this.constant.DB.User)==null){
           this.rootPage=RegisterPage;
       }
      

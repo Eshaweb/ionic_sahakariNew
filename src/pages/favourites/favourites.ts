@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { SelectOperatorPage } from '../select-operator/select-operator';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { StorageService } from '../services/Storage_Service';
 import { FavouriteItem } from '../LocalStorageTables/FavouriteItem';
 import { Favourites } from '../LocalStorageTables/Favourites';
 import { ConstantService } from '../services/Constants';
+import { Tenant } from '../LocalStorageTables/Tenant';
 @Component({
   selector: 'page-favourites',
   templateUrl: 'favourites.html'
 })
 export class FavouritesPage implements OnInit{
+  Tenant: Tenant;
+  Tenants: Tenant;
   newfavourites: Favourites;
   favourites: Favourites;
   nkname: any;
@@ -18,13 +21,18 @@ export class FavouritesPage implements OnInit{
   public firstParam;
   TId: any;
   ParentId: any;
-  constructor(public constant:ConstantService,public navCtrl: NavController,
+  constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController,
     public navParams: NavParams) {
     }
 ngOnInit(){
   this.ParentId=this.navParams.get('ParentId');
-  this.ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenant;
-  switch (this.ParentId) {
+  
+  var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+     this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+     this.ActiveBankName=this.Tenant.Name;  
+     
+     switch (this.ParentId) {
     case "S1":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));      
     break;
@@ -47,41 +55,27 @@ ngOnInit(){
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));  
   }
     
-  
-  //this.nkname=JSON.parse(StorageService.GetItem("FavouriteKey")).NickName;
   if(StorageService.GetItem("Favourite")!=null){
     this.nkname=JSON.parse(StorageService.GetItem("Favourite")).NickName;
   }
 }
-  OnClick(ParentId){
+OnNewRecharge(ParentId){
    // this.navCtrl.push(SelectOperatorPage,{ 'Id': this.Id });
     this.navCtrl.push(MobileRechargePage,{ 'ParentId': this.ParentId });
   }
 
-  // OnClick(form:NgForm){
-  //   this.navCtrl.push(MobileRechargePage,{ 'Id': this.Id, 'nkname':this.nkname });
-
-  // }
-
-  // OnPress(Id,nkname){
-  //   // this.navCtrl.push(SelectOperatorPage,{ 'Id': this.Id });
-  //    this.navCtrl.push(MobileRechargePage,{ 'Id': this.Id, 'nkname':this.nkname });
-  //  }
-  OnPress(order){
+  OnNickName(order){
+    let loading = this.loadingController.create({
+      content: 'Recharging...'
+    });
+    loading.present();
     // this.navCtrl.push(SelectOperatorPage,{ 'Id': this.Id });
-     this.navCtrl.push(MobileRechargePage,{ 'ParentId': order.ParentId, 'Id':order.Id });
-   }
+     this.navCtrl.push(MobileRechargePage,{ 'OperatorId':order.OperatorId,'ParentId': order.ParentId, 'Id':order.Id });
+   loading.dismiss();
+    }
 
-   OnSubmit(order){
-     var PId=order.Id;
-    // var index = this.favourites.indexOf(PId);
-    // if (index > -1) {
-    // this.favourites.splice(PId,1);
-    // }
-
-    //removeByKey(this.favourites, order);
-    //delete this.favourites[PId];
-    
+  OnDelete(order){
+    var PId=order.Id;
     this.favourites = this.favourites.filter(function( obj ) {
       return obj.Id !== PId;
   });
@@ -115,15 +109,6 @@ ngOnInit(){
     StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S7,JSON.stringify(this.favourites));
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));  
   }
-    // StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1,JSON.stringify(this.favourites));
-    // this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
+    
   }
-}
-
-
-function removeByKey(array, params){
-  array.some(function(item, index) {
-    return (array[index][params.key] === params.value) ? !!(array.splice(index, 1)) : false;
-  });
-  return array;
 }

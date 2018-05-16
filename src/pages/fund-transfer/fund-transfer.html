@@ -10,18 +10,47 @@
   </ion-header>
   <ion-content padding id="page3">
     <div *ngIf="ShowHide">
-          <ion-card>
+          <ion-card *ngIf="ShowManyAccounts">
 
             <ion-card-header style="background-color:red">
               From Account
             </ion-card-header>
-          
-            <ion-card-content>
-              Bank Name: {{HeadName}}
+          <span style="color: blue">Click on Account of your wish</span>
+          <ion-card-content *ngFor="let order of SelfCareAcsBasedOnTenantID">
+              <!-- <div (click)="OnFromAccount(order.AcSubId)" style="background-color:bisque">
+              <span>Name: {{order.HeadName}}</span> 
               <br/>
-              Acount No: {{AcNo}}
+              <span>Account No: {{order.AcNo}}</span> 
+            </div> -->
+            <ion-list>
+              <ion-item (click)="OnFromAccount(order.AcSubId)" style="background-color:bisque">
+                <h2>Name: {{order.HeadName}}</h2>
+                <h3>Account No: {{order.AcNo}}</h3>
+              </ion-item>
+            </ion-list>
             </ion-card-content>
-          
+            <div *ngIf="errormsg" style="color:red">{{errormsg}}</div>
+            </ion-card>
+            <ion-card *ngIf="selfCareAC">
+            <ion-card-header style="background-color:red">
+              From Account
+            </ion-card-header>
+            <ion-card-content>
+              <!-- <div style="background-color:bisque">
+              <span>Name: {{selfCareAC.HeadName}}</span> 
+              <br/>
+              <span>Account No: {{selfCareAC.AcNo}}</span> 
+            </div> -->
+            <ion-list>
+              <ion-item style="background-color:bisque">
+                <h2>Name: {{selfCareAC.HeadName}}</h2>
+                <h3>Account No: {{selfCareAC.AcNo}}</h3>
+              </ion-item>
+            </ion-list>
+            </ion-card-content>
+            <noscript>
+            <div style="color:darkred">Above Selected Account is choosen for Fund Transfer for this time</div>
+          </noscript>
           </ion-card>
           <br/>
           <ion-card>
@@ -31,14 +60,14 @@
             </ion-card-header>
           <br/>
             <ion-card-content>
-                <form [formGroup]="formgroup1" id="register-form3" #fundtransferForm1="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)">
+                <form [formGroup]="formgroup1" id="register-form3" #fundtransferForm1="ngForm" (ngSubmit)="OnSearchingAccount(MobileNo.value)">
 
               <ion-list id="register-list11">
                 <ion-item id="register-input8">
-                  <ion-label>
+                  <ion-label floating>
                     Phone Number
                   </ion-label>
-                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder=""></ion-input>
+                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder="                             Enter Mobile No. of Receiver that is Linked to the Bank"></ion-input>
                   <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
                 </ion-item>
                 <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
@@ -63,17 +92,17 @@
         <ion-card>
 
           <ion-card-content>
-              <form [formGroup]="formgroup2" id="register-form4" #fundtransferForm2="ngForm" (ngSubmit)="OnClick(Amount.value)">
+              <form [formGroup]="formgroup2" id="register-form4" #fundtransferForm2="ngForm" (ngSubmit)="OnNext(Amount.value)">
             <ion-list id="register-list11">
               <ion-item id="register-input8">
-                <ion-label>
+                <ion-label floating>
                   Amount
                 </ion-label>
                 <ion-input formControlName="amount" type="text" #Amount ngModel name="Amount" placeholder=""></ion-input>
               </ion-item>
             
             </ion-list>
-            <button [disabled]="fundtransferForm2.invalid" id="register-button8" ion-button color="positive" block>
+            <button [disabled]="fundtransferForm2.invalid || disablenextwithoutFromAccount || disablenextwithoutToAccount" id="register-button8" ion-button color="positive" block>
                 Next
               </button>
             </form>               
@@ -87,13 +116,11 @@
             <ion-card-header style="background-color:red">
               From Account
             </ion-card-header>
-          
             <ion-card-content>
-              Bank Name: {{HeadName}}
+              Account Name: {{selfCareAC.HeadName}}
               <br/>
-              Acount No: {{AcNo}}
+              Acount No: {{selfCareAC.AcNo}}
             </ion-card-content>
-          
           </ion-card>
           <br/>
           <ion-card>
@@ -109,44 +136,15 @@
             <br/>
             Amount: {{Rs}}
           </ion-card-content>
-            <button id="register-button9" (click)="OnPress()" ion-button color="positive" block>
+            <button id="register-button9" (click)="OnConfirm()" ion-button color="positive" block>
               Confirm
             </button>
         </ion-card>
         </div>
+        <div *ngIf="showstatus">
+          <noscript>
+          Fund transferred with status {{ftd.Status}}
+        </noscript>
+        </div>
   </ion-content>
-  <!-- <ion-content padding id="page4">
-      <div *ngIf="confirm">
-    <ion-card>
-
-      <ion-card-header style="background-color:red">
-        From Account
-      </ion-card-header>
-    
-      <ion-card-content>
-        Bank Name: {{HeadName}}
-        <br/>
-        Acount No: {{AcNo}}
-      </ion-card-content>
-    
-    </ion-card>
-    <br/>
-    <ion-card>
-
-      <ion-card-header style="background-color:red">
-        To Account
-      </ion-card-header>
-    <br/>
-    <ion-card-content>
-      Name: {{confirm.Name}}
-      <br/>
-      Acount No: {{confirm.AcNo}}
-      <br/>
-      Amount: {{Amount}}
-    </ion-card-content>
-      <button id="register-button9" ion-button color="positive" block>
-        Confirm
-      </button>
-  </ion-card>
-  </div>
-</ion-content> -->
+  

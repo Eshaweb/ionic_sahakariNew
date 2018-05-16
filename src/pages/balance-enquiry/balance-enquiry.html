@@ -9,14 +9,20 @@
     </ion-navbar>
   </ion-header>
   <ion-content padding id="page3">
-    <div  *ngIf="ShowHide" (click)="OnPress()" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
-        
-      <span>Bank Name : {{ HeadName }}</span> <br>
-      
-      <span>Address : {{ AcNo }}</span> <br>
-      
+    <div  *ngIf="ShowHide">   
+      <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetAccountBalance(order.AcHeadId,order.AcSubId)" style="background-color:bisque;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+        <span>Name: {{order.HeadName}}</span> 
+        <br/>
+        <span>Account No: {{order.AcNo}}</span> 
     </div> 
+      </div>
     <div *ngIf="balance">
         <span>Balance Amount : {{ balance.Balance }}</span>
     </div>
   </ion-content>
+
+  <ion-footer>
+    <ion-toolbar>
+      <ion-title>Footer Toolbar</ion-title>
+    </ion-toolbar>
+  </ion-footer>

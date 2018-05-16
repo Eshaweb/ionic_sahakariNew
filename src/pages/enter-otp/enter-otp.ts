@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { LoadingController,NavController } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { LoadingController, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
 import { RegisterService } from '../services/app-data.service';
 import { PostOPT } from '../View Models/PostOPT';
 import { NewPasswordEntry } from '../View Models/NewPasswordEntry';
-import { FormBuilder, FormGroup, Validators,AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 //import { Validator, NG_VALIDATORS } from '@angular/forms';
 import { UserPost } from '../View Models/UserPost';
 //import { Directive, forwardRef, Attribute } from '@angular/core';
@@ -15,150 +15,164 @@ import { UserResult } from '../View Models/UserResult';
 import "rxjs/add/operator/debounceTime";
 import { LoginPage } from '../login/login';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService }  from "../services/Constants";
+import { ConstantService } from "../services/Constants";
 import { User } from '../LocalStorageTables/User';
 import { Tenant } from '../LocalStorageTables/Tenant';
 @Component({
   selector: 'page-enter-otp',
   templateUrl: 'enter-otp.html'
 })
-export class EnterOTPPage {
+export class EnterOTPPage implements OnInit{
+  OTPRefNo: any;
+  
   Tenant: Tenant;
   User: User;
   pin: any;
   userresult: UserResult;
   storeboolean: any;
-  showHide:boolean;
+  ShowIf: boolean;
+  HideIf: boolean;
   postingotp: PostOPT;
   otpno: any;
-  npef:NewPasswordEntry;
+  npef: NewPasswordEntry;
   SavePasswordForm: FormGroup;
-  formgroup:FormGroup;
-  userpost:UserPost;
-  otp:AbstractControl;
-  password:AbstractControl;
-  confirmpwd:AbstractControl;
-  constructor(public constant:ConstantService,public loadingController: LoadingController,private fb: FormBuilder, public navCtrl: NavController, private regService : RegisterService) {
-  
-this.formgroup = this.fb.group({
-  otp:['',[Validators.required,Validators.minLength(4)]]
-});
-this.otp = this.formgroup.controls['otp'];
+  formgroup: FormGroup;
+  userpost: UserPost;
+  otp: AbstractControl;
+  password: AbstractControl;
+  confirmpwd: AbstractControl;
+  constructor(public navParams: NavParams,public constant: ConstantService, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private regService: RegisterService) {
+    this.HideIf = true;
+    this.formgroup = this.fb.group({
+      otp: ['', [Validators.required, Validators.minLength(4)]]
+    });
+    this.otp = this.formgroup.controls['otp'];
 
-this.SavePasswordForm = this.fb.group({
-  password:['',[Validators.required,Validators.minLength(4)]],
-  confirmpwd:['',[Validators.required,Validators.minLength(4)]]
-},{validator: this.matchingPasswords});
+    this.SavePasswordForm = this.fb.group({
+      password: ['', [Validators.required, Validators.minLength(4)]],
+      confirmpwd: ['', [Validators.required, Validators.minLength(4)]]
+    }, { validator: this.matchingPasswords });
 
-this.password = this.SavePasswordForm.controls['password'];
-this.confirmpwd = this.SavePasswordForm.controls['confirmpwd'];
-
+    this.password = this.SavePasswordForm.controls['password'];
+    this.confirmpwd = this.SavePasswordForm.controls['confirmpwd'];
+    this.password
+      .valueChanges
+      .debounceTime(100)
+      .distinctUntilChanged()
+      .subscribe(val => {
+        if (val && val.length < 4) {
+          this.password.setErrors({ minlength: true });
+        }
+      });
+    this.confirmpwd
+      .valueChanges
+      .debounceTime(100)
+      .distinctUntilChanged()
+      .subscribe(val => {
+        if (val && val.length < 4) {
+          this.confirmpwd.setErrors({ minlength: true });
+        }
+      });
   }
-  
+  ngOnInit() {
+    this.OTPRefNo=this.navParams.get('OTPRefNo');
+    }
   matchingPasswords(group: FormGroup) { // here we have the 'passwords' group
-  let password = group.controls.password.value;
-  let confirmpwd = group.controls.confirmpwd.value;
+    let password = group.controls.password.value;
+    let confirmpwd = group.controls.confirmpwd.value;
+    if (!password || !confirmpwd) {
+      return null;
+    }
+    return password === confirmpwd ? null : { notSame: true }
+  }
 
-  return password === confirmpwd ? null : { notSame: true }     
-}
- 
-  OnSubmit(otpno){
+  OnSubmit(otpno) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
 
     loading.present();
 
-    this.otpno=otpno;
-    this.postingotp={
-      TenantId:this.regService.store.TenantId,  //ActiveTenantId
-      PartyMastId:this.regService.store.PartyMastId,
-      OTPRef:this.regService.store.OTPRef,
-      OTP:this.otpno
+    this.otpno = otpno;
+    this.postingotp = {
+      TenantId: this.regService.TenantId,  //ActiveTenantId
+      MobileNo: this.regService.MobileNo,
+      OTPRef: this.OTPRefNo,
+      OTP: this.otpno
     }
-    this.regService.ValidatingOTP(this.postingotp).subscribe((data:any)=>{
-      this.storeboolean=data;  
-      this.showHide=true;   
-    })   
-    
+    this.regService.ValidateOTP(this.postingotp).subscribe((data: any) => {
+      this.storeboolean = data;
+      this.ShowIf = true;
+      this.HideIf = false;
+    })
+
     setTimeout(() => {
       loading.dismiss();
-    }, 4000); 
-}
-
-OnPress(pin){
-  this.pin=pin;
-  this.userpost={
-
-    DigiPartyId: this.regService.store.DigiPartyId,
-    TenantId: this.regService.store.TenantId,  //ActiveTenantId
-    PIN:this.pin,
-    PartyMastId: this.regService.store.PartyMastId,
-    //UniqueId:userposting.UniqueId,
-    //UniqueId:this.guid.str,
-    UniqueId:this.guid(),
-    OTPRef:this.regService.store.OTPRef,
-    OTP:this.otpno,
-    MobileNo: this.regService.store.MobileNo
+    }, 1500);
   }
- 
-  let loading = this.loadingController.create({
-    content: 'Please wait for a minute......'
-  });
-  loading.present();
 
-  this.regService.SaveMPin(this.userpost).subscribe((data:any)=>{
-this.userresult=data;
-this.User={
-  ActiveTenantId:this.regService.store.TenantId,
-  //ActiveTenantId:data.TenantId,
-  ActiveTenantName:data.TenantName,
-  UserId:data.UserId,
-  UserName:data.UserName,
-  UniqueKey:data.UniqueKey
-}
-this.Tenant={
-  Id:data.UserId,
-  TenantId:data.TenantId,   //ActiveTenantId
-  Name:data.TenantName,
-  Address:data.TenantAddress,
-  Logo:this.regService.Logo
-}
-//StorageService.SetItem(this.constant.UserKey,User);
-//StorageService.SetItem("UserKey",JSON.stringify(this.User));  //Works, But not as of reqment
-StorageService.SetItem(this.constant.DB.User,JSON.stringify(this.User));  //Works, But not as of reqment
-StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify([this.Tenant]));  //Works, But not as of reqment
-//StorageService.SetItem(this.constant.UserKey,this.User);  //Not Works 
-//StorageService.RemoveItem(this.constant.UserKey);  //Not Works 
+  OnSavePassword(pin) {
+    this.pin = pin;
+    this.userpost = {
+      //DigiPartyId: this.regService.store.DigiPartyId,
+      TenantId: this.regService.TenantId,  //ActiveTenantId
+      PIN: this.pin,
+      //PartyMastId: this.regService.store.PartyMastId,
+      //UniqueId:userposting.UniqueId,
+      //UniqueId:this.guid.str,
+      UniqueId: this.guid(),
+      OTPRef: this.OTPRefNo,
+      OTP: this.otpno,
+      MobileNo: this.regService.MobileNo
+    }
 
-setTimeout(() => {
-  this.navCtrl.push(LoginPage);
-}, 1000);
+    let loading = this.loadingController.create({
+      content: 'Please wait for a minute......'
+    });
+    loading.present();
 
-setTimeout(() => {
-  loading.dismiss();
-}, 4000);
+    this.regService.SaveMPin(this.userpost).subscribe((data: any) => {
+      this.userresult = data;
 
-  })
-   
-}
-//below code is from here https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript/105074#105074
-guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
+      this.User = {
+        ActiveTenantId: this.regService.TenantId,
+        //ActiveTenantId:data.TenantId,
+        //ActiveTenantName:"",
+        UserId: data.UserId,
+        UserName: data.UserName,
+        UniqueKey: data.UniqueKey
+      }
+
+      StorageService.SetItem(this.constant.DB.User, JSON.stringify(this.User));
+      setTimeout(() => {
+        this.navCtrl.push(LoginPage);
+      }, 1000);
+      setTimeout(() => {
+        loading.dismiss();
+      }, 1000);
+
+    })
+
   }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
 
-  goToHome(params){
+
+  //below code is from here https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript/105074#105074
+  guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  }
+
+  goToHome(params) {
     if (!params) params = {};
     this.navCtrl.push(HomePage);
-  }goToMobileRecharge(params){
+  } goToMobileRecharge(params) {
     if (!params) params = {};
     this.navCtrl.push(MobileRechargePage);
-  }goToBanking(params){
+  } goToBanking(params) {
     if (!params) params = {};
     this.navCtrl.push(BankingPage);
   }

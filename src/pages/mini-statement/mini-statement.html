@@ -4,19 +4,19 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Mini Statement
+      Mini Statement {{ActiveBankName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page9" style="background-color:#F3F3F3;">
-    <div *ngIf="ShowHide" (click)="OnPress()" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
-        
-        <span>Bank Name : {{ HeadName }}</span> <br>
-        
-        <span>Address : {{ AcNo }}</span> <br>
-        
-      </div> 
-      <div *ngIf="xx">
+  <div  *ngIf="ShowHide">   
+    <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetMiniStatement(order.AcHeadId,order.AcSubId)" style="background-color:bisque;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+      <span>Name: {{order.HeadName}}</span> 
+      <br/>
+      <span>Account No: {{order.AcNo}}</span> 
+  </div> 
+    </div>
+      <div *ngIf="balance">
   <ion-list id="miniStatement-list8">
     <ion-item color="assertive" id="miniStatement-list-item35">
       Kavalapadur Demo
@@ -37,7 +37,7 @@
       Customer ID :
     </ion-item>
     <ion-item color="none" id="miniStatement-list-item42">
-      Account Balance
+      Account Balance :{{balance.Amount}}
     </ion-item>
   </ion-list>
   <div class="spacer" style="width:300px;height:21px;" id="miniStatement-spacer4"></div>
@@ -64,6 +64,24 @@
       <div style="width:100%;height:220px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
         <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
       </div>
+    </ion-list>
+    <ion-list *ngFor="let order of stmntItem" >
+      <ion-item color="none" id="miniStatement-list-item46">
+        {{order.Dt|date:'fullDate'}}
+      </ion-item>
+      <ion-item color="assertive" id="miniStatement-list-item47">
+        Credited : {{order.Dr}}
+      </ion-item>
+      <ion-item id="miniStatement-list-item-container6">
+        <div id="miniStatement-markdown7" class="show-list-numbers-and-dots">
+          <p style="margin-top:0px;color:#000000;">
+            Remark: {{order.Remark}}
+          </p>
+        </div>
+        <div style="width:100%;height:50px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
+          <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+        </div>
+      </ion-item>
     </ion-list>
   </ion-card>
 </div>

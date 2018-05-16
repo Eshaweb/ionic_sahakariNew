@@ -3,16 +3,20 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>
+    <ion-title *ngIf="HideIf">
       Enter OTP
+    </ion-title>
+    <ion-title *ngIf="ShowIf">
+      Password Entry
     </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page15">
+    <div *ngIf="HideIf">
   <form [formGroup]="formgroup" id="enterOTP-form4" #enterOTPForm="ngForm" (ngSubmit)="OnSubmit(OTPNo.value)">
     <ion-list id="enterOTP-list18">
       <ion-item id="enterOTP-input12">
-        <ion-label>
+        <ion-label floating>
           OTP
         </ion-label>
         <ion-input formControlName="otp" type="number" #OTPNo ngModel name="OTPNo" placeholder=""></ion-input>
@@ -28,20 +32,21 @@
       Submit
     </button>
   </form>
-  <div *ngIf="showHide">
-  <form id="enterOTP-form2" [formGroup]="SavePasswordForm"  #NewPasswordEntryForm="ngForm" (ngSubmit)="OnPress(CPassword.value)">
+  </div>
+  <div *ngIf="ShowIf">
+  <form id="enterOTP-form2" [formGroup]="SavePasswordForm"  #NewPasswordEntryForm="ngForm" (ngSubmit)="OnSavePassword(CPassword.value)">
           <ion-item id="enterOTP-input3">
-      <ion-label>
+      <ion-label floating>
         New Password
       </ion-label>
       <!-- <ion-input type="text" placeholder="" name="NPassword" #NPassword="ngModel" [(ngModel)]="npef.NPassword"></ion-input> -->
-      <ion-input formControlName="password" type="text" required #NPassword ngModel name="NPassword" placeholder=""></ion-input>      
+      <ion-input formControlName="password" type="password" required #NPassword ngModel name="NPassword" placeholder=""></ion-input>      
     </ion-item>
     <ion-item *ngIf="password.hasError('required') && password.touched">
-      <p style="color:red;"> *Password with minimum 8 characters is required</p>
+      <p style="color:red;"> *Password is required</p>
     </ion-item>
     <ion-item id="enterOTP-input5">
-      <ion-label>
+      <ion-label floating>
         Confirm Password
       </ion-label>
       <!-- <ion-input type="text" placeholder="" name="CPassword" #CPassword="ngModel" [(ngModel)]="npef.CPassword"></ion-input> -->

@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content>
   <ion-list>
-      <ion-item color="assertive" id="favourites-list-item28" (click)="OnClick(Id)">
+      <ion-item color="assertive" id="favourites-list-item28" (click)="OnNewRecharge(Id)">
           <ion-thumbnail item-start>
               <img src="assets/imgs/thumbnail-totoro.png">
             </ion-thumbnail>
@@ -18,10 +18,14 @@
         </ion-item>
         <div class="row" *ngIf="favourites">
           <ion-item *ngFor="let order of favourites">
-    <button ion-item  (click)="OnPress(order)">
+    <button ion-item  (click)="OnNickName(order)">
       {{ order.NickName }}
     </button>
-    <button ion-button clear item-end (click)="OnSubmit(order)">Delete</button>
+    <button ion-button color="dark"  item-end (click)="OnDelete(order)" round>Delete</button>
+    <!-- <button ion-button color="danger" icon-start (click)="OnSubmit(order)">
+      <ion-icon name='close'></ion-icon>
+      Remove
+    </button> -->
   </ion-item>
   </div>
   </ion-list>

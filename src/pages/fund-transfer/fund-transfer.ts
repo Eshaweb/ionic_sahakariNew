@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 import { AutoLogoutService } from '../services/AutoLogOutService';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
@@ -9,6 +9,10 @@ import { FundTransferRequest } from '../View Models/FundTransferRequest';
 import { FundTransferResponse } from '../View Models/FundTransferResponse';
 import { DoFundTransfer } from '../View Models/DoFundTransfer';
 import { FundTransferDone } from '../View Models/FundTransferDone';
+import { Tenant } from '../LocalStorageTables/Tenant';
+import { DigiParty } from '../LocalStorageTables/DigiParty';
+import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'page-fund-transfer',
@@ -16,6 +20,20 @@ import { FundTransferDone } from '../View Models/FundTransferDone';
 })
 export class FundTransferPage implements OnInit{
 
+  SelfCareAcsBasedOnTenantID: SelfCareAc;
+  disablenextwithoutToAccount: boolean;
+  disablenextwithoutFromAccount: boolean;
+  errormsg: string;
+  AcSubId: any;
+  ShowManyAccounts: boolean;
+  showstatus: boolean;
+  selfCareAC: SelfCareAc;
+  SelfCareACs: SelfCareAc;
+  DigiPartyId: any;
+  digiparty: DigiParty;
+  DigiParties: DigiParty;
+  Tenant: Tenant;
+  Tenants: Tenant;
   ftd: FundTransferDone;
   transfer: DoFundTransfer;
   ShowHide: boolean;
@@ -30,13 +48,9 @@ export class FundTransferPage implements OnInit{
   AcNo: any;
   HeadName: any;
   ActiveBankName: any;
-  ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty)).TenantId;
-  DigiPartyId=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty)).DigiPartyId;
-  AcHeadId=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].AcHeadId;
-  AcSubId=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].AcSubId;
-  LocId=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].LocId;
+  ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-    constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,public navCtrl: NavController) {
+    constructor(private toastr: ToastrService,public loadingController: LoadingController,private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,public navCtrl: NavController) {
 
   //StorageService.SetItem('lastAction', Date.now().toString());
     this.formgroup1 = formbuilder.group({
@@ -52,32 +66,81 @@ export class FundTransferPage implements OnInit{
 
   ngOnInit(){
     this.ShowHide=true;
-    this.ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
-this.HeadName=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].HeadName;
-this.AcNo=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].AcNo;
+    this.disablenextwithoutFromAccount=true;
+    this.disablenextwithoutToAccount=true;
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+       this.ActiveBankName=this.Tenant.Name;
+       this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));    
+       this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })       
+       this.ShowManyAccounts=true;
   }
+
   
-  OnSubmit(mobno){
+  OnFromAccount(AcSubId){
+   this.AcSubId=AcSubId;
+   this.errormsg=null;
+  this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+  this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.AcSubId === AcSubId&&obj.AcActId=="#SB"; });
+  if(this.selfCareAC==null){
+  this.errormsg="Through Pigmy Account Fund can not be transferred";
+  }else{
+    this.ShowManyAccounts=false;
+    this.disablenextwithoutFromAccount=false;
+    return this.selfCareAC;
+  }
+ }
+  GetDigiPartyID(){
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+       this.DigiPartyId=this.digiparty.DigiPartyId;
+       return this.DigiPartyId;
+  }
+
+  GetSelfCareAcByTenantID(ActiveTenantId){
+    var AcSubId=this.AcSubId; 
+    this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    // this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"&&obj.AcSubId===this.AcSubId; });
+    this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcSubId===AcSubId; });
+    return this.selfCareAC;
+    
+  }
+  OnSearchingAccount(mobno){
+    let loading = this.loadingController.create({
+      content: 'Searching For the Account'
+    });
+    loading.present();
     this.FTRequest={
       TenantId:this.ActiveTenantId,
       MobileNo:mobno
     }
-    this.regService.SearchReceiverAccount(this.FTRequest).subscribe((data : any)=>{
+    this.regService.GetFTAccount(this.FTRequest).subscribe((data : any)=>{
       this.fundTransferResponse=data;
+      this.disablenextwithoutToAccount=false;
     });
+    loading.dismiss();
   }
-  OnClick(amnt){
+  
+  OnNext(amnt){
 this.confirm=this.fundTransferResponse;
 this.Rs=amnt;
 this.ShowHide=false;
   }
-  OnPress(){
+
+  OnConfirm(){
+    let loading = this.loadingController.create({
+      content: 'Transferring the Fund..'
+    });
+    loading.present();
     this.transfer={
       TenantId:this.ActiveTenantId,
-      DigiPartyId:this.DigiPartyId,
-      FromAcMastId:this.AcHeadId,
-      FromAcSubId:this.AcSubId,
-      FromLocId:this.LocId,
+       DigiPartyId:this.GetDigiPartyID(),
+      //FromAcMastId:this.AcHeadId,
+      FromAcMastId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcHeadId,
+      FromAcSubId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcSubId,
+      FromLocId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).LocId,
       ToAcMastId:this.fundTransferResponse.AcHeadId,
       ToAcSubId:this.fundTransferResponse.AcSubId,
       ToLocId:this.fundTransferResponse.LocId,
@@ -86,7 +149,10 @@ this.ShowHide=false;
     }
     this.regService.FundTransfer(this.transfer).subscribe((data : any)=>{
       this.ftd=data;
+      this.confirm=null;
+      this.toastr.success('Recharge is successful with ' + this.ftd.Status, 'Success!');
+      this.showstatus=true;
     });
-
+    loading.dismiss();
   }
 }

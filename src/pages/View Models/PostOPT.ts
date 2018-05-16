@@ -1,6 +1,6 @@
 export class PostOPT
 {
-    PartyMastId: string;
+    MobileNo: string;
     TenantId: string;
     OTP:string;
     OTPRef:string;

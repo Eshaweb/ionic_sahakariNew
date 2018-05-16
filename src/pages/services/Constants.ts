@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-//import { TokenParams } from '../View Models/TokenParams';
 import { User } from '../LocalStorageTables/User';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
@@ -33,7 +32,6 @@ export class ConstantService{
 DB:DB;
   SetUser="User";
   GetUser: User;
- //GetUserKey=JSON.parse(localStorage.getItem("UserKey"));
 
     UserId="UserId";
     ActiveTenant="ActiveTenant";
@@ -43,10 +41,10 @@ DB:DB;
     SetTenant="Tenant";
     GetTenant:Tenant
     TId="Id";
-    TenantId="TenantId";
+    //TenantId="TenantId";
     Name="Name";
     Address="Address";
-    Logo="Logo";
+    IconHtml="IconHtml";
 
     SetDigiParty="DigiParty";
     DigiParty:DigiParty;
@@ -111,19 +109,14 @@ DB:DB;
           Favourite:this.SetFavourite,
           SelfCareAc:this.SetSelfCareAc
          }
-        // this.GetUserKey={
-        //     UserId:localStorage.,
-        //     ActiveTenant:this.ActiveTenant,
-        //     UserName:this.UserName,
-        //     UniqueKey:this.UniqueKey
-        //   }
+        
         this.GetUser=JSON.parse(localStorage.getItem("User"));
           const TenantKey:Tenant={
             Id:this.TId,
-            TenantId:this.TenantId,
+            //TenantId:this.TenantId,
             Name:this.Name,
             Address:this.Address,
-            Logo:this.Logo
+            IconHtml:this.IconHtml
           }
 
           this.DigiParty={

@@ -3,7 +3,6 @@ import { NavController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
-import { UserClaim } from '../View Models/userclaim';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { RequestForDigiParty } from '../View Models/RequestForDigiParty';
 import { NgForm } from '@angular/forms';
@@ -12,6 +11,12 @@ import { DigiCustWithOTPRefNo } from '../View Models/DigiCustWithOTPRefNo';
 import { Idle } from 'idlejs/dist';
 import { LoginPage } from '../login/login';
 import { AutoLogoutService } from '../services/AutoLogOutService';
+import { AddBankRequest } from '../View Models/AddBankRequest';
+import { AddBankResponse } from '../View Models/AddBankResponse';
+import { TenantList } from '../View Models/TenantList';
+import { JsonpModule } from '@angular/http';
+import { User } from '../LocalStorageTables/User';
+
 
   const idle = new Idle()
   .whenNotInteractive()
@@ -27,6 +32,15 @@ import { AutoLogoutService } from '../services/AutoLogOutService';
   templateUrl: 'change-bank.html'
 })
 export class ChangeBankPage implements OnInit{
+  Options: boolean;
+  NoOptions: boolean;
+  newselectlist: TenantList;
+  selectboxoptions: Tenant;
+  user: User;
+  addedTenantRecord: Tenant;
+  addbankresponse: AddBankResponse;
+  addbankreq: AddBankRequest;
+  Tenant: Tenant;
   existingentries: Tenant;
   //store: DigiCustWithOTPRefNo;
   digiParty: DigiParty;
@@ -34,9 +48,9 @@ export class ChangeBankPage implements OnInit{
   mobno: any;
   reqForDigiParty:RequestForDigiParty;
   Active: number;
-  filtereduserClaims: UserClaim;
-  userClaims: UserClaim;
-  userClaim: UserClaim;
+  filtereduserClaims: TenantList;
+  tenantList: TenantList;
+  singletenant: TenantList;
   Tenants:Tenant;
   ActiveBankName: any;
   showHide:boolean;
@@ -49,125 +63,98 @@ export class ChangeBankPage implements OnInit{
   
   ngOnInit(){
     this.resetForm();
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty)).TenantId;
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
     this.Active=+ActiveTenantId;
-    this.ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
     var mobno=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty)).MobileNo;
     
     //StorageService.SetItem('lastAction', Date.now().toString());
 
-    
-    //   this.regService.sendMobileNo(mobno).subscribe((data : any)=>{
-  //     this.userClaims = data;
-  //      //this.userClaims=this.userClaims.filter((data)=>data[0].Id===ActiveTenantId);
-  //     this.userClaims.Id=data[1].Id;
-  //     if(this.userClaims.Id==ActiveTenantId){
-  //       this.showIcon=true;
-  //     }
-  // });
    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-   //var Tenantlist=JSON.stringify(this.Tenants);
-  //  if(){
-  //   Tenantlist.push()
-
-  //  }
-
-
-   // this.regService.sendMobileNo(mobno).map(function(obj){
-//   this.userClaims = obj;
-//   return this.userClaims.filter(e => {e.Id==ActiveTenantId});
-//  //return this.userClaims.Id==ActiveTenantId;
-
-// });
-}
-filterByString(userClaims, ActiveTenantId) {
-  return userClaims.filter(e => e.Id==ActiveTenantId);
+   this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+   this.ActiveBankName=this.Tenant.Name;
 }
 
-OnClick(){
+filterByString(tenantlist, ActiveTenantId) {
+  return this.tenantList.filter(e => e.Id==ActiveTenantId);
+}
+
+OnGetTenants(){
   this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
   this.showHide=true;   
-  this.regService.sendMobileNo(this.mobno).subscribe((data : any)=>{
-    this.userClaims = data;    //got tenantlist from server
-    this.userClaims.Id=data[0].Id;
-    // for(var i = 0; i <data.length; i++){
-    //   for(var j = 0; j <this.Tenants.length; j++){
-    //     if (data[i].Id === this.Tenants[i].TenantId) {
-    //       this.userClaims =null;
-    //   }
-    // }}
+  this.regService.GetTenantsByMobile(this.mobno).subscribe((data : any)=>{
+    this.addedTenantRecord=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    this.tenantList = data;    //got tenantlist from server
+    this.tenantList.Id=data[0].Id;
+    this.selectboxoptions={
+      Id:"",
+      Name:"",
+      Address:"",
+      IconHtml:""
+    };
 
-    this.userClaims.filter(o => this.Tenants.find(o2 => o.Id === o2.TenantId));
-    //this.userClaims.filter(function(obj){ return obj.Id === this.Tenants.TenantId; });
-
-    // if(this.Tenants.TenantId==data.Id){
-    //   this.userClaims =null;
-    // }
-    // else{
-    //   this.userClaims = data;    //got tenantlist from server
-    //   this.userClaims.Id=data[0].Id;
-    // }
+    this.selectboxoptions=this.tenantList.filter(o=>!this.addedTenantRecord.find(o2=>o.Id===o2.Id))
+    this.Options=true;
+    if(this.selectboxoptions.length==0){
+      this.Options=false;
+      this.NoOptions=true;
+    }
     
   });
 }
 
-// OnSubmit(MobileRecharegeform){
-//   this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
-  
-//   this.OTPreq={
-//     TenantId:this.OTPreq.TenantId,
-//     MobileNo:this.mobno
-//   }
-//   this.tenant={
-//     Id:'',
-//     TenantId:this.tenant.TenantId,
-//     Name:this.tenant.Name,
-//     Address:this.tenant.Address,
-//     Logo:this.tenant.Logo
-//   }
-//   var existing=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-//   this.tenant=existing.push(this.tenant);
-//   StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(this.tenant));  //Works, But not as of reqment
-// }
 
-
-OnSubmit(Id){
+OnAddBank(Id){
   this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
-  this.userClaim=this.userClaims.filter(function (obj) { return obj.Id === Id; });
-  
-  this.tenant={
-    Id:'',
+  this.singletenant=this.tenantList.filter(function (obj) { return obj.Id === Id; });
+  this.addbankreq={
     TenantId:Id,
-    Name:this.userClaim[0].Name,
-    Address:this.userClaim[0].Address,
-    Logo:this.userClaim[0].IconHtml
+    MobileNo:JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName
   }
-  var existing=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-  this.existingentries=existing.filter(function (obj) { return obj.TenantId === Id; });
-  if(this.existingentries[0]==null){
-    existing.push(this.tenant);
-    StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(existing));  
-  } 
-  else if(this.existingentries[0].TenantId==Id){
-    StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(existing));  
-  }
-  this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-}
-OnPress(order){
-  this.reqForDigiParty={
-    TenantId:order.TenantId,
-    MobileNo:this.mobno
-  }
-  this.regService.requestingDigiParty(this.reqForDigiParty).subscribe((data:any)=>{
-    this.digiParty={
-      Id:data.DigiPartyId,
-      DigiPartyId:data.DigiPartyId,
-      PartyMastId:data.PartyMastId,
-      MobileNo:data.MobileNo,
-      TenantId:data.TenantId,  //ActiveTenantId
-      Name:data.Name
+  this.regService.AddBank(this.addbankreq).subscribe((data:any)=>{
+    this.addbankresponse=data;
+    this.tenant={
+      Id:this.addbankresponse.Tenant.Id,
+      //TenantId:this.addbankresponse.Tenant.TenantId,   //ActiveTenantId
+      Name:this.addbankresponse.Tenant.Name,
+      Address:this.addbankresponse.Tenant.Address,
+      IconHtml:this.addbankresponse.Tenant.IconHtml
     }
+    var existingTenant=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    existingTenant.push(this.tenant);
+    StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(existingTenant));  
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+
+    this.digiParty={
+      Id:this.addbankresponse.DigiPartyId,
+      DigiPartyId:this.addbankresponse.DigiPartyId,
+      PartyMastId:this.addbankresponse.PartyMastId,
+      MobileNo:this.addbankresponse.MobileNo,
+      TenantId:this.addbankresponse.TenantId,  //ActiveTenantId
+      Name:this.addbankresponse.Name
+    }
+    var existingDigiParty=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+    existingDigiParty.push(this.digiParty);
+    StorageService.SetItem(this.constant.DB.DigiParty,JSON.stringify(existingDigiParty));  
+
+
+    var existingSelfCareAcs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
+    StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
+
   });
+  
+}
+
+OnSelect(order){
+  this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
+  this.user=JSON.parse(StorageService.GetItem(this.constant.DB.User));
+  this.user.ActiveTenantId= order.Id;
+  StorageService.SetItem(this.constant.DB.User,JSON.stringify(this.user)); 
+  var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  this.Active=+ActiveTenantId;  
+  this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+  this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+  this.ActiveBankName=this.Tenant.Name;
 }
 
 resetForm(form?: NgForm) {
@@ -179,10 +166,10 @@ this.reqForDigiParty = {
 }
 this.tenant={
   Id:'',
-  TenantId:'',
+  //TenantId:'',
   Name:'',
   Address:'',
-  Logo:''
+  IconHtml:''
 }
 }
 

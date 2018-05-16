@@ -9,12 +9,12 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page13">
-  <form [formGroup]="formgroup" id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)">
+  <form *ngIf="hidethisform" [formGroup]="formgroup" id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnGetTenants(MobileNo.value)">
     <!-- <form id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)"> -->
-   
-     <ion-list id="register-list11">
+
+    <ion-list id="register-list11">
       <ion-item id="register-input8">
-        <ion-label>
+        <ion-label floating>
           Phone Number
         </ion-label>
         <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder=""></ion-input>
@@ -23,40 +23,55 @@
       <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
         <p style="color:red;"> *MobileNumber is required</p>
       </ion-item>
-    </ion-list>   
-    <button [disabled]="registrationForm.invalid"  id="register-button7" ion-button color="positive" block>
+    </ion-list>
+    <button [disabled]="registrationForm.invalid" id="register-button7" ion-button color="positive" block>
       Search Bank
     </button>
-    
+
   </form>
-  <div class="row" *ngIf="userClaims">
+  <!-- <div class="row" *ngIf="tenantList">
     <div class="col s12 m7">
       <div class="card">
-          <!--interpolation-->
-        <div class="card-content">     
-        <div *ngFor="let order of userClaims" (click)="OnPress(order.Id)" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
-        
-        <span>Name : {{ order.Name | json }}</span> <br>
-        <!-- <ion-item id="register-input9">
-          <ion-label>
-            Name
-          </ion-label>
-          <ion-input type="text" placeholder="" name="Name" #Name="ngModel" [(ngModel)]="order.Name"></ion-input>
-        </ion-item> -->
-        <span>Address : {{ order.Address }}</span> <br>
-        <!-- <ion-item id="register-input9">
-          <ion-label>
-            Address
-          </ion-label>
-          <ion-input type="text" placeholder="" name="Address" #Address="ngModel" [(ngModel)]="order.Address"></ion-input>
-        </ion-item> -->
-      </div> 
-  
-        </div>       
+        <div class="card-content">
+          <span style="color: blue">Click on Account of your wish</span>
+          <div *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)" style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+            <span>Name : {{ order.Name | json }}</span>
+            <br>
+            <span>Address : {{ order.Address }}</span>
+            <br>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <button id="register-button8" ion-button color="positive" type="button" (click)="OnPress()" block>
-      Request OTP
-    </button> -->
-  </div>
+  </div> -->
+
+  <!-- <ion-list *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)">
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src={{order.IconHtml}}>
+          <img [src]="order.IconHtml">
+        </ion-thumbnail>
+        <h2>{{ order.Name | json }}</h2>
+        <h3>{{ order.Address }}</h3>
+      </ion-item>
+    </ion-list> -->
+  <ion-list *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+      <h2>{{ order.Name | json }}</h2>
+      <h3>{{ order.Address }}</h3>
+    </ion-item>
+  </ion-list>
+
+  <!-- <div *ngFor="let i of items">
+    <span *ngFor="let j of i">
+        {{j}}
+    </span>
+</div> -->
 </ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Footer Toolbar</ion-title>
+  </ion-toolbar>
+</ion-footer>

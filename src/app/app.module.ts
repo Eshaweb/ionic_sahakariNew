@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { Toast } from '@ionic-native/toast';
+import { ServiceWorkerModule } from '@angular/service-worker';
+//import { environment } from '../environments/environment';
 
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -32,7 +34,6 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import{ RegisterService } from '../pages/services/app-data.service';
-import{ CompleteTestService } from '../pages/services/CompleteTestService';
 import { UIHelperService } from '../pages/UIHelperClasses/UIHelperService';
 import { AuthInterceptor } from '../pages/auth/auth.interceptor';
 import { RouterModule } from '@angular/router';
@@ -77,6 +78,7 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     }),
     IonicModule.forRoot(MyApp),
     RouterModule.forRoot(appRoutes),
+    //environment.production ? ServiceWorkerModule.register('ngsw-worker.js') : []
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -109,7 +111,6 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     UIHelperService,
     StorageService,
     ConstantService,
-    CompleteTestService,
     AutoLogoutService,
     StatusBar,
     SplashScreen,

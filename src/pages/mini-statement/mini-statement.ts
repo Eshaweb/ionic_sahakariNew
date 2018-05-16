@@ -1,48 +1,68 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
 import { StatementRequest } from '../View Models/StatementRequest';
 import { RegisterService } from '../services/app-data.service';
+import { MiniStatement } from '../View Models/MiniStatement';
+import { StatementItem } from '../View Models/StatementItem';
+import { Tenant } from '../LocalStorageTables/Tenant';
+import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 
 @Component({
   selector: 'page-mini-statement',
   templateUrl: 'mini-statement.html'
 })
-export class MiniStatementPage implements OnInit{
+export class MiniStatementPage implements OnInit {
 
+  SelfCareAcsBasedOnTenantID: SelfCareAc;
+  SelfCareACs: SelfCareAc;
+  Tenant: Tenant;
+  Tenants: Tenant;
+  stmntItem: StatementItem;
+  ministmnt: MiniStatement;
   AcNo: any;
   HeadName: any;
   balance: any;
   stmentreq: StatementRequest;
   ActiveBankName: any;
   ShowHide: boolean;
-  AcHeadId=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].AcHeadId;
-  AcSubId=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].AcSubId;
-  ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty)).TenantId;
 
-  constructor(private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
+  ActiveTenantId = JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+
+  constructor(public loadingController: LoadingController, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController) {
 
   }
 
   ngOnInit() {
-    this.ShowHide=true;
-    this.ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
-    this.HeadName=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].HeadName;
-    this.AcNo=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc))[0].AcNo;
-  }
- 
+    this.ShowHide = true;
 
-  OnPress(){
-    this.stmentreq={
-        AcMastId:this.AcHeadId,
-        AcSubId:this.AcSubId,
-        TenantId:this.ActiveTenantId
-    }
-    this.regService.GetStatement(this.stmentreq).subscribe((data:any)=>{
-   this.balance=data;
+    var ActiveTenantId = JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Tenants = JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    this.Tenant = this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
+    this.ActiveBankName = this.Tenant[0].Name;
+    this.SelfCareACs = JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    this.SelfCareAcsBasedOnTenantID = this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
+  }
+
+
+  OnGetMiniStatement(AcHeadId, AcSubId) {
+    let loading = this.loadingController.create({
+      content: 'Loading the Mini Statement..'
     });
-    this.ShowHide=false;
-}
-  
+    loading.present();
+    this.stmentreq = {
+      AcMastId: AcHeadId,
+      AcSubId: AcSubId,
+      TenantId: this.ActiveTenantId
+    }
+    this.regService.GetStatement(this.stmentreq).subscribe((data: any) => {
+      this.balance = data;
+      this.ministmnt = data;
+      this.stmntItem = data.StatementItems;
+    });
+    this.ShowHide = false;
+    loading.dismiss();
+  }
+
 }

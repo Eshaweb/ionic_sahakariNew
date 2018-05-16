@@ -1,8 +1,6 @@
 import { RegisterPage } from '../pages/register/register';
-//import {ListPage } from '../pages/list/list';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
-//import { SignInComponent } from './user/sign-in/sign-in.component';
 import { AuthGuard } from '../pages/auth/auth.guard';
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';

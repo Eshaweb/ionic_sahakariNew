@@ -6,6 +6,7 @@ import { ConstantService } from '../services/Constants';
 import { FundTransferPage } from '../fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../balance-enquiry/balance-enquiry';
 import { MiniStatementPage } from '../mini-statement/mini-statement';
+import { Tenant } from '../LocalStorageTables/Tenant';
 
 @Component({
   selector: 'page-banking',
@@ -13,6 +14,8 @@ import { MiniStatementPage } from '../mini-statement/mini-statement';
 })
 export class BankingPage implements OnInit{
 
+  Tenant: Tenant;
+  Tenants: Tenant;
   ActiveBankName: any;
   // constructor(public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
     constructor(public constant:ConstantService,public navCtrl: NavController) {
@@ -22,8 +25,10 @@ export class BankingPage implements OnInit{
   }
 
   ngOnInit(){
-    this.ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
-
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+       this.ActiveBankName=this.Tenant.Name;
   }
   OnFundTransfer(){
     this.navCtrl.push(FundTransferPage);

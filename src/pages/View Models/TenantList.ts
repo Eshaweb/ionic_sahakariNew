@@ -1,4 +1,4 @@
-export class UserClaim
+export class TenantList
 {
   filter(arg0: any): any {
     throw new Error("Method not implemented.");
