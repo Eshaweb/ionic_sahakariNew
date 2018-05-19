@@ -156,14 +156,14 @@ export class TabBasicContentPage6 {
 
 @Component({
   template: `
-    <ion-tabs class="tabs-basic">
+    <ion-tabs class="tabs-basic" [selectedIndex]="1">
       
     <ion-tab tabTitle={{FTT}} [root]="FTTPage"></ion-tab>
     <ion-tab tabTitle={{TUP}} [root]="TUPPage"></ion-tab>
     <ion-tab tabTitle={{LSC}} [root]="LSCPage"></ion-tab>
     <ion-tab tabTitle={{SMS}} [root]="SMSPage"></ion-tab>
     <ion-tab tabTitle={{OTR}} [root]="OTRPage"></ion-tab>
-    <ion-tab tabTitle={{RMG}} [root]="RMGPage"></ion-tab>
+    <ion-tab tabTitle={{RMG}} [root]="RMGPage" (ionSelect)="myMethod()" (click)="myMethod()"></ion-tab>
 
     </ion-tabs>
 `})
