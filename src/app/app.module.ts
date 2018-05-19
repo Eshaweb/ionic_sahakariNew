@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { Toast } from '@ionic-native/toast';
+//import { Toast } from '@ionic-native/toast';
 import { ServiceWorkerModule } from '@angular/service-worker';
 //import { environment } from '../environments/environment';
 
@@ -44,6 +44,7 @@ import { ConstantService } from '../pages/services/Constants';
 import { AutoLogoutService } from '../pages/services/AutoLogOutService';
 import { FundTransferPage } from '../pages/fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
+import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,TabBasicContentPage3, TabBasicContentPage4, TabBasicContentPage5, TabBasicContentPage6 } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,14 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     EnterOTPPage,
     SelectOperatorPage,
     FundTransferPage,
-    BalanceEnquiryPage
+    BalanceEnquiryPage,
+    TabBasicPage,
+    TabBasicContentPage1,
+    TabBasicContentPage2,
+    TabBasicContentPage3,
+    TabBasicContentPage4,
+    TabBasicContentPage5,
+    TabBasicContentPage6
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
@@ -100,9 +108,16 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     EnterOTPPage,
     SelectOperatorPage,
     FundTransferPage,
-    BalanceEnquiryPage
+    BalanceEnquiryPage,
+    TabBasicPage,
+    TabBasicContentPage1,
+    TabBasicContentPage2,
+    TabBasicContentPage3,
+    TabBasicContentPage4,
+    TabBasicContentPage5,
+    TabBasicContentPage6
   ],
-  providers: [AuthGuard,Toast, {
+  providers: [AuthGuard, {
     provide : HTTP_INTERCEPTORS,
     useClass : AuthInterceptor,
     multi : true
