@@ -61,7 +61,7 @@ SCReq: any;
       }
      
       else{
-        this.rootPage=RechargePage;
+        this.rootPage=PagePage;
       }
         
     });

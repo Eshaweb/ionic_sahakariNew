@@ -8,22 +8,28 @@ import { PlanRequest } from '../View Models/PlanRequest';
 import { StorageService } from '../services/Storage_Service';
 import { PlanDet } from '../View Models/PlanResponse';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
+import { Tenant } from '../LocalStorageTables/Tenant';
 
 
 //(ionSelect)="myMethod()"
 @Component({
-  template: `
-  <ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top" color="primary">
-      
-    <ion-tab tabTitle={{FTT}} [root]="FTTPage" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{TUP}} [root]="TUPPage" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{LSC}} [root]="LSCPage" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{SMS}} [root]="SMSPage" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{OTR}} [root]="OTRPage" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{RMG}} [root]="RMGPage" [rootParams]="navp"></ion-tab>
-    </ion-tabs>
-`})
+//   template: `
+//   <ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top" color="primary">
+//     <ion-tab tabTitle={{FTT}} [root]="FTTPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+//     <ion-tab tabTitle={{TUP}} [root]="TUPPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+//     <ion-tab tabTitle={{LSC}} [root]="LSCPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+//     <ion-tab tabTitle={{SMS}} [root]="SMSPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+//     <ion-tab tabTitle={{OTR}} [root]="OTRPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+//     <ion-tab tabTitle={{RMG}} [root]="RMGPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+//     </ion-tabs>
+// `
+selector: 'page-ViewPlans_Tabs',
+templateUrl: 'ViewPlans_Tabs.html'
+})
 export class BasicPage implements OnInit{
+  ActiveBankName: any;
+  Tenant: Tenant;
+  Tenants: Tenant;
   navp: any;
   planResponse: PlanDet;
   planRequest: PlanRequest;
@@ -57,6 +63,10 @@ export class BasicPage implements OnInit{
   }
 
   ngOnInit(){
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+       this.ActiveBankName=this.Tenant.Name;   
     // for(this.i=0;this.i<this.planTypes.length;this.i++){
     //   this.planRequest={
     //     OSId:this.operatorId,
@@ -79,7 +89,7 @@ export class BasicPage implements OnInit{
     //   });
 
   }
-
+ 
   // myMethod(){
   //   // this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
   //   //   this.planResponse=data;
@@ -97,7 +107,7 @@ export class BasicPage implements OnInit{
     </ion-header>
 
     <ion-content>
-    Music
+    Select the plans you want
     <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
     <h3>Talktime:{{ order.talktime }}</h3>
@@ -153,6 +163,7 @@ export class TabBasicContentPage1 {
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
+    
   }
   // ngOnInit() {
    
@@ -168,13 +179,13 @@ export class TabBasicContentPage1 {
     </ion-header>
 
     <ion-content>
-    Movies
-    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    Select the plans you want
+    <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
     <h3>Talktime:{{ order.talktime }}</h3>
     <button ion-button outline icon-start item-end round medium>
       <ion-icon name='briefcase' is-active="false"></ion-icon>
-      {{ order.amount }}
+      {{ order.amount | number }}
     </button>
     <a style="color:red">{{ order.detail }}</a>
     <h2>Validity:{{ order.validity }}</h2>
@@ -208,6 +219,9 @@ export class TabBasicContentPage2 {
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
   }
+  OnAmount(amount){
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});    
+  }
 }
 @Component({
   template: `
@@ -218,12 +232,13 @@ export class TabBasicContentPage2 {
     </ion-header>
 
     <ion-content>
-    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    Select the plans you want
+    <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
     <h3>Talktime:{{ order.talktime }}</h3>
     <button ion-button outline icon-start item-end round medium>
       <ion-icon name='briefcase' is-active="false"></ion-icon>
-      {{ order.amount }}
+      {{ order.amount | number }}
     </button>
     <a style="color:red">{{ order.detail }}</a>
     <h2>Validity:{{ order.validity }}</h2>
@@ -257,6 +272,9 @@ export class TabBasicContentPage3 {
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
   }
+  OnAmount(amount){
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
+  }
 }
 @Component({
   template: `
@@ -267,17 +285,18 @@ export class TabBasicContentPage3 {
     </ion-header>
 
     <ion-content>
-    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    Select the plans you want
+    <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
     <h3>Talktime:{{ order.talktime }}</h3>
     <button ion-button outline icon-start item-end round medium>
       <ion-icon name='briefcase' is-active="false"></ion-icon>
-      {{ order.amount }}
+      {{ order.amount | number }}
     </button>
     <a style="color:red">{{ order.detail }}</a>
     <h2>Validity:{{ order.validity }}</h2>
     </ion-item>
-  </ion-list>   
+  </ion-list> 
   </ion-content>
 `})
 export class TabBasicContentPage4 {
@@ -306,6 +325,9 @@ export class TabBasicContentPage4 {
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
   }
+  OnAmount(amount){
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});  
+  }
 }
 @Component({
   template: `
@@ -316,12 +338,13 @@ export class TabBasicContentPage4 {
     </ion-header>
 
     <ion-content>
-    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    Select the plans you want
+    <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
     <h3>Talktime:{{ order.talktime }}</h3>
     <button ion-button outline icon-start item-end round medium>
       <ion-icon name='briefcase' is-active="false"></ion-icon>
-      {{ order.amount }}
+      {{ order.amount | number }}
     </button>
     <a style="color:red">{{ order.detail }}</a>
     <h2>Validity:{{ order.validity }}</h2>
@@ -355,6 +378,9 @@ export class TabBasicContentPage5 {
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
   }
+  OnAmount(amount){
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});   
+  }
 }
 @Component({
   template: `
@@ -365,12 +391,13 @@ export class TabBasicContentPage5 {
     </ion-header>
 
     <ion-content>
-    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    Select the plans you want
+    <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
     <h3>Talktime:{{ order.talktime }}</h3>
     <button ion-button outline icon-start item-end round medium>
       <ion-icon name='briefcase' is-active="false"></ion-icon>
-      {{ order.amount }}
+      {{ order.amount | number }}
     </button>
     <a style="color:red">{{ order.detail }}</a>
     <h2>Validity:{{ order.validity }}</h2>
@@ -403,6 +430,9 @@ export class TabBasicContentPage6 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+  }
+  OnAmount(amount){
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});  
   }
 }
 

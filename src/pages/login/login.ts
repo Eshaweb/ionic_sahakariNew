@@ -116,7 +116,8 @@ export class LoginPage implements OnInit {
       //  }, 2000);
       
       setTimeout(() => {
-        this.navCtrl.push(PagePage, { 'ActiveBankName': this.ActiveBankName });
+        //this.navCtrl.push(PagePage, { 'ActiveBankName': this.ActiveBankName });
+        this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
       }, 1000);
     });
     setTimeout(() => {

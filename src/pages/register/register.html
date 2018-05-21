@@ -55,8 +55,10 @@
         <h3>{{ order.Address }}</h3>
       </ion-item>
     </ion-list> -->
+    <div *ngIf="tenantList">
     <span style="color: blue">Click on Account of your wish</span>  
-  <ion-list *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)">
+  </div>
+    <ion-list *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)">
     <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
       <h2>{{ order.Name | json }}</h2>
       <h3>{{ order.Address }}</h3>

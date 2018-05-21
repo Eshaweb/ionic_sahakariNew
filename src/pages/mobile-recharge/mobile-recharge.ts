@@ -24,6 +24,7 @@ import { OperaterCircle } from '../View Models/OperaterCircle';
 import { SingleState } from '../View Models/SingleState';
 import { BasicPage, TabBasicContentPage1 } from '../ViewPlans_Tabs/ViewPlans_Tabs';
 import { SingleOperator } from '../View Models/SingleOperator';
+import { FavouritesPage } from '../favourites/favourites';
 @Component({
   selector: 'page-mobile-recharge',
   templateUrl: 'mobile-recharge.html'
@@ -222,14 +223,14 @@ else if(this.ParentId=="S5"){
       SubscriptionId: this.navParams.get('SubscriptionId'),
       Amount:this.navParams.get('Amount'),
       CircleId:this.navParams.get('CircleId')
-    } 
+    //} 
     // var Cid=this.rechargeitem.CircleId;
     // this.singleState=this.StatesOfIndia.find(function(obj){return obj.Id===Cid})
     // this.statename=this.singleState.Name;
     // var Oid=this.rechargeitem.OperatorId;
     // this.singleOperator=this.OperatorsOfIndia.find(function(obj){return obj.Id===Oid})
     // this.operatorname=this.singleOperator.Name;
-  //}
+  }
     
   }
   
@@ -948,7 +949,9 @@ OnNext(form: NgForm){
       this.label="Customer ID";
     }
   }
-  
+  OnBack(){
+    this.navCtrl.push(FavouritesPage);
+  }
   StateChanged(event){
     switch(event){
       case "1":
