@@ -65,7 +65,7 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     EnterOTPPage,
     SelectOperatorPage,
     FundTransferPage,
-    BalanceEnquiryPage
+    BalanceEnquiryPage,
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
