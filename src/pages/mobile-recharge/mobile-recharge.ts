@@ -16,16 +16,35 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { ToastrService } from 'ngx-toastr';
 import { TranResponse } from '../View Models/TranResponse';
 import { PlanRequest } from '../View Models/PlanRequest';
-import { PlanResponse } from '../View Models/PlanResponse';
+import { PlanResponse, PlanDet } from '../View Models/PlanResponse';
 import { PlanTypes } from '../View Models/PlanTypes';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
+import { OperaterCircle } from '../View Models/OperaterCircle';
+import { SingleState } from '../View Models/SingleState';
+import { BasicPage, TabBasicContentPage1 } from '../ViewPlans_Tabs/ViewPlans_Tabs';
+import { SingleOperator } from '../View Models/SingleOperator';
 @Component({
   selector: 'page-mobile-recharge',
   templateUrl: 'mobile-recharge.html'
 })
 export class MobileRechargePage implements OnInit{
 
+  singleOperator: SingleOperator;
+  amountforRecharge: any;
+  statename: string;
+  operatorname: string;
+  showerrortext: boolean;
+  oid: string;
+  sid: string;
+  singleState: SingleState;
+  singleosrespone: OSResponse;
+  operatorcircle: OperaterCircle;
+  operatorcircleqry: OperaterCircleQuery;
+  showSuccess: boolean;
+  showConfirm: boolean;
   osid: string;
-  planResponse: PlanResponse;
+  planResponse: PlanDet;
   planRequest: PlanRequest;
   tranresponse: TranResponse;
   selfCareAC: SelfCareAc;
@@ -80,13 +99,13 @@ export class MobileRechargePage implements OnInit{
   
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,public formbuilder:FormBuilder) {
     this.formgroup = formbuilder.group({
-      selectoperator:['',[Validators.required,Validators.minLength(2)]],
+      //selectoperator:['',[Validators.required,Validators.minLength(2)]],
       mobno:['',[Validators.required,Validators.minLength(10)]],
       amount:['',[Validators.required,Validators.minLength(1)]],
       nickname:['',[Validators.required,Validators.minLength(2)]]
     });
     this.gender = 'f';
-    this.selectoperator = this.formgroup.controls['selectoperator'];
+    //this.selectoperator = this.formgroup.controls['selectoperator'];
     this.mobno = this.formgroup.controls['selectoperator'];
     this.amount = this.formgroup.controls['selectoperator'];
     this.nickname = this.formgroup.controls['selectoperator'];
@@ -101,6 +120,7 @@ export class MobileRechargePage implements OnInit{
     this.resetForm();
     this.Id=this.navParams.get('Id');
     this.ParentId=this.navParams.get('ParentId');
+    this.amountforRecharge=this.navParams.get('Amount');
     this.osid=this.navParams.get('OperatorId');
     if(this.ParentId=="S3"){
       this.favouriteNewOfDTH=this.ParentId;
@@ -193,8 +213,26 @@ else if(this.ParentId=="S5"){
     StorageService.SetItem(this.constant.osBasedOnParentId.OS_S7,JSON.stringify(this.OSResponseNew))
   }
     });
-    //this.completeTestService=
+    //if(this.Id!=null){
+    this.rechargeitem = {
+      Id: '',
+      NickName: this.navParams.get('nname'),
+      OperatorId:this.navParams.get('OperatorId'),
+      ParentId: this.navParams.get('ParentId'),
+      SubscriptionId: this.navParams.get('SubscriptionId'),
+      Amount:this.navParams.get('Amount'),
+      CircleId:this.navParams.get('CircleId')
+    } 
+    // var Cid=this.rechargeitem.CircleId;
+    // this.singleState=this.StatesOfIndia.find(function(obj){return obj.Id===Cid})
+    // this.statename=this.singleState.Name;
+    // var Oid=this.rechargeitem.OperatorId;
+    // this.singleOperator=this.OperatorsOfIndia.find(function(obj){return obj.Id===Oid})
+    // this.operatorname=this.singleOperator.Name;
+  //}
+    
   }
+  
 
   resetForm(form?: NgForm) {
     if (form != null)
@@ -204,7 +242,8 @@ else if(this.ParentId=="S5"){
     NickName: '',
     OperatorId: '',
     ParentId: '',
-    SubscriptionId: ''
+    SubscriptionId: '',
+    CircleId:''
   }
   this.rechargeitem = {
     Id: '',
@@ -212,9 +251,261 @@ else if(this.ParentId=="S5"){
     OperatorId: '',
     ParentId: '',
     SubscriptionId: '',
-    Amount:''
+    Amount:'',
+    CircleId:''
   }
 }
+
+// OnNext(operatorId,mobileNo,amount,nickName){
+//   if(this.Id==null){
+//     this.rechargeitem={
+      
+//       Id:this.guid(),
+//       OperatorId:this.rechargeitem.OperatorId,
+//       SubscriptionId:this.rechargeitem.SubscriptionId,
+//       ParentId:this.OSResponseNew[0].ParentId,
+//       NickName:this.rechargeitem.NickName,
+//       Amount:this.rechargeitem.Amount
+//     }
+
+//     this.favouriteitem={ 
+//       Id:this.guid(),
+//       OperatorId:this.rechargeitem.OperatorId,
+//       SubscriptionId:this.rechargeitem.SubscriptionId,
+//       ParentId:this.OSResponseNew[0].ParentId,
+//       NickName:this.rechargeitem.NickName
+//     }
+
+//     switch (this.OSResponseNew[0].ParentId) {
+//       case "S1":
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
+//       break;
+//       case "S2":
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
+//         break;
+//       case "S3":
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
+//         break;
+//       case "S4":
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
+//         break;
+//       case "S5":
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
+//         break;
+//       case "S6":
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
+//         break;
+//       default:
+//       var existingEntries = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
+//     }
+//     if(existingEntries == null){ 
+//       switch (this.OSResponseNew[0].ParentId) {
+//         case "S1":
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1, JSON.stringify([this.favouriteitem]));
+//         break;
+//         case "S2":
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S2, JSON.stringify([this.favouriteitem]));
+//           break;
+//         case "S3":
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S3, JSON.stringify([this.favouriteitem]));
+//           break;
+//         case "S4":
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S4, JSON.stringify([this.favouriteitem]));
+//           break;
+//         case "S5":
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S5, JSON.stringify([this.favouriteitem]));
+//           break;
+//         case "S6":
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S6, JSON.stringify([this.favouriteitem]));
+//           break;
+//         default:
+//         StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S7, JSON.stringify([this.favouriteitem]));
+//       }
+//       //localStorage.setItem(this.constant.DB.Favourite, JSON.stringify([this.favouriteitem]));
+//     }
+    
+//     else{
+//       var MobileNumber=this.favouriteitem.SubscriptionId;
+//       var NickName=this.favouriteitem.NickName;
+//       this.existingentry=existingEntries;
+//       //this.duplicateFavourite= this.existingentry.find(function (obj) { return obj === fav; });
+//       //this.duplicateFavourite= this.existingentry.find(function (obj) { return obj.SubscriptionId === MobileNumber; });
+//       this.duplicateFavourite= this.existingentry.find(function (obj) { return obj.SubscriptionId === MobileNumber||obj.NickName===NickName; });
+
+//       if(this.duplicateFavourite==null){
+//         existingEntries.push(this.favouriteitem);
+
+//         switch (this.OSResponseNew[0].ParentId) {
+//           case "S1":
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1,JSON.stringify(existingEntries));  
+//           break;
+//           case "S2":
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S2,JSON.stringify(existingEntries));  
+//             break;
+//           case "S3":
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S3,JSON.stringify(existingEntries));  
+//             break;
+//           case "S4":
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S4,JSON.stringify(existingEntries));  
+//             break;
+//           case "S5":
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S5,JSON.stringify(existingEntries));  
+//             break;
+//           case "S6":
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S6,JSON.stringify(existingEntries));  
+//             break;
+//           default:
+//           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S7,JSON.stringify(existingEntries));  
+//         }
+        
+//       }else{
+//         //No action needed
+//       }
+      
+//     }
+//   }
+    
+//     //above code is for updating or adding row for FavouriteKey local storage.
+    
+//     switch (this.OSResponseNew[0].ParentId) {
+//       case "S1":
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
+//       break;
+//       case "S2":
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
+//         break;
+//       case "S3":
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
+//         break;
+//       case "S4":
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
+//         break;
+//       case "S5":
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
+//         break;
+//       case "S6":
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
+//         break;
+//       default:
+//       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
+//     }
+//     switch (this.rechargeitem.OperatorId) {
+//       case "O1":
+//       this.operator="Airtel";
+//       break;
+//       case "O2":
+//       this.operator="BSNL";       
+//       break;
+//       case "O3":
+//       this.operator="Vodafone";        
+//       break;
+//       case "O4":
+//       this.operator="Idea";
+//         break;
+//       case "O5":
+//       this.operator="Jio";
+//         break;
+//       case "O6":
+//       this.operator="Reliance GSM";
+//         break;
+//       case "O7":
+//       this.operator="Reliance CDMA";
+//       break;
+//       case "O8":
+//       this.operator="Tata Indicom";       
+//       break;
+//       case "O9":
+//       this.operator="Tata Docomo";        
+//       break;
+//       case "O10":
+//       this.operator="Telenor";
+//         break;
+//       case "O11":
+//       this.operator="MTNL";
+//         break;
+//       case "O12":
+//       this.operator="Aircel";
+//         break;
+//         case "O13":
+//       this.operator="Videocon";
+//       break;
+//       case "O14":
+//       this.operator="MTS";       
+//       break;
+//       case "O15":
+//       this.operator="BSNL STV";        
+//       break;
+//       case "O16":
+//       this.operator="Tata Docomo STV";
+//       break;
+//       case "O17":
+//       this.operator="Telenor STV";
+//       break;
+//       case "O18":
+//       this.operator="VIDEOCON STV";
+//       break;
+//       case "O19":
+//       this.operator="MTNL STV";
+//       break;
+//       case "O20":
+//       this.operator="Airtel";
+//       break;
+//       case "O21":
+//       this.operator="Idea";
+//       break;
+//       case "O22":
+//       this.operator="Vodafone";
+//       break;
+//       case "O23":
+//       this.operator="Reliance GSM";
+//       break;
+//       case "O24":
+//       this.operator="Reliance CDMA";
+//       break;
+//       case "O25":
+//       this.operator="Tata Docomo";
+//       break;
+//       case "O26":
+//       this.operator="Aircel";
+//       break;
+//       case "O27":
+//       this.operator="MTS";
+//       break;
+//       case "O28":
+//       this.operator="BSNL";
+//       break;
+//       case "O29":
+//       this.operator="Dish TV";
+//       this.label="Viewing Card Number";
+//       break;
+//       case "O30":
+//       this.operator="TATA Sky";
+//       this.label="Registered Mobile Number or Subscriber ID";
+//       break;
+//       case "O31":
+//       this.operator="Sun TV";
+//       this.label="Smart Card Number";
+//       break;
+//       case "O32":
+//       this.operator="Videocon D2H TV";
+//       this.label="Subscriber ID";
+//       break;
+//       case "O33":
+//       this.operator="Reliance Big TV";
+//       this.label="Smart Card Number";
+//       break;
+//       case "O34":
+//       this.operator="Airtel Digital TV";
+//       this.label="Customer ID";
+//       break;
+//       default:
+//       this.operator="BESCOM";
+//     }
+//     this.ShowEntryForm=false;
+//     this.showConfirm=true;
+
+//   }
+  
 
 OnNext(form: NgForm){
   if(this.Id==null){
@@ -225,7 +516,8 @@ OnNext(form: NgForm){
       SubscriptionId:this.rechargeitem.SubscriptionId,
       ParentId:this.OSResponseNew[0].ParentId,
       NickName:this.rechargeitem.NickName,
-      Amount:this.rechargeitem.Amount
+      Amount:this.rechargeitem.Amount,
+      CircleId:this.rechargeitem.CircleId
     }
 
     this.favouriteitem={ 
@@ -233,7 +525,8 @@ OnNext(form: NgForm){
       OperatorId:this.rechargeitem.OperatorId,
       SubscriptionId:this.rechargeitem.SubscriptionId,
       ParentId:this.OSResponseNew[0].ParentId,
-      NickName:this.rechargeitem.NickName
+      NickName:this.rechargeitem.NickName,
+      CircleId:this.rechargeitem.CircleId
     }
 
     switch (this.OSResponseNew[0].ParentId) {
@@ -462,95 +755,171 @@ OnNext(form: NgForm){
       this.operator="BESCOM";
     }
     this.ShowEntryForm=false;
+    this.showConfirm=true;
+
+  }
+  StatesOfIndia = [
+    {Id: "1", Name: "Delhi/NCR"},
+    {Id: "2", Name: "Mumbai"},
+    {Id: "3", Name: "Kolkata"},
+    {Id: "4", Name: "Maharashtra"},
+    {Id: "5", Name: "Andhra Pradesh"},
+    {Id: "6", Name: "Tamil Nadu"},
+    {Id: "7", Name: "Karnataka"},
+    {Id: "8", Name: "Gujarat"},
+    {Id: "9", Name: "Uttar Pradesh (E)"},
+    {Id: "10", Name: "Madhya Pradesh"},
+    {Id: "11", Name: "Uttar Pradesh (W)"},
+    {Id: "12", Name: "West Bengal"},
+    {Id: "13", Name: "Rajasthan"},
+    {Id: "14", Name: "Kerala"},
+    {Id: "15", Name: "Punjab "},
+    {Id: "16", Name: "Haryana"},
+    {Id: "17", Name: "Bihar & Jharkhand"},
+    {Id: "18", Name: "Orissa"},
+    {Id: "19", Name: "Assam"},
+    {Id: "20", Name: "North East"},
+    {Id: "21", Name: "Himachal Pradesh"},
+    {Id: "22", Name: "Jammu & Kashmir"},
+    {Id: "23", Name: "Chennai"}
+ ];
+ StatesOfIndiayy={"1":"Delhi/NCR","2":""}
+ OperatorsOfIndia=[{Id: "1", Name: "Aircel"},
+ {Id: "2", Name: "Airtel"},
+ {Id: "O2", Name: "BSNL"},
+ {Id: "4", Name: "Idea"},
+ {Id: "5", Name: "Jio"},
+ {Id: "6", Name: "MTNL"},
+ {Id: "7", Name: "MTS"},
+ {Id: "8", Name: "Reliance Mobile"},
+ {Id: "9", Name: "Tata Docomo CDMA"},
+ {Id: "10", Name: "Tata Docomo GSM"},
+ {Id: "11", Name: "Telenor"},
+ {Id: "12", Name: "Vodafone"},
+];
+  OnMobileNo(id){
+    if(id.length<10){
+       //return null;
+       return this.showerrortext=true;
+    }else{
+      var firstfive=id.substring(0,5);
+      this.operatorcircleqry={
+       Mobile:firstfive
+      }
+      this.regService.GetOperaterCircle(this.operatorcircleqry).subscribe((data:any)=>{
+      this.operatorcircle=data;
+      var operator=this.operatorcircle.operator;
+      this.operatorname=this.operatorcircle.operator;
+      this.singleosrespone=this.OSResponseNew.find(function (obj) { return obj.Operator === operator; });
+      this.oid=this.singleosrespone.Id;
+      this.rechargeitem.OperatorId=this.oid;
+  
+      var circle=this.operatorcircle.circle;
+      this.statename=this.operatorcircle.circle;
+      this.singleState=this.StatesOfIndia.find(function(obj){return obj.Name===circle})
+      this.sid=this.singleState.Id;
+      this.rechargeitem.CircleId=this.sid;
+    });
+    }
+    
   }
   
   
-  ObjChanged(event){
-    this.ShowLabel=false;
+  GetDigiPartyandPartyMastID(ActiveTenantId){
+    this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+       return this.digiparty;
+  }
+  GetSelfCareAcByTenantID(ActiveTenantId){
+    this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"; });
+    return this.selfCareAC;
+  }
+  OperatorChanged(event){
     switch(event){
       case "O1":
-      this.osid="O1";
+      this.operatorname="Airtel";
       break;
       case "O2":
-      this.osid="O2";
+      this.operatorname="BSNL";
       break;
       case "O3":
-      this.osid="O3";
+      this.operatorname="Vodafone";
       break;
       case "O4":
-      this.osid="O4";
+      this.operatorname="Idea";
       break;
       case "O5":
-      this.osid="O5";
+      this.operatorname="Jio";
       break;
       case "O6":
-      this.osid="O6";
+      this.operatorname="Reliance GSM";
       break;
       case "O7":
-      this.osid="O7";
+      this.operatorname="Reliance CDMA";
       break;
       case "O8":
-      this.osid="O8";
+      this.operatorname="Tata Indicom";
       break;
       case "O9":
-      this.osid="O9";
+      this.operatorname="Tata Docomo";
       break;
       case "O10":
-      this.osid="O10";
+      this.operatorname="Telenor";
       break;
       case "O11":
-      this.osid="O11";
+      this.operatorname="MTNL";
       break;
       case "O12":
-      this.osid="O12";
+      this.operatorname="Aircel";
       break;
       case "O13":
-      this.osid="O13";
+      this.operatorname="Videocon";
       break;
       case "O14":
-      this.osid="O14";
+      this.operatorname="MTS";
       break;
       case "O15":
-      this.osid="O15";
+      this.operatorname="BSNL STV";
       break;
       case "O16":
-      this.osid="O16";
+      this.operatorname="Tata Docomo STV";
       break;
       case "O17":
-      this.osid="O17";
+      this.operatorname="Telenor STV";
       break;
       case "O18":
-      this.osid="O18";
+      this.operatorname="VIDEOCON STV";
       break;
       case "O19":
-      this.osid="O19";
+      this.operatorname="MTNL STV";
       break;
       case "O20":
-      this.osid="O20";
+      this.operatorname="Airtel";
       break;
       case "O21":
-      this.osid="O21";
+      this.operatorname="Idea";
       break;
       case "O22":
-      this.osid="O22";
+      this.operatorname="Vodafone";
       break;
       case "O23":
-      this.osid="O23";
+      this.operatorname="Reliance GSM";
       break;
       case "O24":
-      this.osid="O24";
+      this.operatorname="Reliance CDMA";
       break;
       case "O25":
-      this.osid="O25";
+      this.operatorname="Tata Docomo";
       break;
       case "O26":
-      this.osid="O26";
+      this.operatorname="Aircel";
       break;
       case "O27":
-      this.osid="O27";
+      this.operatorname="MTS";
       break;
       case "O28":
-      this.osid="O28";
+      this.operatorname="BSNL";
       break;
       case "O29":
       this.label="Viewing Card Number";
@@ -579,36 +948,85 @@ OnNext(form: NgForm){
       this.label="Customer ID";
     }
   }
-
-  GetDigiPartyandPartyMastID(ActiveTenantId){
-    this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
-       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-       return this.digiparty;
-  }
-  GetSelfCareAcByTenantID(ActiveTenantId){
-    this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
-    this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"; });
-    return this.selfCareAC;
-  }
-
-  i:any;
-  planTypes:string[]= ["FTT","LSC","TUP","SMS","OTR","RMG"];
-  OnViewPlans(){
-    for(this.i=0;this.i<this.planTypes.length;this.i++){
-      this.planRequest={
-        OSId:this.osid,
-        CircleId:"7",
-        PlanType:this.planTypes[this.i],
-        TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
-      }
-      
+  
+  StateChanged(event){
+    switch(event){
+      case "1":
+      this.statename="Delhi/NCR";
+      break;
+      case "2":
+      this.statename="Mumbai";
+      break;
+      case "3":
+      this.statename="Kolkata";
+      break;
+      case "4":
+      this.statename="Maharashtra";
+      break;
+      case "5":
+      this.statename="Andhra Pradesh";
+      break;
+      case "6":
+      this.statename="Tamil Nadu";
+      break;
+      case "7":
+      this.statename="Karnataka";
+      break;
+      case "8":
+      this.statename="Gujarat";
+      break;
+      case "9":
+      this.statename="Uttar Pradesh (E)";
+      break;
+      case "10":
+      this.statename="Madhya Pradesh";
+      break;
+      case "11":
+      this.statename="Uttar Pradesh (W)";
+      break;
+      case "12":
+      this.statename="West Bengal";
+      break;
+      case "13":
+      this.statename="Rajasthan";
+      break;
+      case "14":
+      this.statename="Kerala";
+      break;
+      case "15":
+      this.statename="Punjab";
+      break;
+      case "16":
+      this.statename="Haryana";
+      break;
+      case "17":
+      this.statename="Bihar & Jharkhand";
+      break;
+      case "18":
+      this.statename="Orissa";
+      break;
+      case "19":
+      this.statename="Assam";
+      break;
+      case "20":
+      this.statename="North East";
+      break;
+      case "21":
+      this.statename="Himachal Pradesh";
+      break;
+      case "22":
+      this.statename="Jammu & Kashmir";
+      break;
+      default:
+      this.statename="Chennai";
     }
-    this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
-      this.planResponse=data;
-    },(error) => {this.toastr.error(error.message, 'Error!')
-      });
-      this.favouriteNew=null;
-
+  }
+  
+  OnViewPlans(subscriptionId,operatorId,circleId,nname){
+    this.showConfirm=false;
+    //this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'ParentId':this.ParentId});
+     this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'CircleId': circleId,'ParentId':this.ParentId,'SubscriptionId':subscriptionId,'nname':nname});
+    
   }
 
 OnConfirm(){
@@ -656,6 +1074,8 @@ OnConfirm(){
     this.regService.PostRecharge(this.recharge).subscribe((data : any)=>{
       this.tranresponse=data;
       this.toastr.success('Recharge is successful with ' + this.tranresponse.StatusCode, 'Success!');
+this.showConfirm=false;
+this.showSuccess=true;
 
     //},(err) => {console.log(err)});
   //},(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')

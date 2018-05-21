@@ -29,6 +29,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PlanRequest } from '../View Models/PlanRequest';
 import { PlanResponse } from '../View Models/PlanResponse';
 import { RRRequest } from '../View Models/RRRequest';
+import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
 //import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 @Injectable()
@@ -237,7 +238,13 @@ export class RegisterService {
         return this.httpclient.post<StatementRequest>(this.uihelper.CallWebAPIUrlNew("/Banking/GetStatement"), StmntReq);
     }
 
-
+    GetOperaterCircle(operaterCircleQuery:OperaterCircleQuery) {
+        const operatorcquery:OperaterCircleQuery={
+            Mobile:operaterCircleQuery.Mobile
+        }
+        return this.httpclient.post<OperaterCircleQuery>(this.uihelper.CallWebAPIUrlNew("/Operator/GetOperaterCircle"), operatorcquery);
+            
+    }
     GetRechargeReport(rRRequest: RRRequest) {
         const rrreq: RRRequest = {
             TenantId: rRRequest.TenantId,

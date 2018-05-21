@@ -70,7 +70,7 @@ OnNewRecharge(ParentId){
     });
     loading.present();
     // this.navCtrl.push(SelectOperatorPage,{ 'Id': this.Id });
-     this.navCtrl.push(MobileRechargePage,{ 'OperatorId':order.OperatorId,'ParentId': order.ParentId, 'Id':order.Id });
+     this.navCtrl.push(MobileRechargePage,{ 'OperatorId':order.OperatorId,'ParentId': order.ParentId, 'Id':order.Id, 'nname':order.NickName,'SubscriptionId':order.SubscriptionId,'CircleId': order.CircleId});
    loading.dismiss();
     }
 

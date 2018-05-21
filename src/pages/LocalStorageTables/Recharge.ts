@@ -5,4 +5,5 @@ export class Recharge{
           ParentId:string;
           SubscriptionId:string;
           Amount:string;
+          CircleId:string;
       }

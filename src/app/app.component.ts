@@ -17,6 +17,7 @@ import { RegisterService } from '../pages/services/app-data.service';
 import { SCRequest } from '../pages/View Models/SCRequest';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
+import { RechargePage } from '../pages/recharge/recharge';
 
 @Component({
   templateUrl: 'app.html'
@@ -60,7 +61,7 @@ SCReq: any;
       }
      
       else{
-        this.rootPage=PagePage;
+        this.rootPage=RechargePage;
       }
         
     });
