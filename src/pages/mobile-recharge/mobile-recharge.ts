@@ -23,12 +23,15 @@ import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
 import { OperaterCircle } from '../View Models/OperaterCircle';
 import { SingleState } from '../View Models/SingleState';
 import { BasicPage, TabBasicContentPage1 } from '../ViewPlans_Tabs/ViewPlans_Tabs';
+import { SingleOperator } from '../View Models/SingleOperator';
 @Component({
   selector: 'page-mobile-recharge',
   templateUrl: 'mobile-recharge.html'
 })
 export class MobileRechargePage implements OnInit{
 
+  singleOperator: SingleOperator;
+  amountforRecharge: any;
   statename: string;
   operatorname: string;
   showerrortext: boolean;
@@ -117,6 +120,7 @@ export class MobileRechargePage implements OnInit{
     this.resetForm();
     this.Id=this.navParams.get('Id');
     this.ParentId=this.navParams.get('ParentId');
+    this.amountforRecharge=this.navParams.get('Amount');
     this.osid=this.navParams.get('OperatorId');
     if(this.ParentId=="S3"){
       this.favouriteNewOfDTH=this.ParentId;
@@ -209,8 +213,26 @@ else if(this.ParentId=="S5"){
     StorageService.SetItem(this.constant.osBasedOnParentId.OS_S7,JSON.stringify(this.OSResponseNew))
   }
     });
-    //this.completeTestService=
+    //if(this.Id!=null){
+    this.rechargeitem = {
+      Id: '',
+      NickName: this.navParams.get('nname'),
+      OperatorId:this.navParams.get('OperatorId'),
+      ParentId: this.navParams.get('ParentId'),
+      SubscriptionId: this.navParams.get('SubscriptionId'),
+      Amount:this.navParams.get('Amount'),
+      CircleId:this.navParams.get('CircleId')
+    } 
+    // var Cid=this.rechargeitem.CircleId;
+    // this.singleState=this.StatesOfIndia.find(function(obj){return obj.Id===Cid})
+    // this.statename=this.singleState.Name;
+    // var Oid=this.rechargeitem.OperatorId;
+    // this.singleOperator=this.OperatorsOfIndia.find(function(obj){return obj.Id===Oid})
+    // this.operatorname=this.singleOperator.Name;
+  //}
+    
   }
+  
 
   resetForm(form?: NgForm) {
     if (form != null)
@@ -220,7 +242,8 @@ else if(this.ParentId=="S5"){
     NickName: '',
     OperatorId: '',
     ParentId: '',
-    SubscriptionId: ''
+    SubscriptionId: '',
+    CircleId:''
   }
   this.rechargeitem = {
     Id: '',
@@ -502,7 +525,8 @@ OnNext(form: NgForm){
       OperatorId:this.rechargeitem.OperatorId,
       SubscriptionId:this.rechargeitem.SubscriptionId,
       ParentId:this.OSResponseNew[0].ParentId,
-      NickName:this.rechargeitem.NickName
+      NickName:this.rechargeitem.NickName,
+      CircleId:this.rechargeitem.CircleId
     }
 
     switch (this.OSResponseNew[0].ParentId) {
@@ -998,10 +1022,10 @@ OnNext(form: NgForm){
     }
   }
   
-  OnViewPlans(operatorId,circleId){
+  OnViewPlans(subscriptionId,operatorId,circleId,nname){
     this.showConfirm=false;
-   
-    this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'CircleId': circleId});
+    //this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'ParentId':this.ParentId});
+     this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'CircleId': circleId,'ParentId':this.ParentId,'SubscriptionId':subscriptionId,'nname':nname});
     
   }
 

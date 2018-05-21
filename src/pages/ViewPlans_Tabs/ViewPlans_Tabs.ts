@@ -1,177 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { Platform, LoadingController, NavParams, NavController } from 'ionic-angular';
+import { Platform, LoadingController, NavParams, NavController, Tabs } from 'ionic-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
 import { PlanRequest } from '../View Models/PlanRequest';
 import { StorageService } from '../services/Storage_Service';
 import { PlanDet } from '../View Models/PlanResponse';
+import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 
 
+//(ionSelect)="myMethod()"
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-    Music
-    </ion-content>
-`})
-export class TabBasicContentPage1 implements OnInit{
-  
-  
-  circleId: any;
-  operatorId: any;
-  planResponse: PlanDet;
-  isAndroid: boolean = false;
-  planRequest: PlanRequest;
-  i:any;
-  planTypes:string[]= ["RMG","OTR","LSC","TUP","SMS","FTT"];
-
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
-    this.isAndroid = platform.is('android');
-    
-    this.operatorId=this.navParams.get('OperatorId');
-    this.circleId=this.navParams.get('CircleId');
-
-  }
-
-  ngOnInit() {
-    for(this.i=0;this.i<this.planTypes.length;this.i++){
-      this.planRequest={
-        OSId:this.operatorId,
-        CircleId:this.circleId,
-        PlanType:this.planTypes[this.i],
-        TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
-      }
+  <ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top" color="primary">
       
-    }
-    //this.planResponse=this.bpage.planResponse;
-    // this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
-    //   this.planResponse=data;
-    // },(error) => {this.toastr.error(error.message, 'Error!')
-    //   });
-
-  }
-}
-@Component({
-  template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-    Movies
-    </ion-content>
-`})
-export class TabBasicContentPage2 {
-  isAndroid: boolean = false;
-
-  constructor(platform: Platform) {
-    this.isAndroid = platform.is('android');
-  }
-}
-@Component({
-  template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-    Games
-    </ion-content>
-`})
-export class TabBasicContentPage3 {
-  isAndroid: boolean = false;
-
-  constructor(platform: Platform) {
-    this.isAndroid = platform.is('android');
-  }
-}
-@Component({
-  template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-    SMS
-    </ion-content>
-`})
-export class TabBasicContentPage4 {
-  isAndroid: boolean = false;
-
-  constructor(platform: Platform) {
-    this.isAndroid = platform.is('android');
-  }
-}
-@Component({
-  template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-    OTR
-    </ion-content>
-`})
-export class TabBasicContentPage5 {
-  isAndroid: boolean = false;
-
-  constructor(platform: Platform) {
-    this.isAndroid = platform.is('android');
-  }
-}
-@Component({
-  template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-    RMG
-    </ion-content>
-`})
-export class TabBasicContentPage6 {
-  isAndroid: boolean = false;
-
-  constructor(platform: Platform) {
-    this.isAndroid = platform.is('android');
-  }
-}
-
-@Component({
-  template: `
-    <ion-tabs class="tabs-basic" [selectedIndex]="1">
-      
-    <ion-tab tabTitle={{FTT}} [root]="FTTPage"></ion-tab>
-    <ion-tab tabTitle={{TUP}} [root]="TUPPage"></ion-tab>
-    <ion-tab tabTitle={{LSC}} [root]="LSCPage"></ion-tab>
-    <ion-tab tabTitle={{SMS}} [root]="SMSPage"></ion-tab>
-    <ion-tab tabTitle={{OTR}} [root]="OTRPage"></ion-tab>
-    <ion-tab tabTitle={{RMG}} [root]="RMGPage" (ionSelect)="myMethod()" (click)="myMethod()"></ion-tab>
-
+    <ion-tab tabTitle={{FTT}} [root]="FTTPage" [rootParams]="navp"></ion-tab>
+    <ion-tab tabTitle={{TUP}} [root]="TUPPage" [rootParams]="navp"></ion-tab>
+    <ion-tab tabTitle={{LSC}} [root]="LSCPage" [rootParams]="navp"></ion-tab>
+    <ion-tab tabTitle={{SMS}} [root]="SMSPage" [rootParams]="navp"></ion-tab>
+    <ion-tab tabTitle={{OTR}} [root]="OTRPage" [rootParams]="navp"></ion-tab>
+    <ion-tab tabTitle={{RMG}} [root]="RMGPage" [rootParams]="navp"></ion-tab>
     </ion-tabs>
 `})
 export class BasicPage implements OnInit{
+  navp: any;
   planResponse: PlanDet;
   planRequest: PlanRequest;
   i:any;
-  planTypes:string[]= ["RMG","OTR","LSC","TUP","SMS","FTT"];
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
   circleId: any;
   operatorId: any;
   RMG: string;
@@ -195,26 +52,357 @@ export class BasicPage implements OnInit{
       this.RMG="Roaming";
       this.operatorId=this.navParams.get('OperatorId');
       this.circleId=this.navParams.get('CircleId');
-
+      this.navp=this.navParams.data;
       
   }
 
   ngOnInit(){
-    for(this.i=0;this.i<this.planTypes.length;this.i++){
+    // for(this.i=0;this.i<this.planTypes.length;this.i++){
+    //   this.planRequest={
+    //     OSId:this.operatorId,
+    //     CircleId:this.circleId,
+    //     PlanType:this.planTypes[this.i],
+    //     TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    //   }
       this.planRequest={
         OSId:this.operatorId,
         CircleId:this.circleId,
-        PlanType:this.planTypes[this.i],
+        PlanType:this.planTypes[0],
         TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
       }
-      
-    }
-    this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
-      this.planResponse=data;
-    },(error) => {this.toastr.error(error.message, 'Error!')
-      });
+      //this.navCtrl.push(TabBasicContentPage1, { 'OperatorId':this.operatorId,'CircleId': this.circleId});
+
+    //}
+    // this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    //   this.planResponse=data;
+    // },(error) => {this.toastr.error(error.message, 'Error!')
+    //   });
 
   }
 
-
+  // myMethod(){
+  //   // this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  //   //   this.planResponse=data;
+  //   // },(error) => {this.toastr.error(error.message, 'Error!')
+  //   //   });
+  // }
 }
+
+@Component({
+  template: `
+    <ion-header>
+      <ion-navbar>
+        <ion-title>Tabs</ion-title>
+      </ion-navbar>
+    </ion-header>
+
+    <ion-content>
+    Music
+    <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+    <h3>Talktime:{{ order.talktime }}</h3>
+    <button ion-button outline icon-start item-end round medium>
+      <ion-icon name='briefcase' is-active="false"></ion-icon>
+      {{ order.amount | number }}
+    </button>
+    <a style="color:red">{{ order.detail }}</a>
+    <h2>Validity:{{ order.validity }}</h2>
+    </ion-item>
+  </ion-list>
+    </ion-content>
+`})
+export class TabBasicContentPage1 {
+  //@ViewChild("paymentTabs") paymentTabs: Tabs;
+
+  
+  navp: any;
+  circleId: any;
+  operatorId: any;
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  planRequest: PlanRequest;
+  i:any;
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
+
+  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    this.isAndroid = platform.is('android');
+    
+    this.operatorId=this.navParams.get('OperatorId');
+    this.circleId=this.navParams.get('CircleId');
+    this.navp=this.navParams.data;
+ // for(this.i=0;this.i<this.planTypes.length;this.i++){
+    //   this.planRequest={
+    //     OSId:this.operatorId,
+    //     CircleId:this.circleId,
+    //     PlanType:this.planTypes[this.i],
+    //     TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    //   }
+      
+    // }
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[0],
+      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    }
+  //this.planResponse=this.bpage.planResponse;
+  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    this.planResponse=data;
+  },(error) => {this.toastr.error(error.message, 'Error!')
+    });
+  }
+  OnAmount(amount){
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
+  }
+  // ngOnInit() {
+   
+
+  // }
+}
+@Component({
+  template: `
+    <ion-header>
+      <ion-navbar>
+        <ion-title>Tabs</ion-title>
+      </ion-navbar>
+    </ion-header>
+
+    <ion-content>
+    Movies
+    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+    <h3>Talktime:{{ order.talktime }}</h3>
+    <button ion-button outline icon-start item-end round medium>
+      <ion-icon name='briefcase' is-active="false"></ion-icon>
+      {{ order.amount }}
+    </button>
+    <a style="color:red">{{ order.detail }}</a>
+    <h2>Validity:{{ order.validity }}</h2>
+    </ion-item>
+  </ion-list>
+    </ion-content>
+`})
+export class TabBasicContentPage2 {
+  navp: any;
+  circleId: any;
+  operatorId: any;
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  planRequest: PlanRequest;
+  i:any;
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
+
+  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    this.isAndroid = platform.is('android');
+    this.operatorId=this.navParams.get('OperatorId');
+    this.circleId=this.navParams.get('CircleId');
+    this.navp=this.navParams.data;
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[1],
+      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    }
+  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    this.planResponse=data;
+  },(error) => {this.toastr.error(error.message, 'Error!')
+    });
+  }
+}
+@Component({
+  template: `
+    <ion-header>
+      <ion-navbar>
+        <ion-title>Tabs</ion-title>
+      </ion-navbar>
+    </ion-header>
+
+    <ion-content>
+    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+    <h3>Talktime:{{ order.talktime }}</h3>
+    <button ion-button outline icon-start item-end round medium>
+      <ion-icon name='briefcase' is-active="false"></ion-icon>
+      {{ order.amount }}
+    </button>
+    <a style="color:red">{{ order.detail }}</a>
+    <h2>Validity:{{ order.validity }}</h2>
+    </ion-item>
+  </ion-list>
+    </ion-content>
+`})
+export class TabBasicContentPage3 {
+  navp: any;
+  circleId: any;
+  operatorId: any;
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  planRequest: PlanRequest;
+  i:any;
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
+
+  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    this.isAndroid = platform.is('android');
+    this.operatorId=this.navParams.get('OperatorId');
+    this.circleId=this.navParams.get('CircleId');
+    this.navp=this.navParams.data;
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[2],
+      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    }
+  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    this.planResponse=data;
+  },(error) => {this.toastr.error(error.message, 'Error!')
+    });
+  }
+}
+@Component({
+  template: `
+    <ion-header>
+      <ion-navbar>
+        <ion-title>Tabs</ion-title>
+      </ion-navbar>
+    </ion-header>
+
+    <ion-content>
+    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+    <h3>Talktime:{{ order.talktime }}</h3>
+    <button ion-button outline icon-start item-end round medium>
+      <ion-icon name='briefcase' is-active="false"></ion-icon>
+      {{ order.amount }}
+    </button>
+    <a style="color:red">{{ order.detail }}</a>
+    <h2>Validity:{{ order.validity }}</h2>
+    </ion-item>
+  </ion-list>   
+  </ion-content>
+`})
+export class TabBasicContentPage4 {
+  navp: any;
+  circleId: any;
+  operatorId: any;
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  planRequest: PlanRequest;
+  i:any;
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
+
+  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    this.isAndroid = platform.is('android');
+    this.operatorId=this.navParams.get('OperatorId');
+    this.circleId=this.navParams.get('CircleId');
+    this.navp=this.navParams.data;
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[3],
+      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    }
+  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    this.planResponse=data;
+  },(error) => {this.toastr.error(error.message, 'Error!')
+    });
+  }
+}
+@Component({
+  template: `
+    <ion-header>
+      <ion-navbar>
+        <ion-title>Tabs</ion-title>
+      </ion-navbar>
+    </ion-header>
+
+    <ion-content>
+    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+    <h3>Talktime:{{ order.talktime }}</h3>
+    <button ion-button outline icon-start item-end round medium>
+      <ion-icon name='briefcase' is-active="false"></ion-icon>
+      {{ order.amount }}
+    </button>
+    <a style="color:red">{{ order.detail }}</a>
+    <h2>Validity:{{ order.validity }}</h2>
+    </ion-item>
+  </ion-list> 
+  </ion-content>
+`})
+export class TabBasicContentPage5 {
+  navp: any;
+  circleId: any;
+  operatorId: any;
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  planRequest: PlanRequest;
+  i:any;
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
+
+  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    this.isAndroid = platform.is('android');
+    this.operatorId=this.navParams.get('OperatorId');
+    this.circleId=this.navParams.get('CircleId');
+    this.navp=this.navParams.data;
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[4],
+      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    }
+  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    this.planResponse=data;
+  },(error) => {this.toastr.error(error.message, 'Error!')
+    });
+  }
+}
+@Component({
+  template: `
+    <ion-header>
+      <ion-navbar>
+        <ion-title>Tabs</ion-title>
+      </ion-navbar>
+    </ion-header>
+
+    <ion-content>
+    <ion-list *ngFor="let order of planResponse" (click)="OnRequestOTP(order.Id)">
+    <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">
+    <h3>Talktime:{{ order.talktime }}</h3>
+    <button ion-button outline icon-start item-end round medium>
+      <ion-icon name='briefcase' is-active="false"></ion-icon>
+      {{ order.amount }}
+    </button>
+    <a style="color:red">{{ order.detail }}</a>
+    <h2>Validity:{{ order.validity }}</h2>
+    </ion-item>
+  </ion-list>  
+  </ion-content>
+`})
+export class TabBasicContentPage6 {
+  navp: any;
+  circleId: any;
+  operatorId: any;
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  planRequest: PlanRequest;
+  i:any;
+  planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
+
+  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    this.isAndroid = platform.is('android');
+    this.operatorId=this.navParams.get('OperatorId');
+    this.circleId=this.navParams.get('CircleId');
+    this.navp=this.navParams.data;
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[5],
+      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+    }
+  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+    this.planResponse=data;
+  },(error) => {this.toastr.error(error.message, 'Error!')
+    });
+  }
+}
+

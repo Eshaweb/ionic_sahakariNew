@@ -120,7 +120,7 @@
           Amount
         </ion-label>
         <ion-input type="number" placeholder="" name="Amount" #Amount="ngModel" [(ngModel)]="rechargeitem.Amount"></ion-input>
-        <button ion-button clear item-end (click)="OnViewPlans(rechargeitem.OperatorId,rechargeitem.CircleId)" type="button">View Plans</button>
+        <button ion-button clear item-end (click)="OnViewPlans(rechargeitem.SubscriptionId,rechargeitem.OperatorId,rechargeitem.CircleId,rechargeitem.NickName)" type="button">View Plans</button>
       <ion-card-content item-end>of {{operatorname}}-{{statename}}</ion-card-content>
       </ion-item>
       <ion-item id="mobileRecharge-input7">

@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-//import { Toast } from '@ionic-native/toast';
+import { Toast } from '@ionic-native/toast';
 import { ServiceWorkerModule } from '@angular/service-worker';
 //import { environment } from '../environments/environment';
 
@@ -117,7 +117,7 @@ import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,Ta
     TabBasicContentPage5,
     TabBasicContentPage6
   ],
-  providers: [AuthGuard, {
+  providers: [AuthGuard,Toast, {
     provide : HTTP_INTERCEPTORS,
     useClass : AuthInterceptor,
     multi : true
