@@ -27,22 +27,23 @@
                 <span>{{ order.Address }}</span>
           <div *ngIf="(order.Id!=Active)">
         <button ion-button clear item-end (click)="OnSelect(order)">Select</button>       
-       </div>
+      </div>
           <div *ngIf="(order.Id==Active)">
         <!-- <ion-icon name='rose' item-end color="secondary"></ion-icon> -->
         <ion-icon name="heart" item-end color="danger"></ion-icon>
         
       </div>
+      <button ion-button (click)="OnRemove(order.Id)" item-end>Remove</button>
       </ion-item>
       </ion-list>
-      <button  id="register-button7" ion-button color="positive" (click)="OnGetTenants()" block>
+      <button  id="register-button7" ion-button color="positive" (click)="OnAddBank()" block>
         Add Bank Account
       </button>
       <div *ngIf="showHide">
         <form id="mobileRecharge-form2" (ngSubmit)="OnSubmit(MobileRecharegeform)" #MobileRechargeform="ngForm">
           <ion-item id="mobileRecharge-select1" *ngIf="Options">
             <ion-label>Select Your Bank</ion-label>
-              <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="tenant.TenantId" (ionChange)="OnAddBank(tenant.TenantId)">
+              <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="tenant.TenantId" (ionChange)="OnAddBankSelection(tenant.TenantId)">
                 <ion-option *ngFor="let order of selectboxoptions" [value]="order.Id">
                   {{order.Name}}           
                 </ion-option>
@@ -51,11 +52,9 @@
                 </ion-option> -->
             </ion-select> 
         </ion-item> 
-        <noscript>
         <div *ngIf="NoOptions">
           Sorry, All banks already added
         </div>  
-      </noscript>      
       </form>
       </div>
 </ion-content>

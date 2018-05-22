@@ -41,19 +41,7 @@ SCReq: any;
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-        //localStorage.removeItem(this.constant.GetUserKey.UniqueKey);
-        //  localStorage.removeItem("User");
-        //  StorageService.RemoveItem("Tenant");
-        //  StorageService.RemoveItem("DigiParty");
-        //  StorageService.RemoveItem("OS");
-        //  StorageService.RemoveItem("SelfCareAc");
-        //  StorageService.RemoveItem("userToken");
-        //  StorageService.RemoveItem("entry");
-        //  this.RemoveOSes();
-        //  this.RemoveFavourites();
-        //  StorageService.RemoveItem("lastAction");
-
-
+        
         //localStorage.clear();
 
       if(StorageService.GetItem(this.constant.DB.User)==null){
@@ -66,26 +54,7 @@ SCReq: any;
         
     });
   }
-  RemoveOSes(){
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S1);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S2);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S3);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S4);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S5);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S6);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S7);
-
-  }
-  RemoveFavourites(){
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S1);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S2);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S3);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S4);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S5);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S6);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S7);
-
-  }
+  
   goToPage(params){
     if (!params) params = {};
     this.navCtrl.setRoot(PagePage);

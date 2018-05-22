@@ -116,11 +116,11 @@ export class LoginPage implements OnInit {
       //  }, 2000);
       
       setTimeout(() => {
-        //this.navCtrl.push(PagePage, { 'ActiveBankName': this.ActiveBankName });
-        this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
+        //this.navCtrl.push(PagePage);
       }, 1000);
     });
     setTimeout(() => {
+      //this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
        loading.dismiss();
        }, 2000);
   }
@@ -152,6 +152,8 @@ export class LoginPage implements OnInit {
       }
       StorageService.SetItem(this.constant.DB.DigiParty, JSON.stringify([this.DigiParty]));  //Works, But not as of reqment
       StorageService.SetItem(this.constant.DB.SelfCareAc, JSON.stringify(this.addbankresponse.SelfCareAcs))
+      this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
+
     });
 
   }

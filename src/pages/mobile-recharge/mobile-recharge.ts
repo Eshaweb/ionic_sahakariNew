@@ -949,6 +949,37 @@ OnNext(form: NgForm){
       this.label="Customer ID";
     }
   }
+
+  ObjChanged(event){
+    this.ShowLabel=false;
+    switch(event){
+      case "O29":
+      this.label="Viewing Card Number";
+      this.osid="O29";
+      break;
+      case "O30":
+      this.label="Registered Mobile Number or Subscriber ID";
+      this.osid="O30";
+      break;
+      case "O31":
+      this.label="Smart Card Number";
+      this.osid="O31"
+      break;
+      case "O32":
+      this.label="Subscriber ID";
+      this.osid="O32"
+      break;
+      case "O33":
+      this.label="Smart Card Number";
+      this.osid="O33";
+      break;
+      case "O35":
+      this.osid="O35";
+      break;
+      default:
+      this.label="Customer ID";
+    }
+  }
   OnBack(){
     this.navCtrl.push(FavouritesPage);
   }

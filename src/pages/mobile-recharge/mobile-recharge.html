@@ -104,7 +104,7 @@
           <ion-item id="mobileRecharge-select1">
               <ion-label>Operator</ion-label>
               <!-- <ion-select id="mobileRecharge-input3" interface="popover" formControlName="mobno" #selectoperator ngModel name="selectoperator" (ngModelChange)="ObjChanged($event)"> -->
-                <ion-select id="mobileRecharge-input3" interface="popover" formControlName="mobno" #selectoperator ngModel name="selectoperator" (ngModelChange)="ObjChanged($event)">
+                <ion-select id="mobileRecharge-input3" interface="popover" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" name="OperatorId" (ngModelChange)="ObjChanged($event)">
                 <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
             </ion-select>  
           </ion-item>
@@ -115,14 +115,15 @@
           <ion-label floating>
            {{label}}
           </ion-label>
-          <ion-input type="text" placeholder="" name="SubscriptionId" #SubscriptionId="ngModel" [(ngModel)]="rechargeitem.SubscriptionId" (keyup)="OnMobileNo($event.target.value)" maxlength="10"></ion-input>     
+          <ion-input type="text" placeholder="" name="SubscriptionId" #SubscriptionId="ngModel" [(ngModel)]="rechargeitem.SubscriptionId" maxlength="10"></ion-input>     
           <!-- <ion-input type="text" placeholder="" formControlName="mobno" #MobileNo ngModel name="MobileNo"></ion-input> -->
         </ion-item>
       </div>
       <div *ngIf="ElectricityConsumerNo">
           <ion-item id="mobileRecharge-select1">
               <ion-label>Operator</ion-label>
-              <ion-select id="mobileRecharge-input3" interface="popover" formControlName="mobno" #selectoperator ngModel name="selectoperator" (ngModelChange)="ObjChanged($event)">
+              <!-- <ion-select id="mobileRecharge-input3" interface="popover" formControlName="mobno" #selectoperator ngModel name="selectoperator" (ngModelChange)="ObjChanged($event)"> -->
+                <ion-select id="mobileRecharge-input3" interface="popover" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" name="OperatorId" (ngModelChange)="ObjChanged($event)">
                 <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
             </ion-select>  
           </ion-item>

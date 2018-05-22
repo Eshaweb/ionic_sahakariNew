@@ -16,6 +16,7 @@ import { AddBankResponse } from '../View Models/AddBankResponse';
 import { TenantList } from '../View Models/TenantList';
 import { JsonpModule } from '@angular/http';
 import { User } from '../LocalStorageTables/User';
+import { PagePage } from '../page/page';
 
 
   const idle = new Idle()
@@ -78,7 +79,7 @@ filterByString(tenantlist, ActiveTenantId) {
   return this.tenantList.filter(e => e.Id==ActiveTenantId);
 }
 
-OnGetTenants(){
+OnAddBank(){
   this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
   this.showHide=true;   
   this.regService.GetTenantsByMobile(this.mobno).subscribe((data : any)=>{
@@ -92,7 +93,7 @@ OnGetTenants(){
       IconHtml:""
     };
 
-    this.selectboxoptions=this.tenantList.filter(o=>!this.addedTenantRecord.find(o2=>o.Id===o2.Id))
+    this.selectboxoptions=this.tenantList.filter(o=>!this.addedTenantRecord.find(o2=>o.Id===o2.Id));
     this.Options=true;
     if(this.selectboxoptions.length==0){
       this.Options=false;
@@ -103,7 +104,7 @@ OnGetTenants(){
 }
 
 
-OnAddBank(Id){
+OnAddBankSelection(Id){
   this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
   this.singletenant=this.tenantList.filter(function (obj) { return obj.Id === Id; });
   this.addbankreq={
@@ -140,7 +141,14 @@ OnAddBank(Id){
     var existingSelfCareAcs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
     existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
     StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
-
+    this.user=JSON.parse(StorageService.GetItem(this.constant.DB.User));
+    this.user.ActiveTenantId= this.tenant.Id;
+    StorageService.SetItem(this.constant.DB.User,JSON.stringify(this.user)); 
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Active=+ActiveTenantId;  
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+    this.ActiveBankName=this.Tenant.Name;
   });
   
 }
@@ -155,7 +163,30 @@ OnSelect(order){
   this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
   this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
   this.ActiveBankName=this.Tenant.Name;
+  this.navCtrl.setRoot(PagePage);
 }
+
+OnRemove(Id){
+this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+this.Tenants=this.Tenants.filter(function( obj ) {
+  return obj.Id !== Id;
+});
+StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(this.Tenants));  
+
+var existingDigiParty=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+existingDigiParty=existingDigiParty.filter(function( obj ) {
+  return obj.TenantId !== Id;
+});
+StorageService.SetItem(this.constant.DB.DigiParty,JSON.stringify(existingDigiParty));  
+
+var existingSelfCareAcs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+existingSelfCareAcs=existingSelfCareAcs.filter(function( obj ) {
+  return obj.TenantId !== Id;
+});
+StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
+
+}
+
 
 resetForm(form?: NgForm) {
   if (form != null)
