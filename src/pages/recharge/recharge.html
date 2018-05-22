@@ -4,20 +4,13 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Recharge   {{ActiveBankName}}
+      Recharge 
     </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page7">
   
-  <ion-list id="recharge-list6" *ngFor="let row of categories">
-    <ion-item color="assertive" id="recharge-list-item21" (click)="OnOperatorSelection(row.Id)">
-      <ion-avatar item-left>
-        <img />
-      </ion-avatar>
-      <h2>
-        {{row.Operator}}
-      </h2>
-    </ion-item>
-  </ion-list>
+     <ion-list >
+      <ion-item *ngFor="let row of categories" color="assertive" id="recharge-list-item21" (click)="OnOperatorSelection(row.Id)">{{row.Operator}}</ion-item>
+      </ion-list>
 </ion-content>

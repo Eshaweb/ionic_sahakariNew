@@ -4,7 +4,7 @@
         <ion-icon name="menu"></ion-icon>
       </button>
       <ion-title>
-        Fund-Transfer  {{ActiveBankName}}
+        Fund-Transfer  
       </ion-title>
     </ion-navbar>
   </ion-header>
@@ -12,7 +12,7 @@
     <div *ngIf="ShowHide">
           <ion-card *ngIf="ShowManyAccounts">
 
-            <ion-card-header style="background-color:red">
+            <ion-card-header >
               From Account
             </ion-card-header>
           <span style="color: blue">Click on Account of your wish</span>
@@ -29,10 +29,10 @@
               </ion-item>
             </ion-list>
             </ion-card-content>
-            <div *ngIf="errormsg" style="color:red">{{errormsg}}</div>
+            <div *ngIf="errormsg" style="color:#488aff">{{errormsg}}</div>
             </ion-card>
             <ion-card *ngIf="selfCareAC">
-            <ion-card-header style="background-color:red">
+            <ion-card-header style="background-color:#488aff">
               From Account
             </ion-card-header>
             <ion-card-content>
@@ -55,7 +55,7 @@
           <br/>
           <ion-card>
 
-            <ion-card-header style="background-color:red">
+            <ion-card-header style="background-color:#488aff" color:#fff>
               To Account
             </ion-card-header>
           <br/>
