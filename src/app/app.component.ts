@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, Nav, Events} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -17,11 +17,29 @@ import { RegisterService } from '../pages/services/app-data.service';
 import { SCRequest } from '../pages/View Models/SCRequest';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
+import { RechargePage } from '../pages/recharge/recharge';
+import { Tenant } from '../pages/LocalStorageTables/Tenant';
+import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class MyApp{
+  // ngOnInit() {
+  //   var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  //   this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+  //      this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+  //      this.ActiveBankName=this.Tenant.Name;
+  //      this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+  //      this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+  //      this.name=this.digiparty.Name;
+  //       }
+  name: any;
+  digiparty: DigiParty;
+  DigiParties: DigiParty;
+  ActiveBankName: any;
+  Tenant: Tenant;
+  Tenants: Tenant;
   @ViewChild(Nav) navCtrl: Nav;
     //rootPage:any = HomePage;
 rootPage:any;
@@ -33,26 +51,28 @@ SCReq: any;
       this.event.subscribe('UNAUTHORIZED', () => {
         this.navCtrl.push(LoginPage);
     });
-
-
+    this.event.subscribe('Refresh DigiPartyName', () => {
+      var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+       this.ActiveBankName=this.Tenant.Name;
+       this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+       this.name=this.digiparty.Name;
+    });
+    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+       this.ActiveBankName=this.Tenant.Name;
+       this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+       this.name=this.digiparty.Name;
       platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-        //localStorage.removeItem(this.constant.GetUserKey.UniqueKey);
-        //  localStorage.removeItem("User");
-        //  StorageService.RemoveItem("Tenant");
-        //  StorageService.RemoveItem("DigiParty");
-        //  StorageService.RemoveItem("OS");
-        //  StorageService.RemoveItem("SelfCareAc");
-        //  StorageService.RemoveItem("userToken");
-        //  StorageService.RemoveItem("entry");
-        //  this.RemoveOSes();
-        //  this.RemoveFavourites();
-        //  StorageService.RemoveItem("lastAction");
-
-
+        
         //localStorage.clear();
 
       if(StorageService.GetItem(this.constant.DB.User)==null){
@@ -65,26 +85,7 @@ SCReq: any;
         
     });
   }
-  RemoveOSes(){
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S1);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S2);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S3);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S4);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S5);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S6);
-    StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S7);
-
-  }
-  RemoveFavourites(){
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S1);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S2);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S3);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S4);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S5);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S6);
-    StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S7);
-
-  }
+  
   goToPage(params){
     if (!params) params = {};
     this.navCtrl.setRoot(PagePage);

@@ -150,7 +150,7 @@ this.ShowHide=false;
     this.regService.FundTransfer(this.transfer).subscribe((data : any)=>{
       this.ftd=data;
       this.confirm=null;
-      this.toastr.success('Recharge is successful with ' + this.ftd.Status, 'Success!');
+      this.toastr.success('Fund Transferred with ' + this.ftd.Status, 'Success!');
       this.showstatus=true;
     });
     loading.dismiss();

@@ -6,5 +6,5 @@ export class FavouriteItem{
         OperatorId:string;
         ParentId:string;
         SubscriptionId:string;
-        
+        CircleId:string;
     }

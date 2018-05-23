@@ -15,6 +15,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class MiniStatementPage implements OnInit {
 
+  HideMsg: boolean;
   SelfCareAcsBasedOnTenantID: SelfCareAc;
   SelfCareACs: SelfCareAc;
   Tenant: Tenant;
@@ -36,7 +37,7 @@ export class MiniStatementPage implements OnInit {
 
   ngOnInit() {
     this.ShowHide = true;
-
+    this.HideMsg=true;
     var ActiveTenantId = JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
     this.Tenants = JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
     this.Tenant = this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
@@ -62,6 +63,7 @@ export class MiniStatementPage implements OnInit {
       this.stmntItem = data.StatementItems;
     });
     this.ShowHide = false;
+    this.HideMsg=false;
     loading.dismiss();
   }
 
