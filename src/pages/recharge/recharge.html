@@ -1,15 +1,16 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Recharge   {{ActiveBankName}}
+      Recharge 
     </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page7">
   
+
   <ion-list id="recharge-list6">
     <ion-item color="assertive" id="recharge-list-item21" *ngFor="let row of categories"  (click)="OnOperatorSelection(row.Id)">
       <ion-avatar item-left>
@@ -29,4 +30,6 @@
       </h2>
     </ion-item>
   </ion-list>
+
+    
 </ion-content>

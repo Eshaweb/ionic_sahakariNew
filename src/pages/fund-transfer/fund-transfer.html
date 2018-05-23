@@ -1,10 +1,10 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color="primary">
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
       <ion-title>
-        Fund-Transfer  {{ActiveBankName}}
+        Fund-Transfer  
       </ion-title>
     </ion-navbar>
   </ion-header>
@@ -12,7 +12,7 @@
     <div *ngIf="ShowHide">
           <ion-card *ngIf="ShowManyAccounts">
 
-            <ion-card-header style="background-color:red">
+            <ion-card-header >
               From Account
             </ion-card-header>
           <span style="color: blue">Click on Account of your wish</span>
@@ -29,10 +29,10 @@
               </ion-item>
             </ion-list>
             </ion-card-content>
-            <div *ngIf="errormsg" style="color:red">{{errormsg}}</div>
+            <div *ngIf="errormsg" style="color:#488aff">{{errormsg}}</div>
             </ion-card>
             <ion-card *ngIf="selfCareAC">
-            <ion-card-header style="background-color:red">
+            <ion-card-header style="background-color:#488aff">
               From Account
             </ion-card-header>
             <ion-card-content>
@@ -55,7 +55,7 @@
           <br/>
           <ion-card>
 
-            <ion-card-header style="background-color:red">
+            <ion-card-header style="background-color:#488aff color: #fff">
               To Account
             </ion-card-header>
           <br/>
@@ -67,7 +67,11 @@
                   <ion-label floating>
                     Enter Phone Number
                   </ion-label>
+
                   <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo"></ion-input>
+
+                  
+
                   <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
                 </ion-item>
                 <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
