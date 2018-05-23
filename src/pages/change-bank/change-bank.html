@@ -40,7 +40,7 @@
 
       <button  id="register-button7" ion-button color="positive" (click)="OnAddBank()" block>
 
-	  </ion-card>
+	 
   
         Add Bank Account
       </button>
@@ -57,12 +57,17 @@
                 </ion-option> -->
             </ion-select> 
         </ion-item> 
-        <div *ngIf="NoOptions">
-          All banks added
-        </div>  
+
+        <ion-card *ngIf="NoOptions">              
+          <ion-card-content >
+            <h2>All banks added</h2>
+          </ion-card-content>
+        
+        </ion-card>
+         
       </form>
       </div>
-</ion-content>
+
 
 <ion-footer>
   <ion-toolbar color="primary">
