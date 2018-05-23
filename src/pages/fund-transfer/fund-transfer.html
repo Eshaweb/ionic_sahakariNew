@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color="primary">
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
@@ -55,7 +55,7 @@
           <br/>
           <ion-card>
 
-            <ion-card-header style="background-color:#488aff" color:#fff>
+            <ion-card-header style="background-color:#488aff color: #fff">
               To Account
             </ion-card-header>
           <br/>
@@ -67,7 +67,7 @@
                   <ion-label floating>
                     Phone Number
                   </ion-label>
-                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder="                             Enter Mobile No. of Receiver that is Linked to the Bank"></ion-input>
+                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder="Enter Mobile No. of Receiver that is Linked to the Bank"></ion-input>
                   <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
                 </ion-item>
                 <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
