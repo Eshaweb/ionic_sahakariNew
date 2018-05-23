@@ -63,39 +63,21 @@ export class BasicPage implements OnInit{
   }
 
   ngOnInit(){
+
     var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
     this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
        this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
        this.ActiveBankName=this.Tenant.Name;   
-    // for(this.i=0;this.i<this.planTypes.length;this.i++){
-    //   this.planRequest={
-    //     OSId:this.operatorId,
-    //     CircleId:this.circleId,
-    //     PlanType:this.planTypes[this.i],
-    //     TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
-    //   }
+   
       this.planRequest={
         OSId:this.operatorId,
         CircleId:this.circleId,
         PlanType:this.planTypes[0],
         TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
       }
-      //this.navCtrl.push(TabBasicContentPage1, { 'OperatorId':this.operatorId,'CircleId': this.circleId});
-
-    //}
-    // this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
-    //   this.planResponse=data;
-    // },(error) => {this.toastr.error(error.message, 'Error!')
-    //   });
-
+      
   }
  
-  // myMethod(){
-  //   // this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
-  //   //   this.planResponse=data;
-  //   // },(error) => {this.toastr.error(error.message, 'Error!')
-  //   //   });
-  // }
 }
 
 @Component({
@@ -135,20 +117,17 @@ export class TabBasicContentPage1 {
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+
+    loading.present();
     this.isAndroid = platform.is('android');
     
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
     this.navp=this.navParams.data;
- // for(this.i=0;this.i<this.planTypes.length;this.i++){
-    //   this.planRequest={
-    //     OSId:this.operatorId,
-    //     CircleId:this.circleId,
-    //     PlanType:this.planTypes[this.i],
-    //     TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
-    //   }
-      
-    // }
+ 
     this.planRequest={
       OSId:this.operatorId,
       CircleId:this.circleId,
@@ -160,15 +139,13 @@ export class TabBasicContentPage1 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+loading.dismiss();
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
     
   }
-  // ngOnInit() {
-   
-
-  // }
+  
 }
 @Component({
   template: `
@@ -204,6 +181,11 @@ export class TabBasicContentPage2 {
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+
+    loading.present();
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
@@ -218,6 +200,7 @@ export class TabBasicContentPage2 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+    loading.dismiss();
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});    
@@ -257,6 +240,11 @@ export class TabBasicContentPage3 {
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+
+    loading.present();
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
@@ -271,6 +259,7 @@ export class TabBasicContentPage3 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+    loading.dismiss();
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
@@ -310,6 +299,11 @@ export class TabBasicContentPage4 {
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+
+    loading.present();
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
@@ -324,6 +318,7 @@ export class TabBasicContentPage4 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+    loading.dismiss();
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});  
@@ -363,6 +358,12 @@ export class TabBasicContentPage5 {
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+
+    loading.present();
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
@@ -377,6 +378,7 @@ export class TabBasicContentPage5 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+    loading.dismiss();
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});   
@@ -416,6 +418,12 @@ export class TabBasicContentPage6 {
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+    
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+
+    loading.present();
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
@@ -430,6 +438,7 @@ export class TabBasicContentPage6 {
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
+    loading.dismiss();
   }
   OnAmount(amount){
     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});  

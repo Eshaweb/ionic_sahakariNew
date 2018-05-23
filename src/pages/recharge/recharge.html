@@ -10,8 +10,8 @@
 </ion-header>
 <ion-content padding id="page7">
   
-  <ion-list id="recharge-list6" *ngFor="let row of categories">
-    <ion-item color="assertive" id="recharge-list-item21" (click)="OnOperatorSelection(row.Id)">
+  <ion-list id="recharge-list6">
+    <ion-item color="assertive" id="recharge-list-item21" *ngFor="let row of categories"  (click)="OnOperatorSelection(row.Id)">
       <ion-avatar item-left>
         <img />
       </ion-avatar>

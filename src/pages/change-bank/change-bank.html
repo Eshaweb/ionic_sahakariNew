@@ -19,7 +19,7 @@
     </div>
         </div>
         <ion-list>
-              <ion-item *ngFor="let order of Tenants" (click)="OnPress()">
+              <ion-item *ngFor="let order of Tenants">
                   <ion-thumbnail item-start>
                       <img src="assets/imgs/thumbnail-totoro.png">
                     </ion-thumbnail>
@@ -53,7 +53,7 @@
             </ion-select> 
         </ion-item> 
         <div *ngIf="NoOptions">
-          Sorry, All banks already added
+          All banks added
         </div>  
       </form>
       </div>

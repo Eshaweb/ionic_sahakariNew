@@ -65,9 +65,9 @@
               <ion-list id="register-list11">
                 <ion-item id="register-input8">
                   <ion-label floating>
-                    Phone Number
+                    Enter Phone Number
                   </ion-label>
-                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder="                             Enter Mobile No. of Receiver that is Linked to the Bank"></ion-input>
+                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo"></ion-input>
                   <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
                 </ion-item>
                 <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">

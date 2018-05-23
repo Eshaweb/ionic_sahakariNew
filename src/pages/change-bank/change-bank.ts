@@ -99,7 +99,9 @@ OnAddBank(){
       this.Options=false;
       this.NoOptions=true;
     }
-    
+    else{
+      this.NoOptions=false;
+    }
   });
 }
 
@@ -149,6 +151,7 @@ OnAddBankSelection(Id){
     this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
     this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
     this.ActiveBankName=this.Tenant.Name;
+    this.OnAddBank();
   });
   
 }
@@ -184,7 +187,7 @@ existingSelfCareAcs=existingSelfCareAcs.filter(function( obj ) {
   return obj.TenantId !== Id;
 });
 StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
-
+this.OnAddBank();
 }
 
 

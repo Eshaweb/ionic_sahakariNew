@@ -799,6 +799,7 @@ OnNext(form: NgForm){
  {Id: "12", Name: "Vodafone"},
 ];
   OnMobileNo(id){
+    
     if(id.length<10){
        //return null;
        return this.showerrortext=true;
@@ -822,7 +823,6 @@ OnNext(form: NgForm){
       this.rechargeitem.CircleId=this.sid;
     });
     }
-    
   }
   
   
