@@ -31,6 +31,7 @@ import { FavouritesPage } from '../favourites/favourites';
 })
 export class MobileRechargePage implements OnInit{
 
+  postpaid: string;
   singleOperator: SingleOperator;
   amountforRecharge: any;
   statename: string;
@@ -69,7 +70,7 @@ export class MobileRechargePage implements OnInit{
   rechargeitem:Recharge;
   OperatorId: any;
   nkname: any;
-  mobile: any;
+  prepaid: any;
   LocId: any;
   AcSubId: any;
   AcMastId: any;
@@ -128,29 +129,32 @@ export class MobileRechargePage implements OnInit{
     }
     //Below is for page, based on NickName..But HTML is not working..
     if(this.ParentId=="S1"){
+      this.postpaid=null;
     if((StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1)!=null)&&this.Id!=null){
     var PId=this.Id;
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
-    this.mobile=this.rechargeitem.SubscriptionId;
+    this.prepaid=this.rechargeitem.SubscriptionId;
   }else{
-    this.mobile="Enter";
+    this.prepaid="Enter";
   }
   
 }
 else if(this.ParentId=="S2"){
+  this.prepaid=null;
   if((StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2)!=null)&&this.Id!=null){
   var PId=this.Id;
   this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
   this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
-  this.mobile=this.rechargeitem.SubscriptionId;
+  this.postpaid=this.rechargeitem.SubscriptionId;
 
 }else{
-  this.mobile="Enter";
+  this.postpaid="Enter";
 }
 }
 else if(this.ParentId=="S3"){
-  this.mobile=null;
+  this.prepaid=null;
+  this.postpaid=null;
   var PId=this.Id;
   if(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3)!=null&&this.Id!=null){
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
@@ -163,7 +167,9 @@ else if(this.ParentId=="S3"){
   }
 }
 else if(this.ParentId=="S5"){
-  this.mobile=null;
+  this.prepaid=null;
+  this.postpaid=null;
+
   this.DTHNo=null;
   
   var PId=this.Id;

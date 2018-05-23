@@ -13,6 +13,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class BalanceEnquiryPage implements OnInit {
 
+    HideMsg: boolean;
     SelfCareAcsBasedOnTenantID: SelfCareAc;
     SelfCareACs: SelfCareAc;
     Tenant: Tenant;
@@ -29,6 +30,7 @@ export class BalanceEnquiryPage implements OnInit {
     }
 
     ngOnInit(){
+        this.HideMsg=true;
         this.ShowHide=true;       
         var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
         this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
@@ -52,6 +54,7 @@ export class BalanceEnquiryPage implements OnInit {
        this.balance=data;
         });
         this.ShowHide=false;
+        this.HideMsg=false;
         loading.dismiss();
     }
 }

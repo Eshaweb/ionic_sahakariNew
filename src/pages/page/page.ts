@@ -5,6 +5,7 @@ import { RechargePage } from '../recharge/recharge';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
 import { Tenant } from '../LocalStorageTables/Tenant';
+import { RechargeReportPage } from '../recharge-report/recharge-report';
 
 @Component({
   selector: 'page-page',
@@ -30,5 +31,8 @@ ngOnInit(){
   }
   OnRecharge(){
     this.navCtrl.push(RechargePage);
+  }
+  OnReports(){
+    this.navCtrl.push(RechargeReportPage);
   }
 }

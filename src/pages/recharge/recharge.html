@@ -18,6 +18,15 @@
       <h2>
         {{row.Operator}}
       </h2>
+      <span style="color: blue" *ngIf="showMsg">Coming Soon</span>  
+    </ion-item>
+    <ion-item color="assertive" id="recharge-list-item21" (click)="OnReports()">
+      <ion-avatar item-left>
+        <img />
+      </ion-avatar>
+      <h2>
+        Reports
+      </h2>
     </ion-item>
   </ion-list>
 </ion-content>

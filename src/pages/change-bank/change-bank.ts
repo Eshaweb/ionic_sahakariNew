@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
@@ -17,6 +17,8 @@ import { TenantList } from '../View Models/TenantList';
 import { JsonpModule } from '@angular/http';
 import { User } from '../LocalStorageTables/User';
 import { PagePage } from '../page/page';
+import { HomePage } from '../home/home';
+import { MyApp } from '../../app/app.component';
 
 
   const idle = new Idle()
@@ -58,7 +60,7 @@ export class ChangeBankPage implements OnInit{
   showIcon:boolean;
 
   // constructor(private autoLogoutService: AutoLogoutService,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
-    constructor(private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
+    constructor(private events: Events,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
 
   }
   
@@ -167,6 +169,8 @@ OnSelect(order){
   this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
   this.ActiveBankName=this.Tenant.Name;
   this.navCtrl.setRoot(PagePage);
+  this.events.publish('Refresh DigiPartyName');
+
 }
 
 OnRemove(Id){

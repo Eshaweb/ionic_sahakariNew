@@ -45,6 +45,7 @@ import { AutoLogoutService } from '../pages/services/AutoLogOutService';
 import { FundTransferPage } from '../pages/fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
 import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,TabBasicContentPage3, TabBasicContentPage4, TabBasicContentPage5, TabBasicContentPage6 } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
+import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,Ta
     TabBasicContentPage3,
     TabBasicContentPage4,
     TabBasicContentPage5,
-    TabBasicContentPage6
+    TabBasicContentPage6,
+    RechargeReportPage
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
@@ -115,7 +117,8 @@ import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,Ta
     TabBasicContentPage3,
     TabBasicContentPage4,
     TabBasicContentPage5,
-    TabBasicContentPage6
+    TabBasicContentPage6,
+    RechargeReportPage
   ],
   providers: [AuthGuard,Toast, {
     provide : HTTP_INTERCEPTORS,
