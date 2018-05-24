@@ -68,8 +68,6 @@ import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
     SelectOperatorPage,
     FundTransferPage,
     BalanceEnquiryPage,
-<<<<<<< HEAD
-=======
     TabBasicPage,
     TabBasicContentPage1,
     TabBasicContentPage2,
@@ -78,7 +76,6 @@ import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
     TabBasicContentPage5,
     TabBasicContentPage6,
     RechargeReportPage
->>>>>>> b45d7f21c26b6cc733bf6f65d8583a2fcd60e1f5
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
