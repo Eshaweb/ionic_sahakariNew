@@ -44,6 +44,8 @@ import { ConstantService } from '../pages/services/Constants';
 import { AutoLogoutService } from '../pages/services/AutoLogOutService';
 import { FundTransferPage } from '../pages/fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
+import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,TabBasicContentPage3, TabBasicContentPage4, TabBasicContentPage5, TabBasicContentPage6 } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
+import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
 
 @NgModule({
   declarations: [
@@ -66,6 +68,17 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     SelectOperatorPage,
     FundTransferPage,
     BalanceEnquiryPage,
+<<<<<<< HEAD
+=======
+    TabBasicPage,
+    TabBasicContentPage1,
+    TabBasicContentPage2,
+    TabBasicContentPage3,
+    TabBasicContentPage4,
+    TabBasicContentPage5,
+    TabBasicContentPage6,
+    RechargeReportPage
+>>>>>>> b45d7f21c26b6cc733bf6f65d8583a2fcd60e1f5
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
@@ -100,7 +113,15 @@ import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
     EnterOTPPage,
     SelectOperatorPage,
     FundTransferPage,
-    BalanceEnquiryPage
+    BalanceEnquiryPage,
+    TabBasicPage,
+    TabBasicContentPage1,
+    TabBasicContentPage2,
+    TabBasicContentPage3,
+    TabBasicContentPage4,
+    TabBasicContentPage5,
+    TabBasicContentPage6,
+    RechargeReportPage
   ],
   providers: [AuthGuard,Toast, {
     provide : HTTP_INTERCEPTORS,

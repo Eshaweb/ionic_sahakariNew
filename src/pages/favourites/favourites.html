@@ -1,10 +1,10 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Favourites  {{ActiveBankName}}
+      New Recharge
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -21,7 +21,7 @@
     <button ion-item  (click)="OnNickName(order)">
       {{ order.NickName }}
     </button>
-    <button ion-button color="dark"  item-end (click)="OnDelete(order)" round>Delete</button>
+    <button ion-button  item-end (click)="OnDelete(order)">Delete</button>
     <!-- <button ion-button color="danger" icon-start (click)="OnSubmit(order)">
       <ion-icon name='close'></ion-icon>
       Remove

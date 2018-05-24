@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color="primary">
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
@@ -9,6 +9,7 @@
     </ion-navbar>
   </ion-header>
   <ion-content padding id="page3">
+      <span style="color: blue" *ngIf="HideMsg">Click on Account of your wish</span>  
     <div  *ngIf="ShowHide">   
       <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetAccountBalance(order.AcHeadId,order.AcSubId)" style="background-color:bisque;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
         <span>Name: {{order.HeadName}}</span> 
