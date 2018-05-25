@@ -58,11 +58,8 @@ export class LoginPage implements OnInit {
     this.pword = this.formgroup.controls['pword'];
   }
   ngOnInit() {
-    if (StorageService.GetItem(this.constant.DB.Tenant) != null) {
-      var ActiveTenantId = JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-      this.Tenants = JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-      this.Tenant = this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-      this.ActiveBankName = this.Tenant.Name;
+    if (StorageService.GetTenant()!= null) {
+      this.ActiveBankName = StorageService.GetActiveBankName();
     }
 
   }
@@ -71,12 +68,12 @@ export class LoginPage implements OnInit {
       content: 'Wait for a second..'
     });  
     loading.present();
-    var OS = JSON.parse(localStorage.getItem(this.constant.DB.OS));
-    var SelfCareAc = JSON.parse(localStorage.getItem(this.constant.DB.SelfCareAc));
+    var OS = JSON.parse(StorageService.GetOS());
+    var SelfCareAc = JSON.parse(StorageService.GetSelfCareAc());
     this.regService.loginbyHttpClient(this.username, password, this.uniqueKey).subscribe((data: any) => {
       this.userTokenData = data;
       this.regService.userToken = this.userTokenData.access_token;
-      localStorage.setItem('userToken', this.userTokenData.access_token);
+      StorageService.SetItem('userToken', this.userTokenData.access_token);
 
       if (OS == null) {
         let loading = this.loadingController.create({
@@ -92,11 +89,11 @@ export class LoginPage implements OnInit {
       }
       
       // var ActiveTenantId=this.regService.TenantId;
-      this.Tenants = JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+      this.Tenants = JSON.parse(StorageService.GetTenant());
       // this.Tenant= this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      this.DigiParties = JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+      this.DigiParties = JSON.parse(StorageService.GetDigiParty());
       // this.DigiParty=this.DigiParties.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      this.SelfCareAcs = JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+      this.SelfCareAcs = JSON.parse(StorageService.GetSelfCareAc());
       // this.SelfCareAc=this.SelfCareAcs.filter(function (obj) { return obj.Id === ActiveTenantId; });
       if (this.Tenants == null || this.DigiParties == null || this.SelfCareAcs == null) {
         let loadingnew = this.loadingController.create({
@@ -104,9 +101,7 @@ export class LoginPage implements OnInit {
         });
         loadingnew.present();
         this.callservices();
-        setTimeout(() => {
           loadingnew.dismiss();
-        }, 1500);
       }
       // if(this.Tenant==null||this.DigiParty==null||this.SelfCareAc==null){
       //      this.callservices();
@@ -115,21 +110,17 @@ export class LoginPage implements OnInit {
       //  loading.dismiss();
       //  }, 2000);
       
-      setTimeout(() => {
         //this.navCtrl.push(PagePage);
-      }, 1000);
     });
-    setTimeout(() => {
       //this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
        loading.dismiss();
-       }, 2000);
   }
 
 
   callservices() {
     this.addbankreq = {
-      TenantId: JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId,
-      MobileNo: JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName
+      TenantId: JSON.parse(StorageService.GetUser()).ActiveTenantId,
+      MobileNo: JSON.parse(StorageService.GetUser()).UserName
     }
     this.regService.AddBank(this.addbankreq).subscribe((data: any) => {
       this.addbankresponse = data;

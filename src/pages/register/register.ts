@@ -84,7 +84,7 @@ export class RegisterPage implements OnInit {
   OnGetTenants(mobno) {
 
     let loading = this.loadingController.create({
-      content: 'Please wait till the screen loads'
+      content: 'Please wait till we get banks for you'
     });
 
     loading.present();

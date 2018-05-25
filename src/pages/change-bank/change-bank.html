@@ -9,39 +9,36 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page3">
-  
-    <ion-card>
-      <ion-item>
+  <div style="background-color:red" class="col s12 m7">
+    <div class="card">
+      <div class="card-content">
     <h2 style="text-align:center">
       My Banks
     </h2>
-     </ion-item>
-    </ion-card>        
-		
-<ion-card>
+      </div>
+    </div>
+        </div>
         <ion-list>
               <ion-item *ngFor="let order of Tenants">
                   <ion-thumbnail item-start>
                       <img src="assets/imgs/thumbnail-totoro.png">
                     </ion-thumbnail>
                 <h2>{{ order.Name }}</h2>
-				<p>{{ order.Address }}</p>
+                <span>{{ order.Address }}</span>
           <div *ngIf="(order.Id!=Active)">
         <button ion-button clear item-end (click)="OnSelect(order)">Select</button>       
       </div>
           <div *ngIf="(order.Id==Active)">
         <!-- <ion-icon name='rose' item-end color="secondary"></ion-icon> -->
-        <ion-icon name="heart" item-end color="danger">Active</ion-icon>
+        <ion-icon name="heart" item-end color="danger"></ion-icon>
         
       </div>
-      <button ion-button (click)="OnRemove(order.Id)" item-end>Remove</button>
+      <button *ngIf="(order.Id!=Active)" ion-button (click)="OnRemove(order.Id)" item-end>Remove</button>
       </ion-item>
       </ion-list>
 
       <button  id="register-button7" ion-button color="positive" (click)="OnAddBank()" block>
-
-	 
-  
+        
         Add Bank Account
       </button>
       <div *ngIf="showHide">
@@ -51,10 +48,7 @@
               <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="tenant.TenantId" (ionChange)="OnAddBankSelection(tenant.TenantId)">
                 <ion-option *ngFor="let order of selectboxoptions" [value]="order.Id">
                   {{order.Name}}           
-                </ion-option>
-                <!-- <ion-option *ngIf="NoOptions">
-                  All banks already added
-                </ion-option> -->
+                </ion-option>              
             </ion-select> 
         </ion-item> 
 
@@ -67,6 +61,7 @@
          
       </form>
       </div>
+
 
 
 <ion-footer>

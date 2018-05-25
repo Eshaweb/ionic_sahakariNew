@@ -27,10 +27,10 @@ export class FavouritesPage implements OnInit{
 ngOnInit(){
   this.ParentId=this.navParams.get('ParentId');
   
-  var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-  this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-     this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-     this.ActiveBankName=this.Tenant.Name;  
+  // var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  // this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+  //    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+     this.ActiveBankName=StorageService.GetActiveBankName();  
      
      switch (this.ParentId) {
     case "S1":

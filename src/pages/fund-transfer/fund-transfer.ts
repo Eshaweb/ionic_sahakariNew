@@ -69,11 +69,9 @@ export class FundTransferPage implements OnInit{
     this.disablenextwithoutFromAccount=true;
     this.disablenextwithoutToAccount=true;
     var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=this.Tenant.Name;
+       this.ActiveBankName=StorageService.GetActiveBankName();
        this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));    
-       this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })       
+       this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB";})       
        this.ShowManyAccounts=true;
   }
 
@@ -81,7 +79,7 @@ export class FundTransferPage implements OnInit{
   OnFromAccount(AcSubId){
    this.AcSubId=AcSubId;
    this.errormsg=null;
-  this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+  this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
   this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.AcSubId === AcSubId&&obj.AcActId=="#SB"; });
   if(this.selfCareAC==null){
   this.errormsg="Through Pigmy Account Fund can not be transferred";

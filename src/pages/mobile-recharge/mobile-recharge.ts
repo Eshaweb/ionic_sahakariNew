@@ -115,10 +115,10 @@ export class MobileRechargePage implements OnInit{
   }
   ngOnInit(){
     this.ShowEntryForm=true;
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=this.Tenant.Name;   
+    // var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    // this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    //    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+       this.ActiveBankName=StorageService.GetActiveBankName();   
     this.resetForm();
     this.Id=this.navParams.get('Id');
     this.ParentId=this.navParams.get('ParentId');
@@ -791,7 +791,8 @@ OnNext(form: NgForm){
     {Id: "23", Name: "Chennai"}
  ];
  StatesOfIndiayy={"1":"Delhi/NCR","2":""}
- OperatorsOfIndia=[{Id: "1", Name: "Aircel"},
+ OperatorsOfIndia=[
+   {Id: "1", Name: "Aircel"},
  {Id: "2", Name: "Airtel"},
  {Id: "O2", Name: "BSNL"},
  {Id: "4", Name: "Idea"},
@@ -1074,8 +1075,8 @@ OnConfirm(){
     content: 'Recharging...'
   });
   loading.present();
- var  DigiPartyId=JSON.parse(StorageService.GetItem("DigiParty")).DigiPartyId;
- var PartyMastId=JSON.parse(StorageService.GetItem("DigiParty")).PartyMastId;
+ var  DigiPartyId=JSON.parse(StorageService.GetDigiParty()).DigiPartyId;
+ var PartyMastId=JSON.parse(StorageService.GetDigiParty()).PartyMastId;
  
   switch (this.OSResponseNew[0].ParentId) {
     case "S1":

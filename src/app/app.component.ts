@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { Platform, Nav, Events} from 'ionic-angular';
+import { Platform, Nav, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 //import { NavController } from 'ionic-angular';
@@ -24,16 +24,8 @@ import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp{
-  // ngOnInit() {
-  //   var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-  //   this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-  //      this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-  //      this.ActiveBankName=this.Tenant.Name;
-  //      this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
-  //      this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-  //      this.name=this.digiparty.Name;
-  //       }
+export class MyApp {
+
   name: any;
   digiparty: DigiParty;
   DigiParties: DigiParty;
@@ -41,68 +33,57 @@ export class MyApp{
   Tenant: Tenant;
   Tenants: Tenant;
   @ViewChild(Nav) navCtrl: Nav;
-    //rootPage:any = HomePage;
-rootPage:any;
-SCReq: any;
+  rootPage: any;
+  SCReq: any;
   OS: string;
   scr: SCRequest;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
-    constructor(private event: Events,public constant:ConstantService,platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService : RegisterService) {
-      this.event.subscribe('UNAUTHORIZED', () => {
-        this.navCtrl.push(LoginPage);
+  constructor(private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
+    this.event.subscribe('UNAUTHORIZED', () => {
+      this.navCtrl.push(LoginPage);
     });
-    this.event.subscribe('Refresh DigiPartyName', () => {
-      var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=this.Tenant.Name;
-       this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
-       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-       this.name=this.digiparty.Name;
-    });
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=this.Tenant.Name;
-       this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
-       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-       this.name=this.digiparty.Name;
-      platform.ready().then(() => {
+    
+    platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-        
-        //localStorage.clear();
 
-      if(StorageService.GetItem(this.constant.DB.User)==null){
-          this.rootPage=RegisterPage;
+      //localStorage.clear();
+
+      this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
+        this.ActiveBankName = StorageService.GetActiveBankName();
+          this.name = StorageService.Getdigipartyname();
+      });
+      if (StorageService.GetUser() == null) {
+        this.rootPage = RegisterPage;
+       
       }
-     
-      else{
-        this.rootPage=PagePage;
-      }
-        
+      else {
+        this.rootPage = PagePage;
+        this.ActiveBankName = StorageService.GetActiveBankName();
+          this.name = StorageService.Getdigipartyname();
+        }
     });
   }
-  
-  goToPage(params){
+
+  goToPage(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(PagePage);
   }
-  goToMobileRecharge(params){
+  goToMobileRecharge(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(MobileRechargePage);
   }
-  goToBanking(params){
+  goToBanking(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(BankingPage);
   }
-  goToSetting(params){
+  goToSetting(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(SettingPage);
   }
-  goToChangeBank(params){
+  goToChangeBank(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(ChangeBankPage);
   }

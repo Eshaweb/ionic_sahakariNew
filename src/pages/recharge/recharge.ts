@@ -54,10 +54,7 @@ for(var i=0;i<this.categories.length;i++){
 //   break;
 // }
 }
-var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-   this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-   this.ActiveBankName=this.Tenant.Name;
+   this.ActiveBankName=StorageService.GetActiveBankName();
   }
   OnOperatorSelection(ParentId){
     this.ParentId=ParentId;

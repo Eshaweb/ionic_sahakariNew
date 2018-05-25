@@ -32,12 +32,8 @@ export class BalanceEnquiryPage implements OnInit {
     ngOnInit(){
         this.HideMsg=true;
         this.ShowHide=true;       
-        var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-        this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-           this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-           this.ActiveBankName=this.Tenant.Name;   
-           this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));    
-           this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
+           this.ActiveBankName=StorageService.GetActiveBankName();   
+           this.SelfCareAcsBasedOnTenantID=StorageService.GetSelfCareAcsBasedOnTenantID();
     }
   
     OnGetAccountBalance(AcHeadId,AcSubId){
