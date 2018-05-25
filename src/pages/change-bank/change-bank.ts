@@ -127,7 +127,7 @@ OnAddBankSelection(Id){
     }
     var existingTenant=JSON.parse(StorageService.GetTenant());
     existingTenant.push(this.tenant);
-    StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(existingTenant));  
+    StorageService.SetTenant(JSON.stringify(existingTenant));
     this.Tenants=JSON.parse(StorageService.GetTenant());
 
     this.digiParty={
@@ -140,15 +140,15 @@ OnAddBankSelection(Id){
     }
     var existingDigiParty=JSON.parse(StorageService.GetDigiParty());
     existingDigiParty.push(this.digiParty);
-    StorageService.SetItem(this.constant.DB.DigiParty,JSON.stringify(existingDigiParty));  
-
+    StorageService.SetDigiParty(JSON.stringify(existingDigiParty));
 
     var existingSelfCareAcs=JSON.parse(StorageService.GetSelfCareAc());
     existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
-    StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
+    StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs));
+    
     this.user=JSON.parse(StorageService.GetUser());
     this.user.ActiveTenantId= this.tenant.Id;
-    StorageService.SetItem(this.constant.DB.User,JSON.stringify(this.user)); 
+    StorageService.SetUser(JSON.stringify(this.user)); 
     var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
     this.Active=+ActiveTenantId;  
     this.ActiveBankName=StorageService.GetActiveBankName();

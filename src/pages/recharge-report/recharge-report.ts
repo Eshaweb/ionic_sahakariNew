@@ -35,8 +35,8 @@ export class RechargeReportPage implements OnInit {
 
   }
   ngOnInit() {
-    this.categories = JSON.parse(StorageService.GetItem(this.constant.DB.OS));
-    this.ActiveTenantId = JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    this.categories = JSON.parse(StorageService.GetOS());
+    this.ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
     var ATenantId = this.ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
     this.DigiParties = JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));

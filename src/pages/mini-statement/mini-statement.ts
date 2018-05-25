@@ -29,7 +29,7 @@ export class MiniStatementPage implements OnInit {
   ActiveBankName: any;
   ShowHide: boolean;
 
-  ActiveTenantId = JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
   constructor(public loadingController: LoadingController, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController) {
 

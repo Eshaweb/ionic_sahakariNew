@@ -48,7 +48,7 @@ export class FundTransferPage implements OnInit{
   AcNo: any;
   HeadName: any;
   ActiveBankName: any;
-  ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
     constructor(private toastr: ToastrService,public loadingController: LoadingController,private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,public navCtrl: NavController) {
 
@@ -68,9 +68,9 @@ export class FundTransferPage implements OnInit{
     this.ShowHide=true;
     this.disablenextwithoutFromAccount=true;
     this.disablenextwithoutToAccount=true;
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
        this.ActiveBankName=StorageService.GetActiveBankName();
-       this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));    
+       this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());    
        this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB";})       
        this.ShowManyAccounts=true;
   }
@@ -90,8 +90,8 @@ export class FundTransferPage implements OnInit{
   }
  }
   GetDigiPartyID(){
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+    this.DigiParties=JSON.parse(StorageService.GetDigiParty());
        this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
        this.DigiPartyId=this.digiparty.DigiPartyId;
        return this.DigiPartyId;
@@ -99,7 +99,7 @@ export class FundTransferPage implements OnInit{
 
   GetSelfCareAcByTenantID(ActiveTenantId){
     var AcSubId=this.AcSubId; 
-    this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
     // this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"&&obj.AcSubId===this.AcSubId; });
     this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcSubId===AcSubId; });
     return this.selfCareAC;

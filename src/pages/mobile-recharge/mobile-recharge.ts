@@ -834,12 +834,12 @@ OnNext(form: NgForm){
   
   
   GetDigiPartyandPartyMastID(ActiveTenantId){
-    this.DigiParties=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+    this.DigiParties=JSON.parse(StorageService.GetDigiParty());
        this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
        return this.digiparty;
   }
   GetSelfCareAcByTenantID(ActiveTenantId){
-    this.SelfCareACs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
     this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"; });
     return this.selfCareAC;
   }

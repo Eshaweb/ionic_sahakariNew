@@ -82,8 +82,6 @@ export class LoginPage implements OnInit {
         loading.present();
         this.regService.GetServices().subscribe((data: any) => {
           this.OS = JSON.stringify(data);
-          // StorageService.SetItem(this.constant.DB.OS, this.OS);
-          //localStorage.setItem("OS", this.OS);
           StorageService.SetOS(this.OS);
         });
         loading.dismiss();

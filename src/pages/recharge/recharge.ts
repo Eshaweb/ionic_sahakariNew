@@ -20,7 +20,7 @@ categories:OS[]=[];
   constructor(public constant:ConstantService,public navCtrl: NavController) {
   }
   ngOnInit(){
-this.categories=JSON.parse(StorageService.GetItem(this.constant.DB.OS));
+this.categories=JSON.parse(StorageService.GetOS());
 for(var i=0;i<this.categories.length;i++){
   //this.showMsg=false;
 // if(this.categories[i].Id=="S4"){
