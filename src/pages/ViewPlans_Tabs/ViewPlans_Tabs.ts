@@ -68,7 +68,7 @@ export class BasicPage implements OnInit{
         OSId:this.operatorId,
         CircleId:this.circleId,
         PlanType:this.planTypes[0],
-        TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+        TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
       }
       
   }
@@ -127,7 +127,7 @@ export class TabBasicContentPage1 {
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[0],
-      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   //this.planResponse=this.bpage.planResponse;
   this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
@@ -189,7 +189,7 @@ export class TabBasicContentPage2 {
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[1],
-      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
@@ -248,7 +248,7 @@ export class TabBasicContentPage3 {
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[2],
-      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
@@ -307,7 +307,7 @@ export class TabBasicContentPage4 {
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[3],
-      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
@@ -367,7 +367,7 @@ export class TabBasicContentPage5 {
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[4],
-      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
@@ -427,7 +427,7 @@ export class TabBasicContentPage6 {
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[5],
-      TenantId:JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;

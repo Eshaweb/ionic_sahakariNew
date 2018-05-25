@@ -39,7 +39,7 @@ export class RechargeReportPage implements OnInit {
     this.ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
     var ATenantId = this.ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
-    this.DigiParties = JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+    this.DigiParties = JSON.parse(StorageService.GetDigiParty());
     this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ATenantId; });
     this.digiPartyId = this.digiparty.DigiPartyId;
   }

@@ -49,7 +49,7 @@ export class ChangeBankPage implements OnInit{
   //store: DigiCustWithOTPRefNo;
   digiParty: DigiParty;
   tenant: Tenant;
-  mobno: any;
+  mobno: string;
   reqForDigiParty:RequestForDigiParty;
   Active: number;
   filtereduserClaims: TenantList;
@@ -178,19 +178,19 @@ this.Tenants=JSON.parse(StorageService.GetTenant());
 this.Tenants=this.Tenants.filter(function( obj ) {
   return obj.Id !== Id;
 });
-StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(this.Tenants));  
+StorageService.SetTenant(JSON.stringify(this.Tenants));  
 
 var existingDigiParty=JSON.parse(StorageService.GetDigiParty());
 existingDigiParty=existingDigiParty.filter(function( obj ) {
   return obj.TenantId !== Id;
 });
-StorageService.SetItem(this.constant.DB.DigiParty,JSON.stringify(existingDigiParty));  
+StorageService.SetDigiParty(JSON.stringify(existingDigiParty));  
 
 var existingSelfCareAcs=JSON.parse(StorageService.GetSelfCareAc());
 existingSelfCareAcs=existingSelfCareAcs.filter(function( obj ) {
   return obj.TenantId !== Id;
 });
-StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
+StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs))
 this.OnAddBank();
 }
 

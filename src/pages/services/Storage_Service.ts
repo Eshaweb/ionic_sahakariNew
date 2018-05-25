@@ -43,7 +43,7 @@ export class StorageService {
         this.Tenants = JSON.parse(StorageService.GetTenant());
         this.Tenant = this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
         this.ActiveBankName = this.Tenant.Name;
-        return this.ActiveBankName
+        return this.ActiveBankName;
     }
     static Getdigipartyname(){
         var ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;

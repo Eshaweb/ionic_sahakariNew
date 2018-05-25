@@ -24,13 +24,13 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: 'enter-otp.html'
 })
 export class EnterOTPPage implements OnInit{
-  OTPRefNo: any;
+  OTPRefNo: string;
   
   Tenant: Tenant;
   User: User;
   pin: any;
   userresult: UserResult;
-  storeboolean: any;
+  storeboolean: boolean;
   ShowIf: boolean;
   HideIf= true;
   postingotp: PostOPT;

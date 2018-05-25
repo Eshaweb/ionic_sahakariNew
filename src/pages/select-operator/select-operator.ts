@@ -66,7 +66,7 @@ OnSubmit(operator){
     loading.present();
 
     this.starts=operator;
-    var param=JSON.parse(localStorage.getItem('OS'));
+    var param=JSON.parse(StorageService.GetOS());
     var par=param.Id;
     this.osreq={
       Starts:"",

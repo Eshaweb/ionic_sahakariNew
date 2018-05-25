@@ -21,8 +21,8 @@ export class BalanceEnquiryPage implements OnInit {
     ShowHide: boolean;
     balance: any;
     stmentreq: StatementRequest;
-    AcNo: any;
-    HeadName: any;
+    AcNo: string;
+    HeadName: string;
     ActiveBankName: any;
     ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 

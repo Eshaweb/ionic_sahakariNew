@@ -8,6 +8,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { DB } from '../LocalStorageTables/DB';
 import { FavouriteBasedOnParentId } from '../LocalStorageTables/FavouriteBasedOnParentId';
 import { OSBasedOnParentId } from '../LocalStorageTables/OSBasedOnParentId';
+import { StorageService } from './Storage_Service';
 
 @Injectable()
 export class ConstantService{
@@ -29,53 +30,6 @@ export class ConstantService{
   OS_S6="OS(S6)";
   OS_S7="OS(S7)";
 
-DB:DB;
-  GetUser: User;
-
-    UserId="UserId";
-    ActiveTenant="ActiveTenant";
-    UserName="UserName";
-    UniqueKey="UniqueKey";
-
-    GetTenant:Tenant
-    TId="Id";
-    //TenantId="TenantId";
-    Name="Name";
-    Address="Address";
-    IconHtml="IconHtml";
-
-    DigiParty:DigiParty;
-    DId="Id";
-    DigiPartyId="DigiPartyId";
-    PartyMastId="PartyMastId";
-    MobileNo="MobileNo";
-    DTenantId="TenantId";
-    DName="Name";  
-
-    GetOS:OS;
-    OId="Id";
-    Operator="Operator";
-    Type="Type";
-    ParentId="ParentId";
-    Remarks="Remarks";
-
-    Favourite:Favourites;
-    FId="Id";
-    NickName="NickName";
-    OperatorId="OperatorId";
-    FParentId="ParentId";
-    SubscriptionId="SubscriptionId";
-
-    GetSelfCareAc:SelfCareAc;
-    SCId="Id";
-    AcActId="AcActId";
-    HeadName="HeadName";
-    AcHeadId="AcHeadId";
-    AcSubId="AcSubId";
-    AcNo="AcNo";
-    LocId="LocId";
-    SCTenantId="TenantId";
-
       constructor(){
         this.favouriteBasedOnParentId={
           Favourite_S1:this.Favourite_S1,
@@ -95,50 +49,5 @@ DB:DB;
           OS_S6:this.OS_S6,
           OS_S7:this.OS_S7
         }
-         
-        this.GetUser=JSON.parse(localStorage.getItem("User"));
-          const TenantKey:Tenant={
-            Id:this.TId,
-            //TenantId:this.TenantId,
-            Name:this.Name,
-            Address:this.Address,
-            IconHtml:this.IconHtml
-          }
-
-          this.DigiParty={
-            Id:this.DId,
-            DigiPartyId:this.DigiPartyId,
-            PartyMastId:this.PartyMastId,
-            MobileNo:this.MobileNo,
-            TenantId:this.DTenantId,
-            Name:this.DName
-          }
-
-          this.GetOS={
-            Id:this.OId,
-            Operator:this.Operator,
-            Type:this.Type,
-            ParentId:this.ParentId,
-            Remarks:this.Remarks
-          }
-
-          this.Favourite={
-            Id:this.FId,
-            NickName:this.NickName,
-            OperatorId:this.OperatorId,
-            ParentId:this.FParentId,
-            SubscriptionId:this.SubscriptionId
-          }
-
-          this.GetSelfCareAc={
-            Id:this.SCId,
-            AcActId:this.AcActId,
-            HeadName:this.HeadName,
-            AcHeadId:this.AcHeadId,
-            AcSubId:this.AcSubId,
-            AcNo:this.AcNo,
-            LocId:this.LocId,
-            TenantId:this.SCTenantId
-          }
       }
 }

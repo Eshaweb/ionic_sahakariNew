@@ -96,7 +96,7 @@ export class MobileRechargePage implements OnInit{
   OldOSResponseInString: string;
   Id: string;
   pets: Array<string>;
-  ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
   
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,public formbuilder:FormBuilder) {

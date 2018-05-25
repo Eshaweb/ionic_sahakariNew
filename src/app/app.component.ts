@@ -26,17 +26,10 @@ import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 })
 export class MyApp {
 
-  name: any;
-  digiparty: DigiParty;
-  DigiParties: DigiParty;
+  name: string;
   ActiveBankName: any;
-  Tenant: Tenant;
-  Tenants: Tenant;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
-  SCReq: any;
-  OS: string;
-  scr: SCRequest;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
   constructor(private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
     this.event.subscribe('UNAUTHORIZED', () => {
