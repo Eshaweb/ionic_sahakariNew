@@ -81,7 +81,7 @@ import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
     BrowserModule,
     AutoCompleteModule,
     ToastrModule.forRoot({
-      timeOut: 10000,
+      timeOut: 5000,
       //positionClass: 'toast-bottom-center',
       positionClass: 'toast-center-center',
       preventDuplicates: true,

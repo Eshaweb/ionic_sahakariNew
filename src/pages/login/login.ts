@@ -34,9 +34,9 @@ export class LoginPage implements OnInit {
   Tenants: Tenant;
   TenantId: any;
   PartyMastId: any;
-  username = JSON.parse(localStorage.getItem(this.constant.DB.User)).UserName;
+  username = JSON.parse(StorageService.GetUser()).UserName;
   user: User;
-  uniqueKey = JSON.parse(StorageService.GetItem(this.constant.DB.User)).UniqueKey;
+  uniqueKey = JSON.parse(StorageService.GetUser()).UniqueKey;
   //ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
   userTokenData: any;
   tokendata: any;
@@ -82,8 +82,9 @@ export class LoginPage implements OnInit {
         loading.present();
         this.regService.GetServices().subscribe((data: any) => {
           this.OS = JSON.stringify(data);
-          StorageService.SetItem(this.constant.DB.OS, this.OS);
-
+          // StorageService.SetItem(this.constant.DB.OS, this.OS);
+          //localStorage.setItem("OS", this.OS);
+          StorageService.SetOS(this.OS);
         });
         loading.dismiss();
       }
@@ -131,8 +132,7 @@ export class LoginPage implements OnInit {
         Address: this.addbankresponse.Tenant.Address,
         IconHtml: this.addbankresponse.Tenant.IconHtml
       }
-      StorageService.SetItem(this.constant.DB.Tenant, JSON.stringify([this.Tenant]));  //Works, But not as of reqment
-
+      StorageService.SetTenant(JSON.stringify([this.Tenant]));
       this.DigiParty = {
         Id: this.addbankresponse.DigiPartyId,
         DigiPartyId: this.addbankresponse.DigiPartyId,
@@ -141,8 +141,8 @@ export class LoginPage implements OnInit {
         TenantId: this.addbankresponse.TenantId,  //ActiveTenantId
         Name: this.addbankresponse.Name
       }
-      StorageService.SetItem(this.constant.DB.DigiParty, JSON.stringify([this.DigiParty]));  //Works, But not as of reqment
-      StorageService.SetItem(this.constant.DB.SelfCareAc, JSON.stringify(this.addbankresponse.SelfCareAcs))
+      StorageService.SetDigiParty(JSON.stringify([this.DigiParty]));
+      StorageService.SetSelfCareAc(JSON.stringify(this.addbankresponse.SelfCareAcs));
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
     });
