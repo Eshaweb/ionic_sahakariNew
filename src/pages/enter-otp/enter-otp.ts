@@ -147,8 +147,10 @@ export class EnterOTPPage implements OnInit{
         UniqueKey: data.UniqueKey
       }
 
-      StorageService.SetItem(this.constant.DB.User, JSON.stringify(this.User));
-        this.navCtrl.push(LoginPage);
+      //StorageService.SetItem(this.constant.DB.User, JSON.stringify(this.User));
+       //localStorage.setItem("User", JSON.stringify(this.User));
+       StorageService.SetUser(JSON.stringify(this.User));
+      this.navCtrl.push(LoginPage);
         loading.dismiss();
 
     });

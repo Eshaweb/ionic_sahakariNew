@@ -59,17 +59,31 @@ export class StorageService {
     static GetUser() {
         return localStorage.getItem("User");
     }
+    static SetUser(param) {
+        localStorage.setItem("User",param);
+    }
     static GetTenant() {
         return localStorage.getItem("Tenant");
+    }
+    static SetTenant(param) {
+        localStorage.setItem("Tenant",param);
     }
     static GetDigiParty() {
         return localStorage.getItem("DigiParty");
     }
+    static SetDigiParty(param) {
+        localStorage.setItem("DigiParty",param);
+    }
     static GetOS() {
         return localStorage.getItem("OS");
+    }
+    static SetOS(param) {
+        localStorage.setItem("OS",param);
     }
     static GetSelfCareAc() {
         return localStorage.getItem("SelfCareAc");
     }
-    
+    static SetSelfCareAc(param) {
+        localStorage.setItem("SelfCareAc",param);
+    }
 }
