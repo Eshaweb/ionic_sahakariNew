@@ -25,10 +25,7 @@ export class BankingPage implements OnInit{
   }
 
   ngOnInit(){
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=this.Tenant.Name;
+       this.ActiveBankName=StorageService.GetActiveBankName();
   }
   OnFundTransfer(){
     this.navCtrl.push(FundTransferPage);

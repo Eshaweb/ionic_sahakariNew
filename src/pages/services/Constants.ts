@@ -30,7 +30,6 @@ export class ConstantService{
   OS_S7="OS(S7)";
 
 DB:DB;
-  SetUser="User";
   GetUser: User;
 
     UserId="UserId";
@@ -38,7 +37,6 @@ DB:DB;
     UserName="UserName";
     UniqueKey="UniqueKey";
 
-    SetTenant="Tenant";
     GetTenant:Tenant
     TId="Id";
     //TenantId="TenantId";
@@ -46,7 +44,6 @@ DB:DB;
     Address="Address";
     IconHtml="IconHtml";
 
-    SetDigiParty="DigiParty";
     DigiParty:DigiParty;
     DId="Id";
     DigiPartyId="DigiPartyId";
@@ -55,7 +52,6 @@ DB:DB;
     DTenantId="TenantId";
     DName="Name";  
 
-    SetOS="OS";
     GetOS:OS;
     OId="Id";
     Operator="Operator";
@@ -63,7 +59,6 @@ DB:DB;
     ParentId="ParentId";
     Remarks="Remarks";
 
-    SetFavourite="Favourite";
     Favourite:Favourites;
     FId="Id";
     NickName="NickName";
@@ -71,7 +66,6 @@ DB:DB;
     FParentId="ParentId";
     SubscriptionId="SubscriptionId";
 
-    SetSelfCareAc="SelfCareAc";
     GetSelfCareAc:SelfCareAc;
     SCId="Id";
     AcActId="AcActId";
@@ -101,15 +95,7 @@ DB:DB;
           OS_S6:this.OS_S6,
           OS_S7:this.OS_S7
         }
-         this.DB={
-          User:this.SetUser,
-          Tenant:this.SetTenant,
-          DigiParty:this.SetDigiParty,
-          OS:this.SetOS,
-          Favourite:this.SetFavourite,
-          SelfCareAc:this.SetSelfCareAc
-         }
-        
+         
         this.GetUser=JSON.parse(localStorage.getItem("User"));
           const TenantKey:Tenant={
             Id:this.TId,

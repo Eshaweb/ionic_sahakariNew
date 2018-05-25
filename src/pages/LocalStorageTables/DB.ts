@@ -1,8 +1,8 @@
 export class DB{
-    User:string;
-    Tenant:string;
-    DigiParty:string;
-    OS:string;
-    Favourite:string;
-    SelfCareAc:string;
+    User="User";
+    Tenant="Tenant";
+    DigiParty="DigiParty";
+    OS="OS";
+    Favourite="Favourite";
+    SelfCareAc="SelfCareAc";
 }

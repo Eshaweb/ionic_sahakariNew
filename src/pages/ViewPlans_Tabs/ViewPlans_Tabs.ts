@@ -63,12 +63,7 @@ export class BasicPage implements OnInit{
   }
 
   ngOnInit(){
-
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-       this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=this.Tenant.Name;   
-   
+      this.ActiveBankName=StorageService.GetActiveBankName();   
       this.planRequest={
         OSId:this.operatorId,
         CircleId:this.circleId,

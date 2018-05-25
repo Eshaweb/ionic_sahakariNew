@@ -19,6 +19,7 @@ import { User } from '../LocalStorageTables/User';
 import { PagePage } from '../page/page';
 import { HomePage } from '../home/home';
 import { MyApp } from '../../app/app.component';
+import { ToastrService } from 'ngx-toastr';
 
 
   const idle = new Idle()
@@ -60,19 +61,17 @@ export class ChangeBankPage implements OnInit{
   showIcon:boolean;
 
   // constructor(private autoLogoutService: AutoLogoutService,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
-    constructor(private events: Events,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
+    constructor(private toastr: ToastrService,private events: Events,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
 
   }
   
   ngOnInit(){
     this.resetForm();
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    this.Active=+ActiveTenantId;
-    var mobno=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty)).MobileNo;
-    
+    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+    this.Active=+ActiveTenantId;    
     //StorageService.SetItem('lastAction', Date.now().toString());
 
-   this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+   this.Tenants=JSON.parse(StorageService.GetTenant());
    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
    this.ActiveBankName=this.Tenant.Name;
 }
@@ -82,10 +81,10 @@ filterByString(tenantlist, ActiveTenantId) {
 }
 
 OnAddBank(){
-  this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
+  this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.showHide=true;   
   this.regService.GetTenantsByMobile(this.mobno).subscribe((data : any)=>{
-    this.addedTenantRecord=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    this.addedTenantRecord=JSON.parse(StorageService.GetTenant());
     this.tenantList = data;    //got tenantlist from server
     this.tenantList.Id=data[0].Id;
     this.selectboxoptions={
@@ -104,16 +103,18 @@ OnAddBank(){
     else{
       this.NoOptions=false;
     }
-  });
+  },(error) => {this.toastr.error(error.message, 'Error!')
+
+});
 }
 
 
 OnAddBankSelection(Id){
-  this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
+  this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.singletenant=this.tenantList.filter(function (obj) { return obj.Id === Id; });
   this.addbankreq={
     TenantId:Id,
-    MobileNo:JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName
+    MobileNo:JSON.parse(StorageService.GetUser()).UserName
   }
   this.regService.AddBank(this.addbankreq).subscribe((data:any)=>{
     this.addbankresponse=data;
@@ -124,10 +125,10 @@ OnAddBankSelection(Id){
       Address:this.addbankresponse.Tenant.Address,
       IconHtml:this.addbankresponse.Tenant.IconHtml
     }
-    var existingTenant=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    var existingTenant=JSON.parse(StorageService.GetTenant());
     existingTenant.push(this.tenant);
     StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(existingTenant));  
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+    this.Tenants=JSON.parse(StorageService.GetTenant());
 
     this.digiParty={
       Id:this.addbankresponse.DigiPartyId,
@@ -137,56 +138,55 @@ OnAddBankSelection(Id){
       TenantId:this.addbankresponse.TenantId,  //ActiveTenantId
       Name:this.addbankresponse.Name
     }
-    var existingDigiParty=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+    var existingDigiParty=JSON.parse(StorageService.GetDigiParty());
     existingDigiParty.push(this.digiParty);
     StorageService.SetItem(this.constant.DB.DigiParty,JSON.stringify(existingDigiParty));  
 
 
-    var existingSelfCareAcs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+    var existingSelfCareAcs=JSON.parse(StorageService.GetSelfCareAc());
     existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
     StorageService.SetItem(this.constant.DB.SelfCareAc,JSON.stringify(existingSelfCareAcs))
-    this.user=JSON.parse(StorageService.GetItem(this.constant.DB.User));
+    this.user=JSON.parse(StorageService.GetUser());
     this.user.ActiveTenantId= this.tenant.Id;
     StorageService.SetItem(this.constant.DB.User,JSON.stringify(this.user)); 
-    var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
     this.Active=+ActiveTenantId;  
-    this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-    this.ActiveBankName=this.Tenant.Name;
+    this.ActiveBankName=StorageService.GetActiveBankName();
     this.OnAddBank();
-  });
+    this.events.publish('REFRESH_DIGIPARTYNAME');
+  },(error) => {this.toastr.error(error.message, 'Error!')
+
+});
   
 }
 
 OnSelect(order){
-  this.mobno=JSON.parse(StorageService.GetItem(this.constant.DB.User)).UserName;
-  this.user=JSON.parse(StorageService.GetItem(this.constant.DB.User));
+  this.mobno=JSON.parse(StorageService.GetUser()).UserName;
+  this.user=JSON.parse(StorageService.GetUser());
   this.user.ActiveTenantId= order.Id;
-  StorageService.SetItem(this.constant.DB.User,JSON.stringify(this.user)); 
-  var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
+  StorageService.SetItem("User",JSON.stringify(this.user)); 
+  var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
   this.Active=+ActiveTenantId;  
-  this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-  this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-  this.ActiveBankName=this.Tenant.Name;
+  this.ActiveBankName=StorageService.GetActiveBankName();
   this.navCtrl.setRoot(PagePage);
-  this.events.publish('Refresh DigiPartyName');
+  this.events.publish('REFRESH_DIGIPARTYNAME');
 
 }
 
 OnRemove(Id){
-this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
+this.Tenants=JSON.parse(StorageService.GetTenant());
 this.Tenants=this.Tenants.filter(function( obj ) {
   return obj.Id !== Id;
 });
 StorageService.SetItem(this.constant.DB.Tenant,JSON.stringify(this.Tenants));  
 
-var existingDigiParty=JSON.parse(StorageService.GetItem(this.constant.DB.DigiParty));
+var existingDigiParty=JSON.parse(StorageService.GetDigiParty());
 existingDigiParty=existingDigiParty.filter(function( obj ) {
   return obj.TenantId !== Id;
 });
 StorageService.SetItem(this.constant.DB.DigiParty,JSON.stringify(existingDigiParty));  
 
-var existingSelfCareAcs=JSON.parse(StorageService.GetItem(this.constant.DB.SelfCareAc));
+var existingSelfCareAcs=JSON.parse(StorageService.GetSelfCareAc());
 existingSelfCareAcs=existingSelfCareAcs.filter(function( obj ) {
   return obj.TenantId !== Id;
 });

@@ -18,6 +18,7 @@ import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from "../services/Constants";
 import { User } from '../LocalStorageTables/User';
 import { Tenant } from '../LocalStorageTables/Tenant';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'page-enter-otp',
   templateUrl: 'enter-otp.html'
@@ -31,7 +32,7 @@ export class EnterOTPPage implements OnInit{
   userresult: UserResult;
   storeboolean: any;
   ShowIf: boolean;
-  HideIf: boolean;
+  HideIf= true;
   postingotp: PostOPT;
   otpno: any;
   npef: NewPasswordEntry;
@@ -41,8 +42,7 @@ export class EnterOTPPage implements OnInit{
   otp: AbstractControl;
   password: AbstractControl;
   confirmpwd: AbstractControl;
-  constructor(public navParams: NavParams,public constant: ConstantService, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private regService: RegisterService) {
-    this.HideIf = true;
+  constructor(private toastr: ToastrService,public navParams: NavParams,public constant: ConstantService, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private regService: RegisterService) {
     this.formgroup = this.fb.group({
       otp: ['', [Validators.required, Validators.minLength(4)]]
     });
@@ -102,13 +102,17 @@ export class EnterOTPPage implements OnInit{
     }
     this.regService.ValidateOTP(this.postingotp).subscribe((data: any) => {
       this.storeboolean = data;
-      this.ShowIf = true;
-      this.HideIf = false;
+      if(this.storeboolean==true){
+        this.ShowIf = true;
+        this.HideIf = false;
+      }else{
+        this.ShowIf = false;
+        this.HideIf = true;
+        this.toastr.error("OTP is Invalid", 'Error!')
+      }
+      
     })
-
-    setTimeout(() => {
       loading.dismiss();
-    }, 1500);
   }
 
   OnSavePassword(pin) {
@@ -144,14 +148,10 @@ export class EnterOTPPage implements OnInit{
       }
 
       StorageService.SetItem(this.constant.DB.User, JSON.stringify(this.User));
-      setTimeout(() => {
         this.navCtrl.push(LoginPage);
-      }, 1000);
-      setTimeout(() => {
         loading.dismiss();
-      }, 1000);
 
-    })
+    });
 
   }
 
