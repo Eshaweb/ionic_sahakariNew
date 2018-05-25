@@ -1,14 +1,14 @@
 
-<ion-content padding id="page13">
+<ion-content padding id="page13" style="background:url(assets/imgs/back.jpg) no-repeat center;background-size:cover;" >
   <form *ngIf="hidethisform" [formGroup]="formgroup" id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnGetTenants(MobileNo.value)">
     <!-- <form id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)"> -->
       <div class="spacer" style="width:300px;height:217px;" id="register-spacer10"></div>
       <h5 id="register-heading1" style="color:#DEE1EE;">
-        Enter your mobile number to search your bank
+        Enter mobile number to search your bank
       </h5>
     <ion-list id="register-list11">
       <ion-item id="register-input8">
-        <ion-label floating>
+        <ion-label>
           Phone Number
         </ion-label>
         <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder=""></ion-input>
@@ -52,8 +52,3 @@
 </ion-content>
 
 
-<ion-footer>
-  <ion-toolbar>
-    <ion-title>Footer Toolbar</ion-title>
-  </ion-toolbar>
-</ion-footer>

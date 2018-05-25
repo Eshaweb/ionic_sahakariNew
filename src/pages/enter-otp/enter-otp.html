@@ -11,7 +11,8 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding id="page15">
+<ion-content padding style="background:url(assets/imgs/back.jpg) no-repeat center;background-size:cover;" id="page15">
+    <div class="spacer" style="width:300px;height:199px;" id="enterOTP-spacer11"></div>
     <div *ngIf="HideIf">
   <form [formGroup]="formgroup" id="enterOTP-form4" #enterOTPForm="ngForm" (ngSubmit)="OnSubmit(OTPNo.value)">
     <ion-list id="enterOTP-list18">
