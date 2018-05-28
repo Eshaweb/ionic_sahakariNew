@@ -9,28 +9,29 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page3">
-  <div style="background-color:red" class="col s12 m7">
-    <div class="card">
-      <div class="card-content">
+  <ion-card>
+      <ion-item>
     <h2 style="text-align:center">
       My Banks
     </h2>
-      </div>
-    </div>
-        </div>
+  
+  </ion-item>
+        </ion-card>
+      
         <ion-list>
               <ion-item *ngFor="let order of Tenants">
                   <ion-thumbnail item-start>
                       <img src="assets/imgs/thumbnail-totoro.png">
                     </ion-thumbnail>
-                <h2>{{ order.Name }}</h2>
-                <span>{{ order.Address }}</span>
+                <h2 style="text-transform:capitalize;">{{ order.Name }}</h2>
+                <p>Branch:{{ order.Address }}</p>
           <div *ngIf="(order.Id!=Active)">
         <button ion-button clear item-end (click)="OnSelect(order)">Select</button>       
       </div>
           <div *ngIf="(order.Id==Active)">
         <!-- <ion-icon name='rose' item-end color="secondary"></ion-icon> -->
-        <ion-icon name="heart" item-end color="danger"></ion-icon>
+        <ion-icon name="heart" item-end color="danger">Active</ion-icon>
+       
         
       </div>
       <button *ngIf="(order.Id!=Active)" ion-button (click)="OnRemove(order.Id)" item-end>Remove</button>
@@ -66,6 +67,6 @@
 
 <ion-footer>
   <ion-toolbar color="primary">
-    <ion-title>Footer Toolbar</ion-title>
+    <ion-title>All Rights Reserved</ion-title>
   </ion-toolbar>
 </ion-footer>
