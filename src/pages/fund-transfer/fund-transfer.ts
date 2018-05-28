@@ -24,12 +24,12 @@ export class FundTransferPage implements OnInit{
   disablenextwithoutToAccount: boolean;
   disablenextwithoutFromAccount: boolean;
   errormsg: string;
-  AcSubId: any;
+  AcSubId: string;
   ShowManyAccounts: boolean;
   showstatus: boolean;
   selfCareAC: SelfCareAc;
   SelfCareACs: SelfCareAc;
-  DigiPartyId: any;
+  DigiPartyId: string;
   digiparty: DigiParty;
   DigiParties: DigiParty;
   Tenant: Tenant;
@@ -45,9 +45,9 @@ export class FundTransferPage implements OnInit{
   fundTransferResponse: FundTransferResponse;
   mobilenum: AbstractControl;
   formgroup1: FormGroup;
-  AcNo: any;
-  HeadName: any;
-  ActiveBankName: any;
+  AcNo: string;
+  HeadName: string;
+  ActiveBankName: string;
   ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
     constructor(private toastr: ToastrService,public loadingController: LoadingController,private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,public navCtrl: NavController) {

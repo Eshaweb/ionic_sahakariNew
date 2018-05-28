@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
-import { SelectOperatorPage } from '../select-operator/select-operator';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { StorageService } from '../services/Storage_Service';
 import { FavouriteItem } from '../LocalStorageTables/FavouriteItem';
@@ -16,11 +15,11 @@ export class FavouritesPage implements OnInit{
   Tenants: Tenant;
   newfavourites: Favourites;
   favourites: Favourites;
-  nkname: any;
-  ActiveBankName: any;
+  nkname: string;
+  ActiveBankName: string;
   public firstParam;
-  TId: any;
-  ParentId: any;
+  TId: string;
+  ParentId: string;
   constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController,
     public navParams: NavParams) {
     }

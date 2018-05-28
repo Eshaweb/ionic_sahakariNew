@@ -16,7 +16,7 @@ export class BankingPage implements OnInit{
 
   Tenant: Tenant;
   Tenants: Tenant;
-  ActiveBankName: any;
+  ActiveBankName: string;
   // constructor(public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
     constructor(public constant:ConstantService,public navCtrl: NavController) {
 

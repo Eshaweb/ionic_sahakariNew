@@ -23,7 +23,7 @@ import { Tenant } from '../LocalStorageTables/Tenant';
   templateUrl: 'login.html'
 })
 export class LoginPage implements OnInit {
-  ActiveBankName: any;
+  ActiveBankName: string;
   addbankresponse: AddBankResponse;
   addbankreq: AddBankRequest;
   SelfCareAc: SelfCareAc;
@@ -32,18 +32,15 @@ export class LoginPage implements OnInit {
   SelfCareAcs: SelfCareAc;
   DigiParties: DigiParty;
   Tenants: Tenant;
-  TenantId: any;
-  PartyMastId: any;
+  TenantId: string;
+  PartyMastId: string;
   username = JSON.parse(StorageService.GetUser()).UserName;
   user: User;
   uniqueKey = JSON.parse(StorageService.GetUser()).UniqueKey;
   //ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
   userTokenData: any;
-  tokendata: any;
-  SCReq: any;
   OS: string;
   scr: SCRequest;
-  UToken: any;
   isLoginError: boolean;
   formgroup: FormGroup;
   pword: AbstractControl;

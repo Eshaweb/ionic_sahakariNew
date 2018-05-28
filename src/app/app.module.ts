@@ -23,7 +23,6 @@ import { RechargeSuccessfulPage } from '../pages/recharge-successful/recharge-su
 import { RegisterPage } from '../pages/register/register';
 import { BankListPage } from '../pages/bank-list/bank-list';
 import { EnterOTPPage } from '../pages/enter-otp/enter-otp';
-import { SelectOperatorPage } from '../pages/select-operator/select-operator';
 import { HttpClient,HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { AuthGuard } from '../pages/auth/auth.guard';
@@ -65,7 +64,6 @@ import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
     RegisterPage,
     BankListPage,
     EnterOTPPage,
-    SelectOperatorPage,
     FundTransferPage,
     BalanceEnquiryPage,
     TabBasicPage,
@@ -108,7 +106,6 @@ import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
     RegisterPage,
     BankListPage,
     EnterOTPPage,
-    SelectOperatorPage,
     FundTransferPage,
     BalanceEnquiryPage,
     TabBasicPage,

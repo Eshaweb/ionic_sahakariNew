@@ -22,11 +22,11 @@ export class MiniStatementPage implements OnInit {
   Tenants: Tenant;
   stmntItem: StatementItem;
   ministmnt: MiniStatement;
-  AcNo: any;
-  HeadName: any;
+  AcNo: string;
+  HeadName: string;
   balance: any;
   stmentreq: StatementRequest;
-  ActiveBankName: any;
+  ActiveBankName: string;
   ShowHide: boolean;
 
   ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;

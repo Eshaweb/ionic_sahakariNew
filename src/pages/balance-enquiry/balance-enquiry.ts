@@ -23,7 +23,7 @@ export class BalanceEnquiryPage implements OnInit {
     stmentreq: StatementRequest;
     AcNo: string;
     HeadName: string;
-    ActiveBankName: any;
+    ActiveBankName: string;
     ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
     constructor(public loadingController: LoadingController,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {

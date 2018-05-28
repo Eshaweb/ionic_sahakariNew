@@ -14,7 +14,7 @@ export class StorageService {
     static digipartyname:string;
     static digiparty: DigiParty;
     static DigiParties: DigiParty;
-    static ActiveBankName: String;
+    static ActiveBankName: string;
     static Tenant: Tenant;
     static Tenants: Tenant;
     static SetAuthorizationData(auth: TokenParams): void {

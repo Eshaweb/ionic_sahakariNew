@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { OS } from '../View Models/OS';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
@@ -25,25 +25,27 @@ export class RechargeReportPage implements OnInit {
   digiparty: DigiParty;
   DigiParties: DigiParty;
   rRResponse: RRResponse;
-  ActiveBankName: any;
-  Tenant: any;
-  Tenants: any;
-  ActiveTenantId: any;
+  ActiveBankName: string;
+  ActiveTenantId: string;
   rRRequest: RRRequest;
   categories: OS[] = [];
-  constructor(private toastr: ToastrService, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public loadingController: LoadingController, private toastr: ToastrService, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
 
   }
   ngOnInit() {
     this.categories = JSON.parse(StorageService.GetOS());
     this.ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-    var ATenantId = this.ActiveTenantId;
+    const ATenantId = this.ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
     this.DigiParties = JSON.parse(StorageService.GetDigiParty());
     this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ATenantId; });
     this.digiPartyId = this.digiparty.DigiPartyId;
   }
   ObjChanged(event) {
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+    loading.present();
     this.rRRequest = {
       TenantId: this.ActiveTenantId,
       DigiPartyId: this.digiPartyId,
@@ -56,6 +58,7 @@ export class RechargeReportPage implements OnInit {
     }, (error) => {
       this.toastr.error(error.message, 'Error!')
     });
+    loading.dismiss();
   }
 
 

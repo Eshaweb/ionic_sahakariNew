@@ -56,7 +56,7 @@ export class ChangeBankPage implements OnInit{
   tenantList: TenantList;
   singletenant: TenantList;
   Tenants:Tenant;
-  ActiveBankName: any;
+  ActiveBankName: string;
   showHide:boolean;
   showIcon:boolean;
 

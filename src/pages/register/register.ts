@@ -36,16 +36,14 @@ export class RegisterPage implements OnInit {
   store: DigiCustWithOTPRefNo;
   mobno: any;
   registervm: Registervm;
-  //userClaims : TenantList[];
   tenantList: TenantList;
   isLoginError: boolean = false;
-  //user:User;
   errorMessage: string;
   messages: string[] = [];
   formgroup: FormGroup;
   mobilenum: AbstractControl;
   lastname: AbstractControl;
-  public items: any[][];
+  public items: number[][];
 
   constructor(public constant: ConstantService, public loadingController: LoadingController, public formbuilder: FormBuilder, private platform: Platform, private toastCtrl: ToastController, private toast: Toast, private toastr: ToastrService, private regService: RegisterService, public navCtrl: NavController) {
     this.items = [
