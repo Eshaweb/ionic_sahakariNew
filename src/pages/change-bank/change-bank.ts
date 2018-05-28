@@ -26,7 +26,8 @@ import { ToastrService } from 'ngx-toastr';
   .whenNotInteractive()
   .within(5,1000)
   //.do(() => console.log('IDLE'))
-  .do(() => LoginPage)  //Need to call LoginPage
+  .do(()=>LoginPage)
+  //.do(() => { this.navCtrl.setRoot(LoginPage);})  //Need to call LoginPage
   .start();
 
 
@@ -36,50 +37,36 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: 'change-bank.html'
 })
 export class ChangeBankPage implements OnInit{
-  Options: boolean;
-  NoOptions: boolean;
-  newselectlist: TenantList;
-  selectboxoptions: Tenant;
-  user: User;
-  addedTenantRecord: Tenant;
-  addbankresponse: AddBankResponse;
-  addbankreq: AddBankRequest;
-  Tenant: Tenant;
-  existingentries: Tenant;
-  //store: DigiCustWithOTPRefNo;
-  digiParty: DigiParty;
-  tenant: Tenant;
-  mobno: string;
-  reqForDigiParty:RequestForDigiParty;
-  Active: number;
-  filtereduserClaims: TenantList;
-  tenantList: TenantList;
-  singletenant: TenantList;
+  
   Tenants:Tenant;
-  ActiveBankName: string;
-  showHide:boolean;
-  showIcon:boolean;
 
   // constructor(private autoLogoutService: AutoLogoutService,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
     constructor(private toastr: ToastrService,private events: Events,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
 
   }
-  
+  Tenant: Tenant;
+  tenant: Tenant;
+  ActiveBankName: string;
+  Active: number;
   ngOnInit(){
     this.resetForm();
     var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
     this.Active=+ActiveTenantId;    
     //StorageService.SetItem('lastAction', Date.now().toString());
-
    this.Tenants=JSON.parse(StorageService.GetTenant());
    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
    this.ActiveBankName=this.Tenant.Name;
 }
-
+tenantList: TenantList;
 filterByString(tenantlist, ActiveTenantId) {
   return this.tenantList.filter(e => e.Id==ActiveTenantId);
 }
-
+mobno: string;
+showHide:boolean;
+addedTenantRecord: Tenant;
+selectboxoptions: Tenant;
+Options: boolean;
+NoOptions: boolean;
 OnAddBank(){
   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.showHide=true;   
@@ -107,8 +94,11 @@ OnAddBank(){
 
 });
 }
-
-
+addbankreq: AddBankRequest;
+singletenant: TenantList;
+addbankresponse: AddBankResponse;
+user: User;
+digiParty: DigiParty;
 OnAddBankSelection(Id){
   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.singletenant=this.tenantList.filter(function (obj) { return obj.Id === Id; });
@@ -194,7 +184,7 @@ StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs))
 this.OnAddBank();
 }
 
-
+reqForDigiParty:RequestForDigiParty;
 resetForm(form?: NgForm) {
   if (form != null)
     form.reset();

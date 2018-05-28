@@ -27,7 +27,7 @@ import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 export class MyApp {
 
   name: string;
-  ActiveBankName: any;
+  ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {

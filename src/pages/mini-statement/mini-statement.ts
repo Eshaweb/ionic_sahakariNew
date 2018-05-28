@@ -14,39 +14,25 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
   templateUrl: 'mini-statement.html'
 })
 export class MiniStatementPage implements OnInit {
-
-  HideMsg: boolean;
-  SelfCareAcsBasedOnTenantID: SelfCareAc;
-  SelfCareACs: SelfCareAc;
-  Tenant: Tenant;
-  Tenants: Tenant;
-  stmntItem: StatementItem;
-  ministmnt: MiniStatement;
-  AcNo: string;
-  HeadName: string;
-  balance: any;
-  stmentreq: StatementRequest;
-  ActiveBankName: string;
-  ShowHide: boolean;
-
   ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-
   constructor(public loadingController: LoadingController, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController) {
 
   }
-
+  ActiveBankName: string;
+  ShowHide: boolean;
+  HideMsg: boolean;
+  SelfCareAcsBasedOnTenantID: SelfCareAc;
   ngOnInit() {
     this.ShowHide = true;
     this.HideMsg=true;
-    //var ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-    // this.Tenants = JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-    // this.Tenant = this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
-    //this.ActiveBankName = this.Tenant[0].Name;
     this.ActiveBankName =StorageService.GetActiveBankName();
     this.SelfCareAcsBasedOnTenantID =StorageService.GetSelfCareAcsBasedOnTenantID();
   }
 
-
+  stmentreq: StatementRequest;
+  stmntItem: StatementItem;
+  ministmnt: MiniStatement;
+  balance: any;
   OnGetMiniStatement(AcHeadId, AcSubId) {
     let loading = this.loadingController.create({
       content: 'Loading the Mini Statement..'

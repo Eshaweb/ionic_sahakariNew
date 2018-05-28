@@ -7,10 +7,7 @@ import { RegisterService } from '../services/app-data.service';
 import { PostOPT } from '../View Models/PostOPT';
 import { NewPasswordEntry } from '../View Models/NewPasswordEntry';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-//import { Validator, NG_VALIDATORS } from '@angular/forms';
 import { UserPost } from '../View Models/UserPost';
-//import { Directive, forwardRef, Attribute } from '@angular/core';
-//import { ValidatorFn } from '@angular/forms';
 import { UserResult } from '../View Models/UserResult';
 import "rxjs/add/operator/debounceTime";
 import { LoginPage } from '../login/login';
@@ -24,21 +21,11 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: 'enter-otp.html'
 })
 export class EnterOTPPage implements OnInit{
-  OTPRefNo: string;
   
-  Tenant: Tenant;
-  User: User;
-  pin: any;
-  userresult: UserResult;
-  storeboolean: boolean;
-  ShowIf: boolean;
-  HideIf= true;
-  postingotp: PostOPT;
-  otpno: any;
-  npef: NewPasswordEntry;
+  //Tenant: Tenant;
+  
   SavePasswordForm: FormGroup;
   formgroup: FormGroup;
-  userpost: UserPost;
   otp: AbstractControl;
   password: AbstractControl;
   confirmpwd: AbstractControl;
@@ -74,9 +61,12 @@ export class EnterOTPPage implements OnInit{
         }
       });
   }
+
+  OTPRefNo: string;
   ngOnInit() {
     this.OTPRefNo=this.navParams.get('OTPRefNo');
     }
+
   matchingPasswords(group: FormGroup) { // here we have the 'passwords' group
     let password = group.controls.password.value;
     let confirmpwd = group.controls.confirmpwd.value;
@@ -85,7 +75,11 @@ export class EnterOTPPage implements OnInit{
     }
     return password === confirmpwd ? null : { notSame: true }
   }
-
+  otpno: any;
+  storeboolean: boolean;
+  ShowIf: boolean;
+  HideIf= true;
+  postingotp: PostOPT;
   OnSubmit(otpno) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
@@ -114,6 +108,10 @@ export class EnterOTPPage implements OnInit{
     })
       loading.dismiss();
   }
+  User: User;
+  pin: any;
+  userresult: UserResult;
+  userpost: UserPost;
 
   OnSavePassword(pin) {
     this.pin = pin;

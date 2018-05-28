@@ -14,7 +14,7 @@ import { RechargeReportPage } from '../recharge-report/recharge-report';
 export class PagePage implements OnInit {
   Tenant: Tenant;
   Tenants: Tenant;
-  ActiveBankName: any;
+  ActiveBankName: string;
   constructor(public constant:ConstantService,public navCtrl: NavController,public navParams: NavParams) {
   }
 ngOnInit(){

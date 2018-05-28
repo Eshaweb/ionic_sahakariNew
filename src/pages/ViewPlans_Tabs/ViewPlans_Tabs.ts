@@ -403,13 +403,13 @@ export class TabBasicContentPage5 {
   </ion-content>
 `})
 export class TabBasicContentPage6 {
-  navp: any;
-  circleId: any;
-  operatorId: any;
+  navp: string;
+  circleId: string;
+  operatorId: string;
   planResponse: PlanDet;
   isAndroid: boolean = false;
   planRequest: PlanRequest;
-  i:any;
+  i:number;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
   constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {

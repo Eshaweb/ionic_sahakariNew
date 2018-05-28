@@ -13,7 +13,6 @@ import { TenantList } from '../View Models/TenantList';
 })
 export class HomePage implements OnInit{
   tenantlist:TenantList;
-  person:Person;
   //constructor(public navCtrl: NavController, public navParams: NavParams, private userService: RegisterService, private details:RegisterPage) {
     constructor(public navCtrl: NavController, private userService: RegisterService) {
 

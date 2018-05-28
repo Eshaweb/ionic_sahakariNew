@@ -14,8 +14,8 @@ export class RechargePage implements OnInit {
   showMsg: boolean;
   Tenant: Tenant;
   Tenants: Tenant;
-  ActiveBankName: any;
-  ParentId: any;
+  ActiveBankName: string;
+  ParentId: string;
 categories:OS[]=[];
   constructor(public constant:ConstantService,public navCtrl: NavController) {
   }
