@@ -68,6 +68,7 @@ export class RegisterPage implements OnInit {
       this.tenantList = data;   //got tenantlist from server
       this.tenantList.Id = data[0].Id;
       this.hidethisform = false;
+      
       loading.dismiss();
     },
       (err: HttpErrorResponse) => {

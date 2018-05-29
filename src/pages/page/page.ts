@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import { BankingPage } from '../banking/banking';
 import { RechargePage } from '../recharge/recharge';
 import { StorageService } from '../services/Storage_Service';
@@ -12,15 +12,13 @@ import { RechargeReportPage } from '../recharge-report/recharge-report';
   templateUrl: 'page.html'
 })
 export class PagePage implements OnInit {
-  Tenant: Tenant;
-  Tenants: Tenant;
   ActiveBankName: string;
-  constructor(public constant:ConstantService,public navCtrl: NavController,public navParams: NavParams) {
+  constructor(private events: Events,public constant:ConstantService,public navCtrl: NavController,public navParams: NavParams) {
   }
 ngOnInit(){
      this.ActiveBankName=StorageService.GetActiveBankName();
      //this.ActiveBankName=this.navParams.get('ActiveBankName');
-
+     this.events.publish('REFRESH_DIGIPARTYNAME');
     }
   
   OnBanking(){

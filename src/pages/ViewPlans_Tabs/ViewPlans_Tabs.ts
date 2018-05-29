@@ -27,16 +27,10 @@ selector: 'page-ViewPlans_Tabs',
 templateUrl: 'ViewPlans_Tabs.html'
 })
 export class BasicPage implements OnInit{
-  ActiveBankName: any;
-  Tenant: Tenant;
-  Tenants: Tenant;
   navp: any;
-  planResponse: PlanDet;
-  planRequest: PlanRequest;
-  i:any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
-  circleId: any;
-  operatorId: any;
+  circleId: string;
+  operatorId: string;
   RMG: string;
   OTR: string;
   SMS: string;
@@ -61,6 +55,8 @@ export class BasicPage implements OnInit{
       this.navp=this.navParams.data;
       
   }
+  ActiveBankName: string;
+  planRequest: PlanRequest;
 
   ngOnInit(){
       this.ActiveBankName=StorageService.GetActiveBankName();   

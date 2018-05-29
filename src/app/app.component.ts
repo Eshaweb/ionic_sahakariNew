@@ -43,14 +43,15 @@ export class MyApp {
       splashScreen.hide();
 
       //localStorage.clear();
-
+      
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.name = StorageService.Getdigipartyname();
       });
       if (StorageService.GetUser() == null) {
         this.rootPage = RegisterPage;
-       
+        
+
       }
       else {
         this.rootPage = PagePage;

@@ -77,13 +77,7 @@ export class FundTransferPage implements OnInit{
  DigiPartyId: string;
   digiparty: DigiParty;
   DigiParties: DigiParty;
-  GetDigiPartyID(){
-    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
-    this.DigiParties=JSON.parse(StorageService.GetDigiParty());
-       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-       this.DigiPartyId=this.digiparty.DigiPartyId;
-       return this.DigiPartyId;
-  }
+  
 
   GetSelfCareAcByTenantID(ActiveTenantId){
     var AcSubId=this.AcSubId; 
@@ -128,7 +122,7 @@ this.ShowHide=false;
     loading.present();
     this.transfer={
       TenantId:this.ActiveTenantId,
-       DigiPartyId:this.GetDigiPartyID(),
+       DigiPartyId:StorageService.GetDigiPartyID(),
       //FromAcMastId:this.AcHeadId,
       FromAcMastId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcHeadId,
       FromAcSubId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcSubId,

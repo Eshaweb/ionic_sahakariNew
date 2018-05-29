@@ -22,12 +22,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class RechargeReportPage implements OnInit {
   digiPartyId: string;
-  digiparty: DigiParty;
-  DigiParties: DigiParty;
-  rRResponse: RRResponse;
   ActiveBankName: string;
   ActiveTenantId: string;
-  rRRequest: RRRequest;
   categories: OS[] = [];
   constructor(public loadingController: LoadingController, private toastr: ToastrService, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
 
@@ -35,12 +31,12 @@ export class RechargeReportPage implements OnInit {
   ngOnInit() {
     this.categories = JSON.parse(StorageService.GetOS());
     this.ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-    const ATenantId = this.ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
-    this.DigiParties = JSON.parse(StorageService.GetDigiParty());
-    this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ATenantId; });
-    this.digiPartyId = this.digiparty.DigiPartyId;
+    this.digiPartyId = StorageService.GetDigiPartyID();
   }
+  rRResponse: RRResponse;
+  rRRequest: RRRequest;
+
   ObjChanged(event) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'

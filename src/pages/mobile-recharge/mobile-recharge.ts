@@ -30,28 +30,6 @@ import { FavouritesPage } from '../favourites/favourites';
   templateUrl: 'mobile-recharge.html'
 })
 export class MobileRechargePage implements OnInit{
-
-  statename: string;
-  operatorname: string;
-  showerrortext: boolean;
-  oid: string;
-  sid: string;
-  singleState: SingleState;
-  singleosrespone: OSResponse;
-  operatorcircle: OperaterCircle;
-  operatorcircleqry: OperaterCircleQuery;
-  showSuccess: boolean;
-  showConfirm: boolean;
-  tranresponse: TranResponse;
-  selfCareAC: SelfCareAc;
-  SelfCareACs: SelfCareAc;
-  digiparty: DigiParty;
-  DigiParties: DigiParty;
-  label: string;
-  OperatorId: string;
-  recharge: RechargeModel;
-  operator: string;
-  favouriteNew: Favourites;
   amount: AbstractControl;
   mobno: AbstractControl;
   nickname: AbstractControl;
@@ -89,8 +67,8 @@ export class MobileRechargePage implements OnInit{
   OldOSResponseInString: string;
   osreq:OSRequest ;
   OSResponseNew: OSResponse;
-
   ShowEntryForm: boolean;
+
   ActiveBankName: string;
 
   ngOnInit(){
@@ -492,7 +470,10 @@ else if(this.ParentId=="S5"){
 //   }
 existingentry: FavouriteItem;
 duplicateFavourite: FavouriteItem;
-
+showConfirm: boolean;
+label: string;
+operator: string;
+favouriteNew: Favourites;
 
 OnNext(form: NgForm){
   if(this.Id==null){
@@ -629,6 +610,7 @@ OnNext(form: NgForm){
       default:
       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
     }
+
     switch (this.rechargeitem.OperatorId) {
       case "O1":
       this.operator="Airtel";
@@ -785,8 +767,17 @@ OnNext(form: NgForm){
  {Id: "11", Name: "Telenor"},
  {Id: "12", Name: "Vodafone"},
 ];
-  OnMobileNo(id){
-    
+showerrortext: boolean;
+operatorcircleqry: OperaterCircleQuery;
+operatorcircle: OperaterCircle;
+singleosrespone: OSResponse;
+oid: string;
+statename: string;
+sid: string;
+singleState: SingleState;
+operatorname: string;
+
+  OnMobileNo(id){ 
     if(id.length<10){
        //return null;
        return this.showerrortext=true;
@@ -812,12 +803,16 @@ OnNext(form: NgForm){
     }
   }
   
-  
+  DigiParties: DigiParty;
+  digiparty: DigiParty;
+
   GetDigiPartyandPartyMastID(ActiveTenantId){
     this.DigiParties=JSON.parse(StorageService.GetDigiParty());
        this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
        return this.digiparty;
   }
+  selfCareAC: SelfCareAc;
+  SelfCareACs: SelfCareAc;
   GetSelfCareAcByTenantID(ActiveTenantId){
     this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
     this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"; });
@@ -1049,6 +1044,10 @@ OnNext(form: NgForm){
      this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'CircleId': circleId,'ParentId':this.ParentId,'SubscriptionId':subscriptionId,'nname':nname});
     
   }
+  recharge: RechargeModel;
+  tranresponse: TranResponse;
+  showSuccess: boolean;
+  OperatorId: string;
 
 OnConfirm(){
   let loading = this.loadingController.create({

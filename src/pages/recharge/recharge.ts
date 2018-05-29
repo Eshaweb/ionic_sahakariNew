@@ -11,12 +11,8 @@ import { RechargeReportPage } from '../recharge-report/recharge-report';
   templateUrl: 'recharge.html'
 })
 export class RechargePage implements OnInit {
-  showMsg: boolean;
-  Tenant: Tenant;
-  Tenants: Tenant;
   ActiveBankName: string;
-  ParentId: string;
-categories:OS[]=[];
+  categories:OS[]=[];
   constructor(public constant:ConstantService,public navCtrl: NavController) {
   }
   ngOnInit(){
@@ -56,6 +52,7 @@ for(var i=0;i<this.categories.length;i++){
 }
    this.ActiveBankName=StorageService.GetActiveBankName();
   }
+  ParentId: string;
   OnOperatorSelection(ParentId){
     this.ParentId=ParentId;
     this.navCtrl.push(FavouritesPage, { 'ParentId': this.ParentId });
