@@ -5,10 +5,7 @@ import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { RegisterService } from '../services/app-data.service';
-//import { HttpErrorResponse } from '@angular/common/http';
 import { PagePage } from '../page/page';
-//import { Observable } from "rxjs/Observable";
-//import { TokenParams } from '../View Models/TokenParams';
 import { SCRequest } from '../View Models/SCRequest';
 import { StorageService } from '../services/Storage_Service';
 import { ConstantService } from '../services/Constants';
@@ -18,34 +15,14 @@ import { AddBankRequest } from '../View Models/AddBankRequest';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { Tenant } from '../LocalStorageTables/Tenant';
+import { OS } from '../LocalStorageTables/OS';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
-export class LoginPage implements OnInit {
-  ActiveBankName: string;
-  addbankresponse: AddBankResponse;
-  addbankreq: AddBankRequest;
-  SelfCareAc: SelfCareAc;
-  DigiParty: DigiParty;
-  Tenant: Tenant;
-  SelfCareAcs: SelfCareAc;
-  DigiParties: DigiParty;
-  Tenants: Tenant;
-  TenantId: string;
-  PartyMastId: string;
-  username = JSON.parse(StorageService.GetUser()).UserName;
-  user: User;
-  uniqueKey = JSON.parse(StorageService.GetUser()).UniqueKey;
-  //ActiveBankName=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantName;
-  userTokenData: any;
-  OS: string;
-  scr: SCRequest;
-  isLoginError: boolean;
+export class LoginPage implements OnInit { 
   formgroup: FormGroup;
   pword: AbstractControl;
-
-  //userName=this.regService.userresult.UserName;
 
   constructor(public constant: ConstantService, public loadingController: LoadingController, public formbuilder: FormBuilder, private regService: RegisterService, public navCtrl: NavController) {
     this.formgroup = formbuilder.group({
@@ -54,12 +31,22 @@ export class LoginPage implements OnInit {
     });
     this.pword = this.formgroup.controls['pword'];
   }
+
+  ActiveBankName: string;
   ngOnInit() {
     if (StorageService.GetTenant()!= null) {
       this.ActiveBankName = StorageService.GetActiveBankName();
     }
 
   }
+  SelfCareAcs: SelfCareAc;
+  DigiParties: DigiParty;
+  Tenant: Tenant;
+  Tenants: Tenant;
+  username = JSON.parse(StorageService.GetUser()).UserName;
+  uniqueKey = JSON.parse(StorageService.GetUser()).UniqueKey;
+  userTokenData: any;
+  OS: string;
   OnLogin(password) {
     let loading = this.loadingController.create({
       content: 'Wait for a second..'
@@ -112,6 +99,9 @@ export class LoginPage implements OnInit {
        loading.dismiss();
   }
 
+  addbankresponse: AddBankResponse;
+  addbankreq: AddBankRequest;
+  DigiParty: DigiParty;
 
   callservices() {
     this.addbankreq = {

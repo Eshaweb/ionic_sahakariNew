@@ -19,36 +19,12 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: 'fund-transfer.html'
 })
 export class FundTransferPage implements OnInit{
-
-  SelfCareAcsBasedOnTenantID: SelfCareAc;
-  disablenextwithoutToAccount: boolean;
-  disablenextwithoutFromAccount: boolean;
-  errormsg: string;
-  AcSubId: string;
-  ShowManyAccounts: boolean;
-  showstatus: boolean;
-  selfCareAC: SelfCareAc;
-  SelfCareACs: SelfCareAc;
-  DigiPartyId: string;
-  digiparty: DigiParty;
-  DigiParties: DigiParty;
-  Tenant: Tenant;
-  Tenants: Tenant;
-  ftd: FundTransferDone;
-  transfer: DoFundTransfer;
-  ShowHide: boolean;
-  Rs: string;
-  confirm: FundTransferResponse;
   amount: AbstractControl;
   formgroup2: FormGroup;
-  FTRequest: FundTransferRequest;
-  fundTransferResponse: FundTransferResponse;
   mobilenum: AbstractControl;
   formgroup1: FormGroup;
-  AcNo: string;
-  HeadName: string;
-  ActiveBankName: string;
-  ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+ 
+  
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
     constructor(private toastr: ToastrService,public loadingController: LoadingController,private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,public navCtrl: NavController) {
 
@@ -63,7 +39,15 @@ export class FundTransferPage implements OnInit{
     this.amount = this.formgroup2.controls['amount'];
 
   }
-
+  ShowHide: boolean;
+  disablenextwithoutToAccount: boolean;
+  disablenextwithoutFromAccount: boolean;
+  ActiveBankName: string;
+  ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+  selfCareAC: SelfCareAc;
+  SelfCareACs: SelfCareAc;
+  ShowManyAccounts: boolean;
+  SelfCareAcsBasedOnTenantID: SelfCareAc;
   ngOnInit(){
     this.ShowHide=true;
     this.disablenextwithoutFromAccount=true;
@@ -75,7 +59,8 @@ export class FundTransferPage implements OnInit{
        this.ShowManyAccounts=true;
   }
 
-  
+  errormsg: string;
+  AcSubId: string;
   OnFromAccount(AcSubId){
    this.AcSubId=AcSubId;
    this.errormsg=null;
@@ -89,13 +74,10 @@ export class FundTransferPage implements OnInit{
     return this.selfCareAC;
   }
  }
-  GetDigiPartyID(){
-    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
-    this.DigiParties=JSON.parse(StorageService.GetDigiParty());
-       this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-       this.DigiPartyId=this.digiparty.DigiPartyId;
-       return this.DigiPartyId;
-  }
+ DigiPartyId: string;
+  digiparty: DigiParty;
+  DigiParties: DigiParty;
+  
 
   GetSelfCareAcByTenantID(ActiveTenantId){
     var AcSubId=this.AcSubId; 
@@ -105,6 +87,8 @@ export class FundTransferPage implements OnInit{
     return this.selfCareAC;
     
   }
+  FTRequest: FundTransferRequest;
+  fundTransferResponse: FundTransferResponse;
   OnSearchingAccount(mobno){
     let loading = this.loadingController.create({
       content: 'Searching For the Account'
@@ -120,13 +104,17 @@ export class FundTransferPage implements OnInit{
     });
     loading.dismiss();
   }
-  
+ 
+  Rs: string;
+  confirm: FundTransferResponse;
   OnNext(amnt){
 this.confirm=this.fundTransferResponse;
 this.Rs=amnt;
 this.ShowHide=false;
   }
-
+  showstatus: boolean;
+  ftd: FundTransferDone;
+  transfer: DoFundTransfer;
   OnConfirm(){
     let loading = this.loadingController.create({
       content: 'Transferring the Fund..'
@@ -134,7 +122,7 @@ this.ShowHide=false;
     loading.present();
     this.transfer={
       TenantId:this.ActiveTenantId,
-       DigiPartyId:this.GetDigiPartyID(),
+       DigiPartyId:StorageService.GetDigiPartyID(),
       //FromAcMastId:this.AcHeadId,
       FromAcMastId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcHeadId,
       FromAcSubId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcSubId,

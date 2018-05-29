@@ -30,72 +30,11 @@ import { FavouritesPage } from '../favourites/favourites';
   templateUrl: 'mobile-recharge.html'
 })
 export class MobileRechargePage implements OnInit{
-
-  postpaid: string;
-  singleOperator: SingleOperator;
-  amountforRecharge: any;
-  statename: string;
-  operatorname: string;
-  showerrortext: boolean;
-  oid: string;
-  sid: string;
-  singleState: SingleState;
-  singleosrespone: OSResponse;
-  operatorcircle: OperaterCircle;
-  operatorcircleqry: OperaterCircleQuery;
-  showSuccess: boolean;
-  showConfirm: boolean;
-  osid: string;
-  planResponse: PlanDet;
-  planRequest: PlanRequest;
-  tranresponse: TranResponse;
-  selfCareAC: SelfCareAc;
-  SelfCareACs: SelfCareAc;
-  PartyMastID: string;
-  DigiPartyId: string;
-  digiparty: DigiParty;
-  DigiParties: DigiParty;
-  ShowEntryForm: boolean;
-  existingentry: FavouriteItem;
-  duplicateFavourite: FavouriteItem;
-  ShowLabel: boolean;
-  label: string;
-  Tenant: Tenant;
-  Tenants: Tenant;
-  ElectricityConsumerNo: any;
-  DTHNo: any;
-  favouriteNewOfDTH: any;
-  ParentId: string;
-  favouriteitem: FavouriteItem;
-  rechargeitem:Recharge;
-  OperatorId: string;
-  nkname: string;
-  prepaid: any;
-  LocId: any;
-  AcSubId: string;
-  AcMastId: string;
-  recharge: RechargeModel;
-  //recharge: Recharge;
-  operator: any;
-  AmountForRecharge: any;
-  favouriteNew: Favourites;
-  OId: any;
-  Nickname1: string;
   amount: AbstractControl;
   mobno: AbstractControl;
-  MobileNo: any;
-  SubscriptionId: any;
   nickname: AbstractControl;
-  favourites: Favourites;
-  ActiveBankName: string;
-  selectoperator: AbstractControl;
   gender: string;
   formgroup: FormGroup;
-  OSResponseNew: OSResponse;
-  osreq:OSRequest ;
-  OldOSResponseInString: string;
-  Id: string;
-  pets: Array<string>;
   ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
   
@@ -113,12 +52,28 @@ export class MobileRechargePage implements OnInit{
     this.nickname = this.formgroup.controls['selectoperator'];
 
   }
+  Id: string;
+  ParentId: string;
+  amountforRecharge: string;
+  osid: string;
+  favouriteNewOfDTH: string;
+  postpaid: string;
+  favourites: Favourites;
+  rechargeitem:Recharge;
+  prepaid: string;
+  DTHNo: any;
+  ShowLabel: boolean;
+  ElectricityConsumerNo: any;
+  OldOSResponseInString: string;
+  osreq:OSRequest ;
+  OSResponseNew: OSResponse;
+  ShowEntryForm: boolean;
+
+  ActiveBankName: string;
+
   ngOnInit(){
     this.ShowEntryForm=true;
-    // var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-    // this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-    //    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-       this.ActiveBankName=StorageService.GetActiveBankName();   
+    this.ActiveBankName=StorageService.GetActiveBankName();   
     this.resetForm();
     this.Id=this.navParams.get('Id');
     this.ParentId=this.navParams.get('ParentId');
@@ -240,6 +195,7 @@ else if(this.ParentId=="S5"){
     
   }
   
+  favouriteitem: FavouriteItem;
 
   resetForm(form?: NgForm) {
     if (form != null)
@@ -512,7 +468,12 @@ else if(this.ParentId=="S5"){
 //     this.showConfirm=true;
 
 //   }
-  
+existingentry: FavouriteItem;
+duplicateFavourite: FavouriteItem;
+showConfirm: boolean;
+label: string;
+operator: string;
+favouriteNew: Favourites;
 
 OnNext(form: NgForm){
   if(this.Id==null){
@@ -649,6 +610,7 @@ OnNext(form: NgForm){
       default:
       this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
     }
+
     switch (this.rechargeitem.OperatorId) {
       case "O1":
       this.operator="Airtel";
@@ -805,8 +767,17 @@ OnNext(form: NgForm){
  {Id: "11", Name: "Telenor"},
  {Id: "12", Name: "Vodafone"},
 ];
-  OnMobileNo(id){
-    
+showerrortext: boolean;
+operatorcircleqry: OperaterCircleQuery;
+operatorcircle: OperaterCircle;
+singleosrespone: OSResponse;
+oid: string;
+statename: string;
+sid: string;
+singleState: SingleState;
+operatorname: string;
+
+  OnMobileNo(id){ 
     if(id.length<10){
        //return null;
        return this.showerrortext=true;
@@ -832,12 +803,16 @@ OnNext(form: NgForm){
     }
   }
   
-  
+  DigiParties: DigiParty;
+  digiparty: DigiParty;
+
   GetDigiPartyandPartyMastID(ActiveTenantId){
     this.DigiParties=JSON.parse(StorageService.GetDigiParty());
        this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
        return this.digiparty;
   }
+  selfCareAC: SelfCareAc;
+  SelfCareACs: SelfCareAc;
   GetSelfCareAcByTenantID(ActiveTenantId){
     this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
     this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"; });
@@ -1069,6 +1044,10 @@ OnNext(form: NgForm){
      this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'CircleId': circleId,'ParentId':this.ParentId,'SubscriptionId':subscriptionId,'nname':nname});
     
   }
+  recharge: RechargeModel;
+  tranresponse: TranResponse;
+  showSuccess: boolean;
+  OperatorId: string;
 
 OnConfirm(){
   let loading = this.loadingController.create({

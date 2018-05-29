@@ -13,29 +13,22 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class BalanceEnquiryPage implements OnInit {
 
-    HideMsg: boolean;
-    SelfCareAcsBasedOnTenantID: SelfCareAc;
-    SelfCareACs: SelfCareAc;
-    Tenant: Tenant;
-    Tenants: Tenant;
-    ShowHide: boolean;
-    balance: any;
-    stmentreq: StatementRequest;
-    AcNo: string;
-    HeadName: string;
-    ActiveBankName: string;
     ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
     constructor(public loadingController: LoadingController,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
     }
-
+    ActiveBankName: string;
+    HideMsg: boolean;
+    ShowHide: boolean;
+    SelfCareAcsBasedOnTenantID: SelfCareAc;
     ngOnInit(){
         this.HideMsg=true;
         this.ShowHide=true;       
            this.ActiveBankName=StorageService.GetActiveBankName();   
            this.SelfCareAcsBasedOnTenantID=StorageService.GetSelfCareAcsBasedOnTenantID();
     }
-  
+    stmentreq: StatementRequest;
+    balance: any;
     OnGetAccountBalance(AcHeadId,AcSubId){
         let loading = this.loadingController.create({
             content: 'Loading the Account Balance..'

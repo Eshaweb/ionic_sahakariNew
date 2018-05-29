@@ -11,25 +11,18 @@ import { Tenant } from '../LocalStorageTables/Tenant';
   templateUrl: 'favourites.html'
 })
 export class FavouritesPage implements OnInit{
-  Tenant: Tenant;
-  Tenants: Tenant;
-  newfavourites: Favourites;
-  favourites: Favourites;
-  nkname: string;
-  ActiveBankName: string;
-  public firstParam;
-  TId: string;
-  ParentId: string;
   constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController,
     public navParams: NavParams) {
     }
+
+    ActiveBankName: string;
+    ParentId: string;
+    favourites: Favourites;
+    nkname: string;
+
 ngOnInit(){
   this.ParentId=this.navParams.get('ParentId');
-  
-  // var ActiveTenantId=JSON.parse(StorageService.GetItem(this.constant.DB.User)).ActiveTenantId;
-  // this.Tenants=JSON.parse(StorageService.GetItem(this.constant.DB.Tenant));
-  //    this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-     this.ActiveBankName=StorageService.GetActiveBankName();  
+  this.ActiveBankName=StorageService.GetActiveBankName();  
      
      switch (this.ParentId) {
     case "S1":
@@ -53,7 +46,7 @@ ngOnInit(){
     default:
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));  
   }
-    
+  
   if(StorageService.GetItem("Favourite")!=null){
     this.nkname=JSON.parse(StorageService.GetItem("Favourite")).NickName;
   }

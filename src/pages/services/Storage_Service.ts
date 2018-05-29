@@ -56,6 +56,12 @@ export class StorageService {
         this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());    
         return this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
     }
+    static GetDigiPartyID(){
+        var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+        this.DigiParties=JSON.parse(StorageService.GetDigiParty());
+           this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+           return this.digiparty.DigiPartyId;
+      }
     static GetUser() {
         return localStorage.getItem("User");
     }

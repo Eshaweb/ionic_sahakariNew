@@ -27,7 +27,7 @@ import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 export class MyApp {
 
   name: string;
-  ActiveBankName: any;
+  ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
@@ -43,14 +43,15 @@ export class MyApp {
       splashScreen.hide();
 
       //localStorage.clear();
-
+      
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.name = StorageService.Getdigipartyname();
       });
       if (StorageService.GetUser() == null) {
         this.rootPage = RegisterPage;
-       
+        
+
       }
       else {
         this.rootPage = PagePage;
