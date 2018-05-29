@@ -8,65 +8,31 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding id="page9" style="background-color:#F3F3F3;">
+<ion-content padding id="page9" >
   <span style="color: blue" *ngIf="HideMsg">Click on Account of your wish</span>  
   <div  *ngIf="ShowHide">   
-    <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetMiniStatement(order.AcHeadId,order.AcSubId)" style="background-color:bisque;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+    <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetMiniStatement(order.AcHeadId,order.AcSubId)" style="background-color:#eee;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
       <span>Name: {{order.HeadName}}</span> 
       <br/>
       <span>Account No: {{order.AcNo}}</span> 
   </div> 
     </div>
       <div *ngIf="balance">
-  <ion-list id="miniStatement-list8">
-    <ion-item color="assertive" id="miniStatement-list-item35">
-      Kavalapadur Demo
-    </ion-item>
-    <ion-item color="none" id="miniStatement-list-item36">
-      Branch:
-    </ion-item>
-    <ion-item color="none" id="miniStatement-list-item37">
-      Account Type:
-    </ion-item>
-  </ion-list>
   <div class="spacer" style="width:300px;height:21px;" id="miniStatement-spacer3"></div>
   <ion-list id="miniStatement-list9">
-    <ion-item color="none" id="miniStatement-list-item40">
-      Account Type:
-    </ion-item>
-    <ion-item color="none" id="miniStatement-list-item41">
-      Customer ID :
-    </ion-item>
-    <ion-item color="none" id="miniStatement-list-item42">
+     <ion-item color="none" id="miniStatement-list-item42">
       Account Balance :{{balance.Amount}}
     </ion-item>
   </ion-list>
   <div class="spacer" style="width:300px;height:21px;" id="miniStatement-spacer4"></div>
-  <ion-list id="miniStatement-list10">
-    <ion-item color="assertive" id="miniStatement-list-item38">
-      Statement
-    </ion-item>
-  </ion-list>
+  
   <ion-card id="miniStatement-card22">
-    <ion-list>
-      <ion-item color="none" id="miniStatement-list-item45">
-        30-04-2019
-      </ion-item>
-      <ion-item color="assertive" id="miniStatement-list-item46">
-        Credited :30.00
-      </ion-item>
-      <ion-item id="miniStatement-list-item-container5">
-        <div id="miniStatement-markdown6" class="show-list-numbers-and-dots">
-          <p style="margin-top:0px;color:#000000;">
-            Opening Balance
-          </p>
-        </div>
-      </ion-item>
-      <div style="width:100%;height:220px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-        <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-      </div>
-    </ion-list>
-    <ion-list *ngFor="let order of stmntItem" >
+      <ion-list id="miniStatement-list10">
+          <ion-item-divider color="light">
+            Statement
+          </ion-item-divider>
+        </ion-list>
+      <ion-list *ngFor="let order of stmntItem" >
       <ion-item color="none" id="miniStatement-list-item46">
         {{order.Dt|date:'fullDate'}}
       </ion-item>
@@ -79,10 +45,7 @@
             Remark: {{order.Remark}}
           </p>
         </div>
-        <div style="width:100%;height:50px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-          <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-        </div>
-      </ion-item>
+         </ion-item>
     </ion-list>
   </ion-card>
 </div>
