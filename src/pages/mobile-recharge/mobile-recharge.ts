@@ -68,7 +68,12 @@ export class MobileRechargePage implements OnInit{
   osreq:OSRequest ;
   OSResponseNew: OSResponse;
   ShowEntryForm: boolean;
-
+  isOperatorEnabled:boolean=false;
+  isStateEnabled:boolean=false;
+  isMobileNoEntered:boolean=false;
+  isNickNameEntered:boolean=false;
+  isAmountEntered:boolean=false;
+  isButtonEnabled:boolean=false;
   ActiveBankName: string;
 
   ngOnInit(){
@@ -79,6 +84,17 @@ export class MobileRechargePage implements OnInit{
     this.ParentId=this.navParams.get('ParentId');
     this.amountforRecharge=this.navParams.get('Amount');
     this.osid=this.navParams.get('OperatorId');
+    this.isButtonEnabled=this.navParams.get('ButtonEnabled');
+if(this.isButtonEnabled==null){
+  this.isButtonEnabled=false;
+}else{
+  this.isButtonEnabled=true;
+  this.isOperatorEnabled=true;
+    this.isStateEnabled=true;
+    this.isNickNameEntered=true;
+    this.isMobileNoEntered=true;
+    this.isAmountEntered=true;
+}
     if(this.ParentId=="S3"){
       this.favouriteNewOfDTH=this.ParentId;
     }
@@ -90,6 +106,10 @@ export class MobileRechargePage implements OnInit{
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
     this.prepaid=this.rechargeitem.SubscriptionId;
+    this.isOperatorEnabled=true;
+    this.isStateEnabled=true;
+    this.isNickNameEntered=true;
+    this.isMobileNoEntered=true;
   }else{
     this.prepaid="Enter";
   }
@@ -102,7 +122,10 @@ else if(this.ParentId=="S2"){
   this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
   this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
   this.postpaid=this.rechargeitem.SubscriptionId;
-
+  this.isOperatorEnabled=true;
+  this.isStateEnabled=true;
+  this.isNickNameEntered=true;
+  this.isMobileNoEntered=true;
 }else{
   this.postpaid="Enter";
 }
@@ -116,6 +139,9 @@ else if(this.ParentId=="S3"){
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
     this.DTHNo=this.rechargeitem.SubscriptionId;
     this.ShowLabel=true;
+    this.isOperatorEnabled=true;
+  this.isNickNameEntered=true;
+  this.isMobileNoEntered=true;
   }else{
     this.DTHNo="Enter";
     this.ShowLabel=true;
@@ -132,6 +158,9 @@ else if(this.ParentId=="S5"){
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
     this.ElectricityConsumerNo=this.rechargeitem.SubscriptionId;
+    this.isOperatorEnabled=true;
+  this.isNickNameEntered=true;
+  this.isMobileNoEntered=true;
   }else{
     this.ElectricityConsumerNo="Enter";
   }
@@ -800,6 +829,9 @@ operatorname: string;
       this.sid=this.singleState.Id;
       this.rechargeitem.CircleId=this.sid;
     });
+    this.isStateEnabled=true;
+    this.isOperatorEnabled=true;
+    this.isMobileNoEntered=true;
     }
   }
   
@@ -819,6 +851,7 @@ operatorname: string;
     return this.selfCareAC;
   }
   OperatorChanged(event){
+    this.isOperatorEnabled=true;
     switch(event){
       case "O1":
       this.operatorname="Airtel";
@@ -934,6 +967,7 @@ operatorname: string;
 
   ObjChanged(event){
     this.ShowLabel=false;
+    this.isOperatorEnabled=true;
     switch(event){
       case "O29":
       this.label="Viewing Card Number";
@@ -966,6 +1000,7 @@ operatorname: string;
     this.navCtrl.push(FavouritesPage);
   }
   StateChanged(event){
+    this.isStateEnabled=true;
     switch(event){
       case "1":
       this.statename="Delhi/NCR";
@@ -1037,7 +1072,16 @@ operatorname: string;
       this.statename="Chennai";
     }
   }
-  
+  OnSubscriberID(value){
+    this.isMobileNoEntered=true;
+  }
+  onAmount(event){
+    this.isAmountEntered=true;
+    this.isButtonEnabled=true;
+  }
+  onNickName(event){
+this.isNickNameEntered=true;
+  }
   OnViewPlans(subscriptionId,operatorId,circleId,nname){
     this.showConfirm=false;
     //this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'ParentId':this.ParentId});

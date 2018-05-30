@@ -65,15 +65,22 @@ export class RegisterPage implements OnInit {
     this.mobno = mobno;
     this.tenantList = null;
     this.regService.GetTenantsByMobile(mobno).subscribe((data: any) => {
-      this.tenantList = data;   //got tenantlist from server
-      this.tenantList.Id = data[0].Id;
-      this.hidethisform = false;
+      this.tenantList = data;  
+      var TenantList=data;
+      //this.tenantList.Id = data[0].Id;
+      if(TenantList.length==0){
+        this.toastr.error("Non-Registered/InCorrect Mobile Number", 'Error!');
+        this.tenantList = null;
+      }
+      else{
+        this.hidethisform = false;
+      }
+      
       
       loading.dismiss();
-    },
-      (err: HttpErrorResponse) => {
-        this.isLoginError = true;
-      });
+    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+
+  });
 
   }
   TenantIdActive: any;
@@ -97,11 +104,10 @@ export class RegisterPage implements OnInit {
       //ADDED toastr.css in the path "node_modules/ngx-toastr/toastr.css" from https://github.com/scttcper/ngx-toastr/blob/master/src/lib/toastr.css
       this.toastr.success('OTP Sent to ' + this.OTPreq.MobileNo + ' with Reference No. ' + this.store.OTPRef, 'Success!');
       loading.dismiss();
-      this.navCtrl.push(EnterOTPPage, { 'OTPRefNo': this.store.OTPRef });
-    },
-      (err: HttpErrorResponse) => {
-        this.isLoginError = true;
-      })
+      this.navCtrl.push(EnterOTPPage, { 'OTPRefNo': this.store.OTPRef,'TenantId':this.OTPreq.TenantId ,'MobileNo':this.OTPreq.MobileNo});
+    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+
+  });
 
 
 

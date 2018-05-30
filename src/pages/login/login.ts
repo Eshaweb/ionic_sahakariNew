@@ -16,6 +16,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { OS } from '../LocalStorageTables/OS';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -24,7 +25,7 @@ export class LoginPage implements OnInit {
   formgroup: FormGroup;
   pword: AbstractControl;
 
-  constructor(public constant: ConstantService, public loadingController: LoadingController, public formbuilder: FormBuilder, private regService: RegisterService, public navCtrl: NavController) {
+  constructor(private toastr: ToastrService,public constant: ConstantService, public loadingController: LoadingController, public formbuilder: FormBuilder, private regService: RegisterService, public navCtrl: NavController) {
     this.formgroup = formbuilder.group({
       pword: ['', [Validators.required, Validators.minLength(4)]]
 
@@ -94,7 +95,9 @@ export class LoginPage implements OnInit {
       //  }, 2000);
       
         //this.navCtrl.push(PagePage);
-    });
+    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+
+  });
       //this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
        loading.dismiss();
   }
@@ -130,7 +133,9 @@ export class LoginPage implements OnInit {
       StorageService.SetSelfCareAc(JSON.stringify(this.addbankresponse.SelfCareAcs));
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
-    });
+    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+
+  });
 
   }
 
