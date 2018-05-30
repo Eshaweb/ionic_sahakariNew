@@ -20,6 +20,7 @@ import { PagePage } from '../page/page';
 import { HomePage } from '../home/home';
 import { MyApp } from '../../app/app.component';
 import { ToastrService } from 'ngx-toastr';
+import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 
 
   const idle = new Idle()
@@ -116,6 +117,8 @@ singletenant: TenantList;
 addbankresponse: AddBankResponse;
 user: User;
 digiParty: DigiParty;
+singleSelfCareAC:SelfCareAc;
+singlexx:SelfCareAc;
 OnAddBankSelection(Id){
   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.singletenant=this.tenantList.filter(function (obj) { return obj.Id === Id; });
@@ -155,9 +158,21 @@ OnAddBankSelection(Id){
     
 
     var existingSelfCareAcs=JSON.parse(StorageService.GetSelfCareAc());
-    existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
+    this.singleSelfCareAC=existingSelfCareAcs.find(function (obj) { return obj.TenantId === TenantId; }); 
+    if(this.singleSelfCareAC==null){
+      this.singleSelfCareAC={
+        AcActId:this.addbankresponse.SelfCareAcs[0].AcActId,
+        AcHeadId:this.addbankresponse.SelfCareAcs[0].AcHeadId,
+        AcNo:this.addbankresponse.SelfCareAcs[0].AcNo,
+        AcSubId:this.addbankresponse.SelfCareAcs[0].AcSubId,
+        HeadName:this.addbankresponse.SelfCareAcs[0].HeadName,
+        LocId:this.addbankresponse.SelfCareAcs[0].LocId,
+        TenantId:this.addbankresponse.SelfCareAcs[0].TenantId
+      }
+      existingSelfCareAcs.push(this.singleSelfCareAC);
+    //existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
     StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs));
-    
+    }
     this.user=JSON.parse(StorageService.GetUser());
     this.user.ActiveTenantId= this.tenant.Id;
     StorageService.SetUser(JSON.stringify(this.user)); 
