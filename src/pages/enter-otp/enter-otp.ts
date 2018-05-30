@@ -16,6 +16,8 @@ import { ConstantService } from "../services/Constants";
 import { User } from '../LocalStorageTables/User';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { ToastrService } from 'ngx-toastr';
+import { OTPRequest } from '../View Models/OTPrequest.vm';
+import { DigiCustWithOTPRefNo } from '../View Models/DigiCustWithOTPRefNo';
 @Component({
   selector: 'page-enter-otp',
   templateUrl: 'enter-otp.html'
@@ -63,8 +65,12 @@ export class EnterOTPPage implements OnInit{
   }
 
   OTPRefNo: string;
+  MobileNo:string;
+  TenantId:string;
   ngOnInit() {
     this.OTPRefNo=this.navParams.get('OTPRefNo');
+    this.TenantId=this.navParams.get('TenantId');
+    this.MobileNo=this.navParams.get('MobileNo');
     }
 
   matchingPasswords(group: FormGroup) { // here we have the 'passwords' group
@@ -108,6 +114,27 @@ export class EnterOTPPage implements OnInit{
     })
       loading.dismiss();
   }
+  OTPreq: OTPRequest;
+  store: DigiCustWithOTPRefNo;
+
+  OnResendOTP(){
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+    loading.present();
+    this.OTPreq = {
+      TenantId: this.TenantId,
+      MobileNo: this.MobileNo
+    }
+    this.regService.RequestOTP(this.OTPreq).subscribe((data: any) => {
+      this.store = data;
+      this.OTPRefNo=data.OTPRef;
+      //ADDED toastr.css in the path "node_modules/ngx-toastr/toastr.css" from https://github.com/scttcper/ngx-toastr/blob/master/src/lib/toastr.css
+      this.toastr.success('OTP Sent to ' + this.OTPreq.MobileNo + ' with Reference No. ' + this.OTPRefNo, 'Success!');
+      loading.dismiss();
+  },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+});
+}
   User: User;
   pin: any;
   userresult: UserResult;
@@ -151,7 +178,9 @@ export class EnterOTPPage implements OnInit{
       this.navCtrl.push(LoginPage);
         loading.dismiss();
 
-    });
+    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+
+  });
 
   }
 

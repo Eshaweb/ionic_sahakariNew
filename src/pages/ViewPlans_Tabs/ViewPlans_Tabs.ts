@@ -95,6 +95,7 @@ export class BasicPage implements OnInit{
     </ion-content>
 `})
 export class TabBasicContentPage1 {
+  isButtonEnabled: boolean=false;
   //@ViewChild("paymentTabs") paymentTabs: Tabs;
 
   
@@ -133,8 +134,10 @@ export class TabBasicContentPage1 {
 loading.dismiss();
   }
   OnAmount(amount){
-    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
-    
+    this.isButtonEnabled=true;
+     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname'),'ButtonEnabled':this.isButtonEnabled});
+    //this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
+
   }
   
 }

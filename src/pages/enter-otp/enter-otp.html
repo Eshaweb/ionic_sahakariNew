@@ -32,8 +32,8 @@
     <button [disabled]="enterOTPForm.invalid" id="enterOTP-button8" ion-button color="positive" block>
       Submit
     </button>
-    <!-- <button ion-button clear item-centre >Click here to Resend OTP</button>        -->
   </form>
+  <!-- <button ion-button clear item-centre (click)="OnResendOTP()">Click here to Resend OTP</button>        -->
   </div>
   <div *ngIf="ShowIf">
   <form id="enterOTP-form2" [formGroup]="SavePasswordForm"  #NewPasswordEntryForm="ngForm" (ngSubmit)="OnSavePassword(CPassword.value)">
