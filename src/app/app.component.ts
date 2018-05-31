@@ -2,14 +2,10 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, Nav, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-//import { NavController } from 'ionic-angular';
 import { MobileRechargePage } from '../pages/mobile-recharge/mobile-recharge';
 import { BankingPage } from '../pages/banking/banking';
 import { SettingPage } from '../pages/setting/setting';
 import { ChangeBankPage } from '../pages/change-bank/change-bank';
-
-
-//import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { StorageService } from '../pages/services/Storage_Service';
@@ -26,7 +22,7 @@ import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 })
 export class MyApp {
 
-  name: string;
+  digipartyname: string;
   ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
