@@ -11,7 +11,7 @@
 <ion-content padding id="page9" >
   <span style="color: blue" *ngIf="HideMsg">Click on Account of your wish</span>  
   <div  *ngIf="ShowHide">   
-    <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetMiniStatement(order.AcHeadId,order.AcSubId)" style="background-color:#eee;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+    <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetMiniStatement(order.AcHeadId,order.AcSubId)" style="background-color:#ddd;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
       <span>Name: {{order.HeadName}}</span> 
       <br/>
       <span>Account No: {{order.AcNo}}</span> 
@@ -26,18 +26,16 @@
   </ion-list>
   <div class="spacer" style="width:300px;height:21px;" id="miniStatement-spacer4"></div>
   
-  <ion-card id="miniStatement-card22">
+  <ion-card id="miniStatement-card22" *ngFor="let order of stmntItem">
       <ion-list id="miniStatement-list10">
-          <ion-item-divider color="light">
-            Statement
-          </ion-item-divider>
-        </ion-list>
-      <ion-list *ngFor="let order of stmntItem" >
+       </ion-list>
+       
+      <ion-list >
       <ion-item color="none" id="miniStatement-list-item46">
-        {{order.Dt|date:'fullDate'}}
-      </ion-item>
-      <ion-item color="assertive" id="miniStatement-list-item47">
-        Credited : {{order.Dr}}
+        {{order.Dt|date:'mediumDate'}}
+        <ion-note item-end>
+          Credited : {{order.Dr}}
+          </ion-note>
       </ion-item>
       <ion-item id="miniStatement-list-item-container6">
         <div id="miniStatement-markdown7" class="show-list-numbers-and-dots">
@@ -47,6 +45,7 @@
         </div>
          </ion-item>
     </ion-list>
+  
   </ion-card>
 </div>
 </ion-content>

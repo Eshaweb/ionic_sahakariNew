@@ -16,7 +16,7 @@
 <ion-content padding>
 <ion-list>
   <ion-item id="mobileRecharge-select1">
-    <ion-label>select the type</ion-label>
+    <ion-label>Select the type</ion-label>
     <!-- <ion-select id="mobileRecharge-input3" interface="popover" formControlName="mobno" #selectoperator ngModel name="selectoperator" (ngModelChange)="ObjChanged($event)"> -->
       <ion-select id="mobileRecharge-input3" interface="popover" (ionChange)="ObjChanged($event)">
       <ion-option *ngFor="let order of categories" [value]="order.Id">{{order.Operator}}</ion-option>
@@ -25,7 +25,7 @@
 </ion-list>
 <ion-list *ngFor="let order of rRResponse" >
   <ion-item color="none" id="miniStatement-list-item46">
-    Date: {{order.Date|date:'fullDate'}}
+    Date: {{order.Date|date:'mediumDate'}}
   </ion-item>
   <ion-item color="assertive" id="miniStatement-list-item47">
     Amount : {{order.Amount}} 
@@ -35,12 +35,12 @@
     <div id="miniStatement-markdown7" class="show-list-numbers-and-dots">
       <p style="margin-top:0px;color:#000000;">
         Remark: {{order.Status}}
-        SubStatus: {{order.SubStatus}}
+        <!-- SubStatus: {{order.SubStatus}} -->
       </p>
     </div>
-    <div style="width:100%;height:50px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
+    <!-- <div style="width:100%;height:50px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
       <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-    </div>
+    </div> -->
   </ion-item>
 </ion-list>
 </ion-content>
