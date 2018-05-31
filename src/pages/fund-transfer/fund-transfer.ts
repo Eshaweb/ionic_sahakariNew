@@ -26,7 +26,7 @@ export class FundTransferPage implements OnInit{
  
   
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-    constructor(private toastr: ToastrService,public loadingController: LoadingController,private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,public navCtrl: NavController) {
+    constructor(private toastr: ToastrService,public loadingController: LoadingController,private registerService : RegisterService, public formbuilder:FormBuilder,public navCtrl: NavController) {
 
   //StorageService.SetItem('lastAction', Date.now().toString());
     this.formgroup1 = formbuilder.group({
@@ -73,11 +73,7 @@ export class FundTransferPage implements OnInit{
     this.disablenextwithoutFromAccount=false;
     return this.selfCareAC;
   }
- }
- DigiPartyId: string;
-  digiparty: DigiParty;
-  DigiParties: DigiParty;
-  
+ }  
 
   GetSelfCareAcByTenantID(ActiveTenantId){
     var AcSubId=this.AcSubId; 
@@ -87,18 +83,18 @@ export class FundTransferPage implements OnInit{
     return this.selfCareAC;
     
   }
-  FTRequest: FundTransferRequest;
+  fundTransferRequest: FundTransferRequest;
   fundTransferResponse: FundTransferResponse;
   OnSearchingAccount(mobno){
     let loading = this.loadingController.create({
       content: 'Searching For the Account'
     });
     loading.present();
-    this.FTRequest={
+    this.fundTransferRequest={
       TenantId:this.ActiveTenantId,
       MobileNo:mobno
     }
-    this.regService.GetFTAccount(this.FTRequest).subscribe((data : any)=>{
+    this.registerService.GetFTAccount(this.fundTransferRequest).subscribe((data : any)=>{
       this.fundTransferResponse=data;
       this.disablenextwithoutToAccount=false;
     });
@@ -113,17 +109,16 @@ this.Rs=amnt;
 this.ShowHide=false;
   }
   showstatus: boolean;
-  ftd: FundTransferDone;
-  transfer: DoFundTransfer;
+  fundTransferDone: FundTransferDone;
+  doFundTransfer: DoFundTransfer;
   OnConfirm(){
     let loading = this.loadingController.create({
       content: 'Transferring the Fund..'
     });
     loading.present();
-    this.transfer={
+    this.doFundTransfer={
       TenantId:this.ActiveTenantId,
-       DigiPartyId:StorageService.GetDigiPartyID(),
-      //FromAcMastId:this.AcHeadId,
+      DigiPartyId:StorageService.GetDigiPartyID(),
       FromAcMastId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcHeadId,
       FromAcSubId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcSubId,
       FromLocId:this.GetSelfCareAcByTenantID(this.ActiveTenantId).LocId,
@@ -133,10 +128,10 @@ this.ShowHide=false;
       Amount:this.Rs,
       ToAcNo:this.fundTransferResponse.AcNo
     }
-    this.regService.FundTransfer(this.transfer).subscribe((data : any)=>{
-      this.ftd=data;
+    this.registerService.FundTransfer(this.doFundTransfer).subscribe((data : any)=>{
+      this.fundTransferDone=data;
       this.confirm=null;
-      this.toastr.success('Fund Transferred with ' + this.ftd.Status, 'Success!');
+      this.toastr.success('Fund Transferred with ' + this.fundTransferDone.Status, 'Success!');
       this.showstatus=true;
     });
     loading.dismiss();

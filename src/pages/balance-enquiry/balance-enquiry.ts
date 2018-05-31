@@ -15,7 +15,7 @@ export class BalanceEnquiryPage implements OnInit {
 
     ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
-    constructor(public loadingController: LoadingController,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
+    constructor(public loadingController: LoadingController,private registerService : RegisterService,public navCtrl: NavController) {
     }
     ActiveBankName: string;
     HideMsg: boolean;
@@ -27,19 +27,19 @@ export class BalanceEnquiryPage implements OnInit {
            this.ActiveBankName=StorageService.GetActiveBankName();   
            this.SelfCareAcsBasedOnTenantID=StorageService.GetSelfCareAcsBasedOnTenantID();
     }
-    stmentreq: StatementRequest;
+    statementRequest: StatementRequest;
     balance: any;
     OnGetAccountBalance(AcHeadId,AcSubId){
         let loading = this.loadingController.create({
             content: 'Loading the Account Balance..'
           });
           loading.present();
-        this.stmentreq={
+        this.statementRequest={
             AcMastId:AcHeadId,
             AcSubId:AcSubId,
             TenantId:this.ActiveTenantId
         }
-        this.regService.GetAccountBalance(this.stmentreq).subscribe((data:any)=>{
+        this.registerService.GetAccountBalance(this.statementRequest).subscribe((data:any)=>{
        this.balance=data;
         });
         this.ShowHide=false;

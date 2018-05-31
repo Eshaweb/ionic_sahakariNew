@@ -30,27 +30,24 @@ import { PlanRequest } from '../View Models/PlanRequest';
 import { PlanResponse } from '../View Models/PlanResponse';
 import { RRRequest } from '../View Models/RRRequest';
 import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
-//import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 @Injectable()
 export class RegisterService {
     TenantId: string;
-    MobileNo: any;
-    Logo: any;
+    MobileNo: string;
+    Logo: string;
     userresult: UserResult;
     tenantlist: TenantList;
-
-    //userClaims: any=[];
     user: OTPRequest;
     mobno: any;
-    store: DigiCustWithOTPRefNo;
-    postingOTP: PostOPT;
-    userposting: UserPost;
+    digiCustWithOTPRefNo: DigiCustWithOTPRefNo;
+    postOPT: PostOPT;
+    userPost: UserPost;
     local: StorageService;
-    SCReq: SCRequest;
+    sCRequest: SCRequest;
     userToken: any;
     //constructor(private sqlite: SQLite,private httpclient:HttpClient,private locals:StorageService,private uihelper: UIHelperService,private http: Http) {
-    constructor(private toastr: ToastrService, private httpclient: HttpClient, private locals: StorageService, private uihelper: UIHelperService) {
+    constructor(private httpclient: HttpClient, private uIHelperService: UIHelperService) {
 
 
     }
@@ -58,91 +55,58 @@ export class RegisterService {
     GetTenantsByMobile(mobno: any) {
         this.MobileNo = mobno;
         var data = "MobileNo=" + mobno;
-        var url = this.uihelper.CallWebAPIUrlNew("/Tenant/GetTenantsByMobile") + "?" + data;
-        //    return this.http.get(url).map((response: Response) => {
-
-        //          var datanew = response.json();
-        //          this.Logo=datanew[0].IconHtml;
-        //          this.tenantlist=datanew;
-        //          return response.json();
-
-        //         });
+        var url = this.uIHelperService.CallWebAPIUrlNew("/Tenant/GetTenantsByMobile") + "?" + data;
         return this.httpclient.get<TenantList>(url);
-        // }).catch(this.handleErrors);
-
     }
-    RequestOTP(user: OTPRequest) {
+    RequestOTP(oTPRequest: OTPRequest) {
 
         const body: OTPRequest = {
-            TenantId: user.TenantId,
-            MobileNo: user.MobileNo
+            TenantId: oTPRequest.TenantId,
+            MobileNo: oTPRequest.MobileNo
 
         }
-        this.TenantId = user.TenantId;
-        //var reqHeader = new Headers({'No-Auth':'True'});
-        // return this.http.post(this.uihelper.CallWebAPIUrlNew("/User/RequestOTP"), body,{headers : reqHeader}).map((response: Response) =>{
-
-        //     var datanew = response.json();
-        //     this.store=datanew;
-        //     return response.json();
-        // });
-        return this.httpclient.post<DigiCustWithOTPRefNo>(this.uihelper.CallWebAPIUrlNew("/User/RequestOTP"), body);
+        this.TenantId = oTPRequest.TenantId;
+        return this.httpclient.post<DigiCustWithOTPRefNo>(this.uIHelperService.CallWebAPIUrlNew("/User/RequestOTP"), body);
     }
 
-    ValidateOTP(postingOTP: PostOPT) {
-        const post: PostOPT = {
-            TenantId: postingOTP.TenantId,
-            MobileNo: postingOTP.MobileNo,
-            OTPRef: postingOTP.OTPRef,
-            OTP: postingOTP.OTP
+    ValidateOTP(postOPT: PostOPT) {
+        const body: PostOPT = {
+            TenantId: postOPT.TenantId,
+            MobileNo: postOPT.MobileNo,
+            OTPRef: postOPT.OTPRef,
+            OTP: postOPT.OTP
         }
-        //var reqHeader = new Headers({'No-Auth':'True'});
-        //   return this.http.post(this.uihelper.CallWebAPIUrlNew("/User/ValidateOTP"), post,{headers : reqHeader});
-        return this.httpclient.post(this.uihelper.CallWebAPIUrlNew("/User/ValidateOTP"), post);
-
+        return this.httpclient.post(this.uIHelperService.CallWebAPIUrlNew("/User/ValidateOTP"), body);
     }
 
-    SaveMPin(userposting: UserPost) {
-        const userpost: UserPost = {
-            TenantId: userposting.TenantId,
-            PIN: userposting.PIN,
-            UniqueId: userposting.UniqueId,
-            OTPRef: userposting.OTPRef,
-            OTP: userposting.OTP,
-            MobileNo: userposting.MobileNo
+    SaveMPin(userPost: UserPost) {
+        const body: UserPost = {
+            TenantId: userPost.TenantId,
+            PIN: userPost.PIN,
+            UniqueId: userPost.UniqueId,
+            OTPRef: userPost.OTPRef,
+            OTP: userPost.OTP,
+            MobileNo: userPost.MobileNo
         }
-        return this.httpclient.post<UserResult>(this.uihelper.CallWebAPIUrlNew("/User/SaveMPin"), userpost);
+        return this.httpclient.post<UserResult>(this.uIHelperService.CallWebAPIUrlNew("/User/SaveMPin"), body);
     }
-
-    // userAuthentication(userName, password, unique): Observable<TokenParams> {
-    //     var data = "username=" + userName + "&password=" + password + "&unique=" + unique + "&grant_type=password";
-    //     var reqHeader = new Headers({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth': 'True' });
-    //     return this.http.post(this.uihelper.CallWebAPIUrl("/token"), data, { headers: reqHeader }).map((res => res.json()));
-    // }
-
 
     loginbyHttpClient(userName, password, unique): Observable<TokenParams> {
         var data = "username=" + userName + "&password=" + password + "&unique=" + unique + "&grant_type=password";
-        return this.httpclient.post<TokenParams>(this.uihelper.CallWebAPIUrl("/token"), data);
+        return this.httpclient.post<TokenParams>(this.uIHelperService.CallWebAPIUrl("/token"), data);
 
     }
-
-    // GetUserClaims() {
-    //     return this.http.get(this.uihelper.CallWebAPIUrl("/api/GetUserClaims"));
-    //     //return this.http.get(this.uihelper.CallWebAPIUrlNew("/Tenant/GetTenantsByMobile?MobileNo=8129750780"));
-
-    // }
 
     GetServices(): Observable<OS[]> {
-        return this.httpclient.get<OS[]>(this.uihelper.CallWebAPIUrlNew("/Operator/GetServices"));
+        return this.httpclient.get<OS[]>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetServices"));
     }
 
-    GetAccounts(SCReq: SCRequest) {
-        const scr: SCRequest = {
-            PartyMastId: SCReq.PartyMastId,
-            TenantId: SCReq.TenantId
+    GetAccounts(sCRequest: SCRequest) {
+        const body: SCRequest = {
+            PartyMastId: sCRequest.PartyMastId,
+            TenantId: sCRequest.TenantId
         }
-        return this.httpclient.post<TokenParams>(this.uihelper.CallWebAPIUrlNew("/Banking/GetAccounts"), scr);
+        return this.httpclient.post<TokenParams>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetAccounts"), body);
     }
 
     AddBank(addBankRequest: AddBankRequest) {
@@ -151,58 +115,55 @@ export class RegisterService {
             MobileNo: addBankRequest.MobileNo
 
         }
-        return this.httpclient.post<AddBankRequest>(this.uihelper.CallWebAPIUrlNew("/Banking/AddBank"), body);
+        return this.httpclient.post<AddBankRequest>(this.uIHelperService.CallWebAPIUrlNew("/Banking/AddBank"), body);
     }
-    GetOperators(OSReq: OSRequest) {
+    GetOperators(oSRequest: OSRequest) {
 
-        const osr: OSRequest = {
-            Starts: OSReq.Starts,
-            PerentId: OSReq.PerentId,
-            TenantId: OSReq.TenantId
+        const body: OSRequest = {
+            Starts: oSRequest.Starts,
+            PerentId: oSRequest.PerentId,
+            TenantId: oSRequest.TenantId
         }
-        return this.httpclient.post<OSResponse>(this.uihelper.CallWebAPIUrlNew("/Operator/GetOperators"), osr);
-
-        //return this.httpclient.get<OS[]>(this.uihelper.CallWebAPIUrlNew("/Operator/GetOperators"));
+        return this.httpclient.post<OSResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetOperators"), body);
 
     }
     GetPlans(planRequest: PlanRequest) {
-        const planreq: PlanRequest = {
+        const body: PlanRequest = {
             OSId: planRequest.OSId,
             CircleId: planRequest.CircleId,
             PlanType: planRequest.PlanType,
             TenantId: planRequest.TenantId
         }
-        return this.httpclient.post<PlanResponse>(this.uihelper.CallWebAPIUrlNew("/Operator/GetPlans"), planreq);
+        return this.httpclient.post<PlanResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetPlans"), body);
 
     }
-    PostRecharge(Recharge: RechargeModel) {
-        const rech: RechargeModel = {
-            TenantId: Recharge.TenantId,
-            DigiPartyId: Recharge.DigiPartyId,
-            PartyMastId: Recharge.PartyMastId,
-            AcMastId: Recharge.AcMastId,
-            AcSubId: Recharge.AcSubId,
-            Amount: Recharge.Amount,
-            OperatorId: Recharge.OperatorId,
-            SubscriptionId: Recharge.SubscriptionId,
-            LocId: Recharge.LocId
+    PostRecharge(rechargeModel: RechargeModel) {
+        const body: RechargeModel = {
+            TenantId: rechargeModel.TenantId,
+            DigiPartyId: rechargeModel.DigiPartyId,
+            PartyMastId: rechargeModel.PartyMastId,
+            AcMastId: rechargeModel.AcMastId,
+            AcSubId: rechargeModel.AcSubId,
+            Amount: rechargeModel.Amount,
+            OperatorId: rechargeModel.OperatorId,
+            SubscriptionId: rechargeModel.SubscriptionId,
+            LocId: rechargeModel.LocId
         }
-        return this.httpclient.post<TranResponse>(this.uihelper.CallWebAPIUrlNew("/Recharge/PostRecharge"), rech);
-        //   return this.httpclient.post<TranResponse>(this.uihelper.CallWebAPIUrlNew("/Recharge/PostRecharge"),rech).catch(this.handleErrors);
+        return this.httpclient.post<TranResponse>(this.uIHelperService.CallWebAPIUrlNew("/Recharge/PostRecharge"), body);
 
     }
 
     GetFTAccount(fundTransferRequest: FundTransferRequest) {
-        const FTReq: FundTransferRequest = {
+        const body: FundTransferRequest = {
             TenantId: fundTransferRequest.TenantId,
             MobileNo: fundTransferRequest.MobileNo
         }
-        return this.httpclient.post<TranResponse>(this.uihelper.CallWebAPIUrlNew("/Banking/GetFTAccount"), FTReq);
+        return this.httpclient.post<TranResponse>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetFTAccount"), body);
 
     }
 
     FundTransfer(doFundTransfer: DoFundTransfer) {
-        const DFT: DoFundTransfer = {
+        const body: DoFundTransfer = {
             TenantId: doFundTransfer.TenantId,
             DigiPartyId: doFundTransfer.DigiPartyId,
             FromAcMastId: doFundTransfer.FromAcMastId,
@@ -214,45 +175,45 @@ export class RegisterService {
             Amount: doFundTransfer.Amount,
             ToAcNo: doFundTransfer.ToAcNo
         }
-        return this.httpclient.post<TranResponse>(this.uihelper.CallWebAPIUrlNew("/Banking/FundTransfer"), DFT);
+        return this.httpclient.post<TranResponse>(this.uIHelperService.CallWebAPIUrlNew("/Banking/FundTransfer"), body);
 
     }
 
     GetAccountBalance(statementRequest: StatementRequest) {
-        const StmntReq: StatementRequest = {
+        const body: StatementRequest = {
             AcMastId: statementRequest.AcMastId,
             AcSubId: statementRequest.AcMastId,
             TenantId: statementRequest.TenantId
 
         }
-        return this.httpclient.post<StatementRequest>(this.uihelper.CallWebAPIUrlNew("/Banking/GetAccountBalance"), StmntReq);
+        return this.httpclient.post<StatementRequest>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetAccountBalance"), body);
     }
 
     GetStatement(statementRequest: StatementRequest) {
-        const StmntReq: StatementRequest = {
+        const body: StatementRequest = {
             AcMastId: statementRequest.AcMastId,
             AcSubId: statementRequest.AcSubId,
             TenantId: statementRequest.TenantId
 
         }
-        return this.httpclient.post<StatementRequest>(this.uihelper.CallWebAPIUrlNew("/Banking/GetStatement"), StmntReq);
+        return this.httpclient.post<StatementRequest>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetStatement"), body);
     }
 
-    GetOperaterCircle(operaterCircleQuery:OperaterCircleQuery) {
-        const operatorcquery:OperaterCircleQuery={
-            Mobile:operaterCircleQuery.Mobile
+    GetOperaterCircle(operaterCircleQuery: OperaterCircleQuery) {
+        const body: OperaterCircleQuery = {
+            Mobile: operaterCircleQuery.Mobile
         }
-        return this.httpclient.post<OperaterCircleQuery>(this.uihelper.CallWebAPIUrlNew("/Operator/GetOperaterCircle"), operatorcquery);
-            
+        return this.httpclient.post<OperaterCircleQuery>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetOperaterCircle"), body);
+
     }
     GetRechargeReport(rRRequest: RRRequest) {
-        const rrreq: RRRequest = {
+        const body: RRRequest = {
             TenantId: rRRequest.TenantId,
             DigiPartyId: rRRequest.DigiPartyId,
             SelectedType: rRRequest.SelectedType,
             Number: rRRequest.Number
         }
-        return this.httpclient.post<StatementRequest>(this.uihelper.CallWebAPIUrlNew("/Recharge/GetRechargeReport"), rrreq);
+        return this.httpclient.post<StatementRequest>(this.uIHelperService.CallWebAPIUrlNew("/Recharge/GetRechargeReport"), body);
     }
     private ExtractData(res: Response) {
 
@@ -261,42 +222,4 @@ export class RegisterService {
 
     }
 
-    // private handleErrors(error: any): Observable<any> {
-    //     let errors: string[] = [];
-    //     switch (error.status) {
-    //         case 400:
-    //             let err = error.json();
-    //             if (err.modelState) {
-    //                 let valErrors = error.json.modelStae;
-    //                 for (var key in valErrors) {
-    //                     for (var i = 0; i < valErrors[key].length; i++) {
-    //                         errors.push(valErrors[key][i])
-    //                     }
-    //                 }
-
-    //             }
-    //             else if (err.message) {
-    //                 error.push(err.message);
-    //             }
-    //             else {
-    //                 error.push("an unknown error occured");
-    //             }
-    //             break;
-    //         case 404:
-    //             error.push("No Product data is available");
-    //             break;
-    //         case 500:
-    //         error.push(error.ExceptionMessage);
-    //             //this.toastr.success(error.ExceptionMessage, 'Success!');
-    //             //error.push("No Product data is available");  
-    //             break;
-    //         default:
-    //             error.push("status:", +error.status + "" + error.statusText)
-    //             break;
-    //     };
-    //     console.error("an error occured", error);
-    //     return Observable.throw(error);
-    // }
-
 }
-//test

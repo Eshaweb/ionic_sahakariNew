@@ -1,6 +1,7 @@
 export class SelfCareAc{
   [x: string]: any;
     Id:any;
+    //Id:any;
     AcActId:string;
     HeadName:string;
     AcHeadId:string;

@@ -15,7 +15,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class MiniStatementPage implements OnInit {
   ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-  constructor(public loadingController: LoadingController, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController) {
+  constructor(public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
 
   }
   ActiveBankName: string;
@@ -29,24 +29,24 @@ export class MiniStatementPage implements OnInit {
     this.SelfCareAcsBasedOnTenantID =StorageService.GetSelfCareAcsBasedOnTenantID();
   }
 
-  stmentreq: StatementRequest;
-  stmntItem: StatementItem;
-  ministmnt: MiniStatement;
+  statementRequest: StatementRequest;
+  statementItem: StatementItem;
+  miniStatement: MiniStatement;
   balance: any;
   OnGetMiniStatement(AcHeadId, AcSubId) {
     let loading = this.loadingController.create({
       content: 'Loading the Mini Statement..'
     });
     loading.present();
-    this.stmentreq = {
+    this.statementRequest = {
       AcMastId: AcHeadId,
       AcSubId: AcSubId,
       TenantId: this.ActiveTenantId
     }
-    this.regService.GetStatement(this.stmentreq).subscribe((data: any) => {
+    this.registerService.GetStatement(this.statementRequest).subscribe((data: any) => {
       this.balance = data;
-      this.ministmnt = data;
-      this.stmntItem = data.StatementItems;
+      this.miniStatement = data;
+      this.statementItem = data.StatementItems;
     });
     this.ShowHide = false;
     this.HideMsg=false;

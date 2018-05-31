@@ -53,7 +53,7 @@ export class StorageService {
     }
     static GetSelfCareAcsBasedOnTenantID(){
         var ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-        this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());    
+        this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc()); 
         return this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
     }
     static GetDigiPartyID(){

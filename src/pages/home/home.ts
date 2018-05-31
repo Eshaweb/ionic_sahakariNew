@@ -12,13 +12,12 @@ import { TenantList } from '../View Models/TenantList';
   templateUrl: 'home.html'
 })
 export class HomePage implements OnInit{
-  tenantlist:TenantList;
-  //constructor(public navCtrl: NavController, public navParams: NavParams, private userService: RegisterService, private details:RegisterPage) {
-    constructor(public navCtrl: NavController, private userService: RegisterService) {
+  tenantList:TenantList;
+    constructor(public navCtrl: NavController, private registerService: RegisterService) {
 
 }
   ngOnInit() {  
-   this.tenantlist= this.userService.tenantlist;
+   this.tenantList= this.registerService.tenantlist;
   }
 
   goToMobileRecharge(params){

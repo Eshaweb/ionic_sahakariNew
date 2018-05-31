@@ -13,11 +13,10 @@ import { RechargeReportPage } from '../recharge-report/recharge-report';
 })
 export class PagePage implements OnInit {
   ActiveBankName: string;
-  constructor(private events: Events,public constant:ConstantService,public navCtrl: NavController,public navParams: NavParams) {
+  constructor(private events: Events,public navCtrl: NavController,public navParams: NavParams) {
   }
 ngOnInit(){
      this.ActiveBankName=StorageService.GetActiveBankName();
-     //this.ActiveBankName=this.navParams.get('ActiveBankName');
      this.events.publish('REFRESH_DIGIPARTYNAME');
     }
   

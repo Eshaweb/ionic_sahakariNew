@@ -27,7 +27,7 @@ export class RegisterPage implements OnInit {
   formgroup: FormGroup;
   mobilenum: AbstractControl;
   lastname: AbstractControl;
-  constructor(public constant: ConstantService, public loadingController: LoadingController, public formbuilder: FormBuilder, private platform: Platform, private toastCtrl: ToastController, private toast: Toast, private toastr: ToastrService, private regService: RegisterService, public navCtrl: NavController) {
+  constructor(public loadingController: LoadingController, public formbuilder: FormBuilder,private toastrService: ToastrService, private regService: RegisterService, public navCtrl: NavController) {
     this.formgroup = formbuilder.group({
       mobilenum: ['', [Validators.required, Validators.minLength(10)]]
     });
@@ -69,7 +69,7 @@ export class RegisterPage implements OnInit {
       var TenantList=data;
       //this.tenantList.Id = data[0].Id;
       if(TenantList.length==0){
-        this.toastr.error("Non-Registered/InCorrect Mobile Number", 'Error!');
+        this.toastrService.error("Non-Registered/InCorrect Mobile Number", 'Error!');
         this.tenantList = null;
       }
       else{
@@ -78,14 +78,14 @@ export class RegisterPage implements OnInit {
       
       
       loading.dismiss();
-    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
 
   });
 
   }
   TenantIdActive: any;
-  store: DigiCustWithOTPRefNo;
-  OTPreq: OTPRequest;
+  digiCustWithOTPRefNo: DigiCustWithOTPRefNo;
+  oTPRequest: OTPRequest;
 
   OnRequestOTP(Id) {
     let loading = this.loadingController.create({
@@ -93,19 +93,19 @@ export class RegisterPage implements OnInit {
     });
     loading.present();
     this.TenantIdActive = Id;
-    this.OTPreq = {
+    this.oTPRequest = {
       TenantId: this.TenantIdActive,
       MobileNo: this.mobno
     }
-    this.regService.RequestOTP(this.OTPreq).subscribe((data: any) => {
-      this.store = data;
-      this.store.OTPRef = data.OTPRef;
+    this.regService.RequestOTP(this.oTPRequest).subscribe((data: any) => {
+      this.digiCustWithOTPRefNo = data;
+      this.digiCustWithOTPRefNo.OTPRef = data.OTPRef;
 
       //ADDED toastr.css in the path "node_modules/ngx-toastr/toastr.css" from https://github.com/scttcper/ngx-toastr/blob/master/src/lib/toastr.css
-      this.toastr.success('OTP Sent to ' + this.OTPreq.MobileNo + ' with Reference No. ' + this.store.OTPRef, 'Success!');
+      this.toastrService.success('OTP Sent to ' + this.oTPRequest.MobileNo + ' with Reference No. ' + this.digiCustWithOTPRefNo.OTPRef, 'Success!');
       loading.dismiss();
-      this.navCtrl.push(EnterOTPPage, { 'OTPRefNo': this.store.OTPRef,'TenantId':this.OTPreq.TenantId ,'MobileNo':this.OTPreq.MobileNo});
-    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+      this.navCtrl.push(EnterOTPPage, { 'OTPRefNo': this.digiCustWithOTPRefNo.OTPRef,'TenantId':this.oTPRequest.TenantId ,'MobileNo':this.oTPRequest.MobileNo});
+    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
 
   });
 

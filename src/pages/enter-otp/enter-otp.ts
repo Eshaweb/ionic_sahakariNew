@@ -31,7 +31,7 @@ export class EnterOTPPage implements OnInit{
   otp: AbstractControl;
   password: AbstractControl;
   confirmpwd: AbstractControl;
-  constructor(private toastr: ToastrService,public navParams: NavParams,public constant: ConstantService, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private regService: RegisterService) {
+  constructor(private toastrService: ToastrService,public navParams: NavParams, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private registerService: RegisterService) {
     this.formgroup = this.fb.group({
       otp: ['', [Validators.required, Validators.minLength(4)]]
     });
@@ -85,7 +85,7 @@ export class EnterOTPPage implements OnInit{
   storeboolean: boolean;
   ShowIf: boolean;
   HideIf= true;
-  postingotp: PostOPT;
+  postOPT: PostOPT;
   OnSubmit(otpno) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
@@ -94,13 +94,13 @@ export class EnterOTPPage implements OnInit{
     loading.present();
 
     this.otpno = otpno;
-    this.postingotp = {
-      TenantId: this.regService.TenantId,  //ActiveTenantId
-      MobileNo: this.regService.MobileNo,
+    this.postOPT = {
+      TenantId: this.registerService.TenantId,  //ActiveTenantId
+      MobileNo: this.registerService.MobileNo,
       OTPRef: this.OTPRefNo,
       OTP: this.otpno
     }
-    this.regService.ValidateOTP(this.postingotp).subscribe((data: any) => {
+    this.registerService.ValidateOTP(this.postOPT).subscribe((data: any) => {
       this.storeboolean = data;
       if(this.storeboolean==true){
         this.ShowIf = true;
@@ -108,51 +108,47 @@ export class EnterOTPPage implements OnInit{
       }else{
         this.ShowIf = false;
         this.HideIf = true;
-        this.toastr.error("OTP is Invalid", 'Error!')
+        this.toastrService.error("OTP is Invalid", 'Error!')
       }
       
     })
       loading.dismiss();
   }
-  OTPreq: OTPRequest;
-  store: DigiCustWithOTPRefNo;
+  oTPRequest: OTPRequest;
+  digiCustWithOTPRefNo: DigiCustWithOTPRefNo;
 
   OnResendOTP(){
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
     loading.present();
-    this.OTPreq = {
+    this.oTPRequest = {
       TenantId: this.TenantId,
       MobileNo: this.MobileNo
     }
-    this.regService.RequestOTP(this.OTPreq).subscribe((data: any) => {
-      this.store = data;
+    this.registerService.RequestOTP(this.oTPRequest).subscribe((data: any) => {
+      this.digiCustWithOTPRefNo = data;
       this.OTPRefNo=data.OTPRef;
       //ADDED toastr.css in the path "node_modules/ngx-toastr/toastr.css" from https://github.com/scttcper/ngx-toastr/blob/master/src/lib/toastr.css
-      this.toastr.success('OTP Sent to ' + this.OTPreq.MobileNo + ' with Reference No. ' + this.OTPRefNo, 'Success!');
+      this.toastrService.success('OTP Sent to ' + this.digiCustWithOTPRefNo.MobileNo + ' with Reference No. ' + this.OTPRefNo, 'Success!');
       loading.dismiss();
-  },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+  },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
 });
 }
-  User: User;
+  user: User;
   pin: any;
-  userresult: UserResult;
-  userpost: UserPost;
+  userResult: UserResult;
+  userPost: UserPost;
 
   OnSavePassword(pin) {
     this.pin = pin;
-    this.userpost = {
-      //DigiPartyId: this.regService.store.DigiPartyId,
-      TenantId: this.regService.TenantId,  //ActiveTenantId
+    this.userPost = {
+      TenantId: this.registerService.TenantId,  //ActiveTenantId
       PIN: this.pin,
-      //PartyMastId: this.regService.store.PartyMastId,
-      //UniqueId:userposting.UniqueId,
-      //UniqueId:this.guid.str,
       UniqueId: this.guid(),
       OTPRef: this.OTPRefNo,
       OTP: this.otpno,
-      MobileNo: this.regService.MobileNo
+      MobileNo: this.registerService.MobileNo
     }
 
     let loading = this.loadingController.create({
@@ -160,25 +156,20 @@ export class EnterOTPPage implements OnInit{
     });
     loading.present();
 
-    this.regService.SaveMPin(this.userpost).subscribe((data: any) => {
-      this.userresult = data;
+    this.registerService.SaveMPin(this.userPost).subscribe((data: any) => {
+      this.userResult = data;
 
-      this.User = {
-        ActiveTenantId: this.regService.TenantId,
-        //ActiveTenantId:data.TenantId,
-        //ActiveTenantName:"",
+      this.user = {
+        ActiveTenantId: this.registerService.TenantId,
         UserId: data.UserId,
         UserName: data.UserName,
         UniqueKey: data.UniqueKey
       }
-
-      //StorageService.SetItem(this.constant.DB.User, JSON.stringify(this.User));
-       //localStorage.setItem("User", JSON.stringify(this.User));
-       StorageService.SetUser(JSON.stringify(this.User));
+       StorageService.SetUser(JSON.stringify(this.user));
       this.navCtrl.push(LoginPage);
         loading.dismiss();
 
-    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
 
   });
 
