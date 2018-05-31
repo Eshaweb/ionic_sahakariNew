@@ -25,7 +25,7 @@ export class RechargeReportPage implements OnInit {
   ActiveBankName: string;
   ActiveTenantId: string;
   categories: OS[] = [];
-  constructor(public loadingController: LoadingController, private toastr: ToastrService, private regService: RegisterService, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public loadingController: LoadingController, private toastr: ToastrService, private registerService: RegisterService, public navCtrl: NavController, public navParams: NavParams) {
 
   }
   ngOnInit() {
@@ -48,7 +48,7 @@ export class RechargeReportPage implements OnInit {
       SelectedType: event,
       Number: 10
     }
-    this.regService.GetRechargeReport(this.rRRequest).subscribe((data: any) => {
+    this.registerService.GetRechargeReport(this.rRRequest).subscribe((data: any) => {
       this.rRResponse = data;
 
     }, (error) => {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, Events } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { RequestForDigiParty } from '../View Models/RequestForDigiParty';
@@ -40,13 +39,12 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 export class ChangeBankPage implements OnInit{
   
   singleDigiParty: DigiParty;
-  Tenants:Tenant;
+  tenants:Tenant;
 
   // constructor(private autoLogoutService: AutoLogoutService,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
-    constructor(private toastr: ToastrService,private events: Events,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
+    constructor(private toastrService: ToastrService,private events: Events,private registerService : RegisterService, public navCtrl: NavController) {
 
   }
-  Tenant: Tenant;
   tenant: Tenant;
   ActiveBankName: string;
   Active: number;
@@ -56,17 +54,17 @@ export class ChangeBankPage implements OnInit{
     this.Active=+ActiveTenantId;    
     //StorageService.SetItem('lastAction', Date.now().toString());
     this.mobno=JSON.parse(StorageService.GetUser()).UserName;
-   this.Tenants=JSON.parse(StorageService.GetTenant());
-   this.Tenant=this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-   this.ActiveBankName=this.Tenant.Name;
+   this.tenants=JSON.parse(StorageService.GetTenant());
+   this.tenant=this.tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+   this.ActiveBankName=this.tenant.Name;
    
-   this.regService.GetTenantsByMobile(this.mobno).subscribe((data : any)=>{
+   this.registerService.GetTenantsByMobile(this.mobno).subscribe((data : any)=>{
     this.addedTenantRecord=JSON.parse(StorageService.GetTenant());
     this.tenantList = data;    //got tenantlist from server
     var tenlist=data;
     this.tenantList.Id=data[0].Id;
     StorageService.SetTenant(JSON.stringify(this.tenantList));  //Works, But not as of reqment
-if(this.Tenants.length<tenlist.length){
+if(this.tenants.length<tenlist.length){
   for(var i=0;i<tenlist.length;i++){
     this.OnAddBankSelection(tenlist[i].Id);
   }
@@ -80,11 +78,11 @@ filterByString(tenantlist, ActiveTenantId) {
   return this.tenantList.filter(e => e.Id==ActiveTenantId);
 }
 mobno: string;
-showHide:boolean;
+//showHide:boolean;
 addedTenantRecord: Tenant;
-selectboxoptions: Tenant;
-Options: boolean;
-NoOptions: boolean;
+//selectboxoptions: Tenant;
+//Options: boolean;
+//NoOptions: boolean;
 // OnAddBank(){
 //   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
 //   this.showHide=true;   
@@ -112,41 +110,40 @@ NoOptions: boolean;
 
 // });
 // }
-addbankreq: AddBankRequest;
+addBankRequest: AddBankRequest;
 singletenant: TenantList;
-addbankresponse: AddBankResponse;
+addBankResponse: AddBankResponse;
 user: User;
 digiParty: DigiParty;
 singleSelfCareAC:SelfCareAc;
-singlexx:SelfCareAc;
 OnAddBankSelection(Id){
   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.singletenant=this.tenantList.filter(function (obj) { return obj.Id === Id; });
-  this.addbankreq={
+  this.addBankRequest={
     TenantId:Id,
     MobileNo:JSON.parse(StorageService.GetUser()).UserName
   }
-  this.regService.AddBank(this.addbankreq).subscribe((data:any)=>{
-    this.addbankresponse=data;
+  this.registerService.AddBank(this.addBankRequest).subscribe((data:any)=>{
+    this.addBankResponse=data;
     this.tenant={
-      Id:this.addbankresponse.Tenant.Id,
+      Id:this.addBankResponse.Tenant.Id,
       //TenantId:this.addbankresponse.Tenant.TenantId,   //ActiveTenantId
-      Name:this.addbankresponse.Tenant.Name,
-      Address:this.addbankresponse.Tenant.Address,
-      IconHtml:this.addbankresponse.Tenant.IconHtml
+      Name:this.addBankResponse.Tenant.Name,
+      Address:this.addBankResponse.Tenant.Address,
+      IconHtml:this.addBankResponse.Tenant.IconHtml
     }
     // var existingTenant=JSON.parse(StorageService.GetTenant());
     // existingTenant.push(this.tenant);
     // StorageService.SetTenant(JSON.stringify(existingTenant));
-    this.Tenants=JSON.parse(StorageService.GetTenant());
+    this.tenants=JSON.parse(StorageService.GetTenant());
 
     this.digiParty={
-      Id:this.addbankresponse.DigiPartyId,
-      DigiPartyId:this.addbankresponse.DigiPartyId,
-      PartyMastId:this.addbankresponse.PartyMastId,
-      MobileNo:this.addbankresponse.MobileNo,
-      TenantId:this.addbankresponse.TenantId,  //ActiveTenantId
-      Name:this.addbankresponse.Name
+      Id:this.addBankResponse.DigiPartyId,
+      DigiPartyId:this.addBankResponse.DigiPartyId,
+      PartyMastId:this.addBankResponse.PartyMastId,
+      MobileNo:this.addBankResponse.MobileNo,
+      TenantId:this.addBankResponse.TenantId,  //ActiveTenantId
+      Name:this.addBankResponse.Name
     }
     var existingDigiParty=JSON.parse(StorageService.GetDigiParty());
     var TenantId=this.tenant.Id;
@@ -161,13 +158,13 @@ OnAddBankSelection(Id){
     this.singleSelfCareAC=existingSelfCareAcs.find(function (obj) { return obj.TenantId === TenantId; }); 
     if(this.singleSelfCareAC==null){
       this.singleSelfCareAC={
-        AcActId:this.addbankresponse.SelfCareAcs[0].AcActId,
-        AcHeadId:this.addbankresponse.SelfCareAcs[0].AcHeadId,
-        AcNo:this.addbankresponse.SelfCareAcs[0].AcNo,
-        AcSubId:this.addbankresponse.SelfCareAcs[0].AcSubId,
-        HeadName:this.addbankresponse.SelfCareAcs[0].HeadName,
-        LocId:this.addbankresponse.SelfCareAcs[0].LocId,
-        TenantId:this.addbankresponse.SelfCareAcs[0].TenantId
+        AcActId:this.addBankResponse.SelfCareAcs[0].AcActId,
+        AcHeadId:this.addBankResponse.SelfCareAcs[0].AcHeadId,
+        AcNo:this.addBankResponse.SelfCareAcs[0].AcNo,
+        AcSubId:this.addBankResponse.SelfCareAcs[0].AcSubId,
+        HeadName:this.addBankResponse.SelfCareAcs[0].HeadName,
+        LocId:this.addBankResponse.SelfCareAcs[0].LocId,
+        TenantId:this.addBankResponse.SelfCareAcs[0].TenantId
       }
       existingSelfCareAcs.push(this.singleSelfCareAC);
     //existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
@@ -181,7 +178,7 @@ OnAddBankSelection(Id){
     this.ActiveBankName=StorageService.GetActiveBankName();
     //this.OnAddBank();
     this.events.publish('REFRESH_DIGIPARTYNAME');
-  },(error) => {this.toastr.error(error.message, 'Error!')
+  },(error) => {this.toastrService.error(error.message, 'Error!')
 
 });
   
@@ -191,7 +188,7 @@ OnSelect(order){
   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
   this.user=JSON.parse(StorageService.GetUser());
   this.user.ActiveTenantId= order.Id;
-  StorageService.SetItem("User",JSON.stringify(this.user)); 
+  StorageService.SetUser(JSON.stringify(this.user)); 
   var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
   this.Active=+ActiveTenantId;  
   this.ActiveBankName=StorageService.GetActiveBankName();

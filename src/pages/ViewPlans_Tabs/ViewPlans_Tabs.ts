@@ -10,24 +10,12 @@ import { PlanDet } from '../View Models/PlanResponse';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { Tenant } from '../LocalStorageTables/Tenant';
 
-
-//(ionSelect)="myMethod()"
 @Component({
-//   template: `
-//   <ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top" color="primary">
-//     <ion-tab tabTitle={{FTT}} [root]="FTTPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-//     <ion-tab tabTitle={{TUP}} [root]="TUPPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-//     <ion-tab tabTitle={{LSC}} [root]="LSCPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-//     <ion-tab tabTitle={{SMS}} [root]="SMSPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-//     <ion-tab tabTitle={{OTR}} [root]="OTRPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-//     <ion-tab tabTitle={{RMG}} [root]="RMGPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-//     </ion-tabs>
-// `
 selector: 'page-ViewPlans_Tabs',
 templateUrl: 'ViewPlans_Tabs.html'
 })
 export class BasicPage implements OnInit{
-  navp: any;
+  navparams: any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
   circleId: string;
   operatorId: string;
@@ -52,7 +40,7 @@ export class BasicPage implements OnInit{
       this.RMG="Roaming";
       this.operatorId=this.navParams.get('OperatorId');
       this.circleId=this.navParams.get('CircleId');
-      this.navp=this.navParams.data;
+      this.navparams=this.navParams.data;
       
   }
   ActiveBankName: string;
@@ -99,7 +87,7 @@ export class TabBasicContentPage1 {
   //@ViewChild("paymentTabs") paymentTabs: Tabs;
 
   
-  navp: any;
+  navparams: any;
   circleId: any;
   operatorId: any;
   planResponse: PlanDet;
@@ -108,7 +96,7 @@ export class TabBasicContentPage1 {
   i:any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  constructor(private toastr: ToastrService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
@@ -118,7 +106,7 @@ export class TabBasicContentPage1 {
     
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
-    this.navp=this.navParams.data;
+    this.navparams=this.navParams.data;
  
     this.planRequest={
       OSId:this.operatorId,
@@ -127,7 +115,7 @@ export class TabBasicContentPage1 {
       TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
   //this.planResponse=this.bpage.planResponse;
-  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
@@ -165,7 +153,7 @@ loading.dismiss();
     </ion-content>
 `})
 export class TabBasicContentPage2 {
-  navp: any;
+  navparams: any;
   circleId: any;
   operatorId: any;
   planResponse: PlanDet;
@@ -174,7 +162,7 @@ export class TabBasicContentPage2 {
   i:any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  constructor(private toastr: ToastrService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
@@ -183,14 +171,14 @@ export class TabBasicContentPage2 {
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
-    this.navp=this.navParams.data;
+    this.navparams=this.navParams.data;
     this.planRequest={
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[1],
       TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
-  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
@@ -224,7 +212,7 @@ export class TabBasicContentPage2 {
     </ion-content>
 `})
 export class TabBasicContentPage3 {
-  navp: any;
+  navparams: any;
   circleId: any;
   operatorId: any;
   planResponse: PlanDet;
@@ -233,7 +221,7 @@ export class TabBasicContentPage3 {
   i:any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  constructor(private toastr: ToastrService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
@@ -242,14 +230,14 @@ export class TabBasicContentPage3 {
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
-    this.navp=this.navParams.data;
+    this.navparams=this.navParams.data;
     this.planRequest={
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[2],
       TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
-  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
@@ -283,7 +271,7 @@ export class TabBasicContentPage3 {
   </ion-content>
 `})
 export class TabBasicContentPage4 {
-  navp: any;
+  navparams: any;
   circleId: any;
   operatorId: any;
   planResponse: PlanDet;
@@ -292,7 +280,7 @@ export class TabBasicContentPage4 {
   i:any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  constructor(private toastr: ToastrService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
@@ -301,14 +289,14 @@ export class TabBasicContentPage4 {
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
-    this.navp=this.navParams.data;
+    this.navparams=this.navParams.data;
     this.planRequest={
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[3],
       TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
-  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
@@ -342,7 +330,7 @@ export class TabBasicContentPage4 {
   </ion-content>
 `})
 export class TabBasicContentPage5 {
-  navp: any;
+  navparams: any;
   circleId: any;
   operatorId: any;
   planResponse: PlanDet;
@@ -351,7 +339,7 @@ export class TabBasicContentPage5 {
   i:any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  constructor(private toastr: ToastrService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
@@ -361,14 +349,14 @@ export class TabBasicContentPage5 {
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
-    this.navp=this.navParams.data;
+    this.navparams=this.navParams.data;
     this.planRequest={
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[4],
       TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
-  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });
@@ -402,7 +390,7 @@ export class TabBasicContentPage5 {
   </ion-content>
 `})
 export class TabBasicContentPage6 {
-  navp: string;
+  navparams: string;
   circleId: string;
   operatorId: string;
   planResponse: PlanDet;
@@ -411,7 +399,7 @@ export class TabBasicContentPage6 {
   i:number;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
 
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  constructor(private toastr: ToastrService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
@@ -421,14 +409,14 @@ export class TabBasicContentPage6 {
     this.isAndroid = platform.is('android');
     this.operatorId=this.navParams.get('OperatorId');
     this.circleId=this.navParams.get('CircleId');
-    this.navp=this.navParams.data;
+    this.navparams=this.navParams.data;
     this.planRequest={
       OSId:this.operatorId,
       CircleId:this.circleId,
       PlanType:this.planTypes[5],
       TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
     }
-  this.regService.GetPlans(this.planRequest).subscribe((data : any)=>{
+  this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
     this.planResponse=data;
   },(error) => {this.toastr.error(error.message, 'Error!')
     });

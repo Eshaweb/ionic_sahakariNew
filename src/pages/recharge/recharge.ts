@@ -13,11 +13,13 @@ import { RechargeReportPage } from '../recharge-report/recharge-report';
 export class RechargePage implements OnInit {
   ActiveBankName: string;
   categories:OS[]=[];
+  NewCategories:OS[]=[];
   constructor(public constant:ConstantService,public navCtrl: NavController) {
   }
   ngOnInit(){
 this.categories=JSON.parse(StorageService.GetOS());
-for(var i=0;i<this.categories.length;i++){
+this.NewCategories=this.categories.filter(function (obj) { return obj.Id === "S1"||obj.Id === "S2"||obj.Id === "S3"||obj.Id === "S5"; });
+//for(var i=0;i<this.categories.length;i++){
   //this.showMsg=false;
 // if(this.categories[i].Id=="S4"){
 //   this.showMsg=true;
@@ -49,7 +51,7 @@ for(var i=0;i<this.categories.length;i++){
 //   this.showMsg=true;
 //   break;
 // }
-}
+//}
    this.ActiveBankName=StorageService.GetActiveBankName();
   }
   ParentId: string;

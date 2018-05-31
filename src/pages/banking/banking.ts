@@ -13,12 +13,9 @@ import { Tenant } from '../LocalStorageTables/Tenant';
   templateUrl: 'banking.html'
 })
 export class BankingPage implements OnInit{
-
-  Tenant: Tenant;
-  Tenants: Tenant;
   ActiveBankName: string;
   // constructor(public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-    constructor(public constant:ConstantService,public navCtrl: NavController) {
+    constructor(public navCtrl: NavController) {
 
   //StorageService.SetItem('lastAction', Date.now().toString());
 

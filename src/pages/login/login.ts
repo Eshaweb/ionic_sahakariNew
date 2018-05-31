@@ -22,15 +22,15 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: 'login.html'
 })
 export class LoginPage implements OnInit { 
-  formgroup: FormGroup;
+  formGroup: FormGroup;
   pword: AbstractControl;
 
-  constructor(private toastr: ToastrService,public constant: ConstantService, public loadingController: LoadingController, public formbuilder: FormBuilder, private regService: RegisterService, public navCtrl: NavController) {
-    this.formgroup = formbuilder.group({
+  constructor(private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
+    this.formGroup = formbuilder.group({
       pword: ['', [Validators.required, Validators.minLength(4)]]
 
     });
-    this.pword = this.formgroup.controls['pword'];
+    this.pword = this.formGroup.controls['pword'];
   }
 
   ActiveBankName: string;
@@ -42,12 +42,12 @@ export class LoginPage implements OnInit {
   }
   SelfCareAcs: SelfCareAc;
   DigiParties: DigiParty;
-  Tenant: Tenant;
-  Tenants: Tenant;
-  username = JSON.parse(StorageService.GetUser()).UserName;
+  tenant: Tenant;
+  tenants: Tenant;
+  userName = JSON.parse(StorageService.GetUser()).UserName;
   uniqueKey = JSON.parse(StorageService.GetUser()).UniqueKey;
   userTokenData: any;
-  OS: string;
+  oS: string;
   OnLogin(password) {
     let loading = this.loadingController.create({
       content: 'Wait for a second..'
@@ -55,9 +55,9 @@ export class LoginPage implements OnInit {
     loading.present();
     var OS = JSON.parse(StorageService.GetOS());
     var SelfCareAc = JSON.parse(StorageService.GetSelfCareAc());
-    this.regService.loginbyHttpClient(this.username, password, this.uniqueKey).subscribe((data: any) => {
+    this.registerService.loginbyHttpClient(this.userName, password, this.uniqueKey).subscribe((data: any) => {
       this.userTokenData = data;
-      this.regService.userToken = this.userTokenData.access_token;
+      this.registerService.userToken = this.userTokenData.access_token;
       StorageService.SetItem('userToken', this.userTokenData.access_token);
 
       if (OS == null) {
@@ -65,21 +65,21 @@ export class LoginPage implements OnInit {
           content: 'Syncing Operators and Services'
         });  
         loading.present();
-        this.regService.GetServices().subscribe((data: any) => {
-          this.OS = JSON.stringify(data);
-          StorageService.SetOS(this.OS);
+        this.registerService.GetServices().subscribe((data: any) => {
+          this.oS = JSON.stringify(data);
+          StorageService.SetOS(this.oS);
         });
         loading.dismiss();
       }
       
       // var ActiveTenantId=this.regService.TenantId;
-      this.Tenants = JSON.parse(StorageService.GetTenant());
+      this.tenants = JSON.parse(StorageService.GetTenant());
       // this.Tenant= this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
       this.DigiParties = JSON.parse(StorageService.GetDigiParty());
       // this.DigiParty=this.DigiParties.filter(function (obj) { return obj.Id === ActiveTenantId; });
       this.SelfCareAcs = JSON.parse(StorageService.GetSelfCareAc());
       // this.SelfCareAc=this.SelfCareAcs.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      if (this.Tenants == null || this.DigiParties == null || this.SelfCareAcs == null) {
+      if (this.tenants == null || this.DigiParties == null || this.SelfCareAcs == null) {
         let loadingnew = this.loadingController.create({
           content: 'Syncing Accounts'
         });
@@ -95,45 +95,45 @@ export class LoginPage implements OnInit {
       //  }, 2000);
       
         //this.navCtrl.push(PagePage);
-    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
 
   });
       //this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
        loading.dismiss();
   }
 
-  addbankresponse: AddBankResponse;
-  addbankreq: AddBankRequest;
-  DigiParty: DigiParty;
+ addBankResponse: AddBankResponse;
+ addBankRequest: AddBankRequest;
+ digiParty: DigiParty;
 
   callservices() {
-    this.addbankreq = {
+    this.addBankRequest = {
       TenantId: JSON.parse(StorageService.GetUser()).ActiveTenantId,
       MobileNo: JSON.parse(StorageService.GetUser()).UserName
     }
-    this.regService.AddBank(this.addbankreq).subscribe((data: any) => {
-      this.addbankresponse = data;
-      this.Tenant = {
-        Id: this.addbankresponse.Tenant.Id,
+    this.registerService.AddBank(this.addBankRequest).subscribe((data: any) => {
+      this.addBankResponse = data;
+      this.tenant = {
+        Id: this.addBankResponse.Tenant.Id,
         //TenantId:this.addbankresponse.Tenant.TenantId,   //ActiveTenantId
-        Name: this.addbankresponse.Tenant.Name,
-        Address: this.addbankresponse.Tenant.Address,
-        IconHtml: this.addbankresponse.Tenant.IconHtml
+        Name: this.addBankResponse.Tenant.Name,
+        Address: this.addBankResponse.Tenant.Address,
+        IconHtml: this.addBankResponse.Tenant.IconHtml
       }
-      StorageService.SetTenant(JSON.stringify([this.Tenant]));
-      this.DigiParty = {
-        Id: this.addbankresponse.DigiPartyId,
-        DigiPartyId: this.addbankresponse.DigiPartyId,
-        PartyMastId: this.addbankresponse.PartyMastId,
-        MobileNo: this.addbankresponse.MobileNo,
-        TenantId: this.addbankresponse.TenantId,  //ActiveTenantId
-        Name: this.addbankresponse.Name
+      StorageService.SetTenant(JSON.stringify([this.tenant]));
+      this.digiParty = {
+        Id: this.addBankResponse.DigiPartyId,
+        DigiPartyId: this.addBankResponse.DigiPartyId,
+        PartyMastId: this.addBankResponse.PartyMastId,
+        MobileNo: this.addBankResponse.MobileNo,
+        TenantId: this.addBankResponse.TenantId,  //ActiveTenantId
+        Name: this.addBankResponse.Name
       }
-      StorageService.SetDigiParty(JSON.stringify([this.DigiParty]));
-      StorageService.SetSelfCareAc(JSON.stringify(this.addbankresponse.SelfCareAcs));
+      StorageService.SetDigiParty(JSON.stringify([this.digiParty]));
+      StorageService.SetSelfCareAc(JSON.stringify(this.addBankResponse.SelfCareAcs));
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
-    },(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
 
   });
 

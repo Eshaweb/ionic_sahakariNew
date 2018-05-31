@@ -11,8 +11,7 @@ import { Tenant } from '../LocalStorageTables/Tenant';
   templateUrl: 'favourites.html'
 })
 export class FavouritesPage implements OnInit{
-  constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController,
-    public navParams: NavParams) {
+  constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
     }
 
     ActiveBankName: string;

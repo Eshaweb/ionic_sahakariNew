@@ -1,20 +1,28 @@
-<!-- <ion-header>
-    <ion-navbar>
+<ion-header>
+    <!-- <ion-navbar>
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
       <ion-title>
       {{ActiveBankName}}  Mobile App
       </ion-title>
-    </ion-navbar>
-  </ion-header> -->
+    </ion-navbar> -->
+    <!-- <ion-navbar color="primary">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>
+        Balance-Enquiry  {{ActiveBankName}}
+      </ion-title>
+    </ion-navbar> -->
+  </ion-header>
   <ion-content padding id="page5">
 <ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top" color="primary">
-    <ion-tab tabTitle={{FTT}} [root]="FTTPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{TUP}} [root]="TUPPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{LSC}} [root]="LSCPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{SMS}} [root]="SMSPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{OTR}} [root]="OTRPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
-    <ion-tab tabTitle={{RMG}} [root]="RMGPage" tabsHideOnSubPages="true" [rootParams]="navp"></ion-tab>
+    <ion-tab tabTitle={{FTT}} [root]="FTTPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{TUP}} [root]="TUPPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{LSC}} [root]="LSCPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{SMS}} [root]="SMSPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{OTR}} [root]="OTRPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{RMG}} [root]="RMGPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
     </ion-tabs>
     </ion-content>

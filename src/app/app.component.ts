@@ -22,7 +22,7 @@ import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
 })
 export class MyApp {
 
-  name: string;
+  digipartyname: string;
   ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
@@ -42,7 +42,7 @@ export class MyApp {
       
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
         this.ActiveBankName = StorageService.GetActiveBankName();
-          this.name = StorageService.Getdigipartyname();
+          this.digipartyname = StorageService.Getdigipartyname();
       });
       if (StorageService.GetUser() == null) {
         this.rootPage = RegisterPage;
@@ -52,7 +52,7 @@ export class MyApp {
       else {
         this.rootPage = PagePage;
         this.ActiveBankName = StorageService.GetActiveBankName();
-          this.name = StorageService.Getdigipartyname();
+          this.digipartyname = StorageService.Getdigipartyname();
         }
     });
   }
