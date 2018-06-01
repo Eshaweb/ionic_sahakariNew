@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { OS } from '../View Models/OS';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
 import { RRRequest } from '../View Models/RRRequest';
 import { RRResponse } from '../View Models/RRResponse';
-import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { ToastrService } from 'ngx-toastr';
 
 /**

@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import { TokenParams } from '../View Models/TokenParams';
 import { Tenant } from '../LocalStorageTables/Tenant';

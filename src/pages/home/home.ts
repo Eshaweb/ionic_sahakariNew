@@ -3,8 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
 import { RegisterService } from '../services/app-data.service';
-import { Person } from '../View Models/person.model';
-import { ActivatedRoute, Params} from '@angular/router';
+//import { ActivatedRoute, Params} from '@angular/router';
 import { TenantList } from '../View Models/TenantList';
 
 @Component({

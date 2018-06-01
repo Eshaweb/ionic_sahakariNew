@@ -10,12 +10,9 @@ import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { StorageService } from '../pages/services/Storage_Service';
 import { RegisterService } from '../pages/services/app-data.service';
-import { SCRequest } from '../pages/View Models/SCRequest';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
-import { RechargePage } from '../pages/recharge/recharge';
-import { Tenant } from '../pages/LocalStorageTables/Tenant';
-import { DigiParty } from '../pages/LocalStorageTables/DigiParty';
+
 
 @Component({
   templateUrl: 'app.html'

@@ -6,18 +6,13 @@ import { Tenant } from '../LocalStorageTables/Tenant';
 import { RequestForDigiParty } from '../View Models/RequestForDigiParty';
 import { NgForm } from '@angular/forms';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
-import { DigiCustWithOTPRefNo } from '../View Models/DigiCustWithOTPRefNo';
 import { Idle } from 'idlejs/dist';
 import { LoginPage } from '../login/login';
-import { AutoLogoutService } from '../services/AutoLogOutService';
 import { AddBankRequest } from '../View Models/AddBankRequest';
 import { AddBankResponse } from '../View Models/AddBankResponse';
 import { TenantList } from '../View Models/TenantList';
-import { JsonpModule } from '@angular/http';
 import { User } from '../LocalStorageTables/User';
 import { PagePage } from '../page/page';
-import { HomePage } from '../home/home';
-import { MyApp } from '../../app/app.component';
 import { ToastrService } from 'ngx-toastr';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 
@@ -170,12 +165,6 @@ OnAddBankSelection(Id){
     //existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
     StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs));
     }
-    this.user=JSON.parse(StorageService.GetUser());
-    this.user.ActiveTenantId= this.tenant.Id;
-    StorageService.SetUser(JSON.stringify(this.user)); 
-    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
-    this.Active=+ActiveTenantId;  
-    this.ActiveBankName=StorageService.GetActiveBankName();
     //this.OnAddBank();
     this.events.publish('REFRESH_DIGIPARTYNAME');
   },(error) => {this.toastrService.error(error.message, 'Error!')

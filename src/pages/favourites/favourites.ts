@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavController, NavParams, LoadingController, Navbar } from 'ionic-angular';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { StorageService } from '../services/Storage_Service';
-import { FavouriteItem } from '../LocalStorageTables/FavouriteItem';
 import { Favourites } from '../LocalStorageTables/Favourites';
 import { ConstantService } from '../services/Constants';
-import { Tenant } from '../LocalStorageTables/Tenant';
+
 @Component({
   selector: 'page-favourites',
   templateUrl: 'favourites.html'
 })
 export class FavouritesPage implements OnInit{
+  title: string;
+ // @ViewChild(Navbar) navBar: Navbar;
+
   constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
     }
 
@@ -26,18 +28,22 @@ ngOnInit(){
      switch (this.ParentId) {
     case "S1":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));      
+    this.title="Recharge";
     break;
     case "S2":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));      
+    this.title="Postpaid Bill";
     break;
     case "S3":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));      
+    this.title="DTH Recharge";
     break;
     case "S4":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));      
     break;
     case "S5":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));      
+    this.title="Electricity Bill";
     break;
     case "S6":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));      

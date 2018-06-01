@@ -3,8 +3,6 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 import { BankingPage } from '../banking/banking';
 import { RechargePage } from '../recharge/recharge';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
-import { Tenant } from '../LocalStorageTables/Tenant';
 import { RechargeReportPage } from '../recharge-report/recharge-report';
 
 @Component({

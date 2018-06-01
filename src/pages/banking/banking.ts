@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { AutoLogoutService } from '../services/AutoLogOutService';
+//import { AutoLogoutService } from '../services/AutoLogOutService';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
 import { FundTransferPage } from '../fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../balance-enquiry/balance-enquiry';
 import { MiniStatementPage } from '../mini-statement/mini-statement';
-import { Tenant } from '../LocalStorageTables/Tenant';
 
 @Component({
   selector: 'page-banking',

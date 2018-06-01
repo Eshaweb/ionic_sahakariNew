@@ -1,23 +1,27 @@
 <ion-header>
-    <!-- <ion-navbar>
-      <button ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-      <ion-title>
-      {{ActiveBankName}}  Mobile App
-      </ion-title>
-    </ion-navbar> -->
+    
+    <!-- <ion-navbar hideBackButton="true" color="primary"> -->
     <!-- <ion-navbar color="primary">
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
       <ion-title>
-        Balance-Enquiry  {{ActiveBankName}}
+        {{ActiveBankName}}  Mobile App
       </ion-title>
     </ion-navbar> -->
+    <!-- <ion-navbar #navbar color="primary" >
+      <ion-title>Whatever</ion-title>
+      <ion-buttons right>
+        <button icon-only ion-button>
+          <ion-icon name='pause'></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar> -->
   </ion-header>
+
   <ion-content padding id="page5">
-<ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top" color="primary">
+    
+<ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top">
     <ion-tab tabTitle={{FTT}} [root]="FTTPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
     <ion-tab tabTitle={{TUP}} [root]="TUPPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
     <ion-tab tabTitle={{LSC}} [root]="LSCPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>

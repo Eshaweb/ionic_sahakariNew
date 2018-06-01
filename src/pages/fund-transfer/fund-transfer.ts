@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
-import { AutoLogoutService } from '../services/AutoLogOutService';
+//import { AutoLogoutService } from '../services/AutoLogOutService';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { RegisterService } from '../services/app-data.service';
 import { FundTransferRequest } from '../View Models/FundTransferRequest';
 import { FundTransferResponse } from '../View Models/FundTransferResponse';
 import { DoFundTransfer } from '../View Models/DoFundTransfer';
 import { FundTransferDone } from '../View Models/FundTransferDone';
-import { Tenant } from '../LocalStorageTables/Tenant';
-import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { ToastrService } from 'ngx-toastr';
 

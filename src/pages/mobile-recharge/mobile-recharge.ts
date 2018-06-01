@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavController, NavParams, LoadingController, Navbar } from 'ionic-angular';
 import { RegisterService } from '../services/app-data.service';
 import { StorageService } from '../services/Storage_Service';
 import { OSRequest } from '../View Models/OSRequest';
@@ -10,26 +10,24 @@ import { ConstantService } from '../services/Constants';
 import { RechargeModel } from '../View Models/RechargeModel';
 import { Favourites } from '../LocalStorageTables/Favourites';
 import { Recharge } from '../LocalStorageTables/Recharge';
-import { Tenant } from '../LocalStorageTables/Tenant';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { ToastrService } from 'ngx-toastr';
 import { TranResponse } from '../View Models/TranResponse';
-import { PlanRequest } from '../View Models/PlanRequest';
-import { PlanResponse, PlanDet } from '../View Models/PlanResponse';
-import { PlanTypes } from '../View Models/PlanTypes';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
 import { OperaterCircle } from '../View Models/OperaterCircle';
 import { SingleState } from '../View Models/SingleState';
 import { BasicPage, TabBasicContentPage1 } from '../ViewPlans_Tabs/ViewPlans_Tabs';
-import { SingleOperator } from '../View Models/SingleOperator';
 import { FavouritesPage } from '../favourites/favourites';
+import { PrepaidConfirmPage } from '../prepaid-confirm/prepaid-confirm';
 @Component({
   selector: 'page-mobile-recharge',
   templateUrl: 'mobile-recharge.html'
 })
 export class MobileRechargePage implements OnInit{
+  title: string;
+ // @ViewChild(Navbar) navBar: Navbar;
+  showNavbar: boolean;
   amount: AbstractControl;
   mobno: AbstractControl;
   nickname: AbstractControl;
@@ -52,6 +50,15 @@ export class MobileRechargePage implements OnInit{
     this.nickname = this.formGroup.controls['selectoperator'];
 
   }
+//   ionViewDidLoad() {
+//     this.setBackButtonAction()
+// }
+
+// setBackButtonAction(){
+//    this.navBar.backButtonClick = () => {
+//       this.navCtrl.push(FavouritesPage);
+//    }
+// }
   Id: string;
   ParentId: string;
   amountforRecharge: string;
@@ -106,12 +113,14 @@ if(this.isButtonEnabled==null){
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
     this.prepaid=this.rechargeitem.SubscriptionId;
+    this.title="PREPAID RECHARGE";
     this.isOperatorEnabled=true;
     this.isStateEnabled=true;
     this.isNickNameEntered=true;
     this.isMobileNoEntered=true;
   }else{
     this.prepaid="Enter";
+    this.title="PREPAID RECHARGE";
   }
   
 }
@@ -122,12 +131,14 @@ else if(this.ParentId=="S2"){
   this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
   this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
   this.postpaid=this.rechargeitem.SubscriptionId;
+  this.title="POSTPAID BILL";
   this.isOperatorEnabled=true;
   this.isStateEnabled=true;
   this.isNickNameEntered=true;
   this.isMobileNoEntered=true;
 }else{
   this.postpaid="Enter";
+  this.title="POSTPAID BILL";
 }
 }
 else if(this.ParentId=="S3"){
@@ -138,6 +149,7 @@ else if(this.ParentId=="S3"){
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
     this.DTHNo=this.rechargeitem.SubscriptionId;
+    this.title="DTH RECHARGE";
     this.ShowLabel=true;
     this.isOperatorEnabled=true;
   this.isNickNameEntered=true;
@@ -145,6 +157,7 @@ else if(this.ParentId=="S3"){
   }else{
     this.DTHNo="Enter";
     this.ShowLabel=true;
+    this.title="DTH RECHARGE";
   }
 }
 else if(this.ParentId=="S5"){
@@ -158,11 +171,13 @@ else if(this.ParentId=="S5"){
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
     this.rechargeitem=this.favourites.find(function (obj) { return obj.Id === PId; });
     this.ElectricityConsumerNo=this.rechargeitem.SubscriptionId;
+    this.title="ELECTRICITY BILL";
     this.isOperatorEnabled=true;
   this.isNickNameEntered=true;
   this.isMobileNoEntered=true;
   }else{
     this.ElectricityConsumerNo="Enter";
+    this.title="ELECTRICITY BILL";
   }
 }  
 
@@ -367,29 +382,6 @@ OnNext(form: NgForm){
   }
     
     //above code is for updating or adding row for FavouriteKey local storage.
-    
-    switch (this.OSResponseNew[0].ParentId) {
-      case "S1":
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
-      break;
-      case "S2":
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
-        break;
-      case "S3":
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
-        break;
-      case "S4":
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
-        break;
-      case "S5":
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
-        break;
-      case "S6":
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
-        break;
-      default:
-      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
-    }
 
     switch (this.rechargeitem.OperatorId) {
       case "O1":
@@ -503,9 +495,40 @@ OnNext(form: NgForm){
       default:
       this.operator="BESCOM";
     }
-    this.ShowEntryForm=false;
-    this.showConfirm=true;
-
+    
+    switch (this.OSResponseNew[0].ParentId) {
+      case "S1":
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
+      this.navCtrl.push(PrepaidConfirmPage, { 'Operator':this.operator,'SubscriptionId': this.rechargeitem.SubscriptionId,'Amount':this.rechargeitem.Amount});
+      break;
+      case "S2":
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
+      this.ShowEntryForm=false;
+      this.showConfirm=true;  
+      break;
+      case "S3":
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
+      this.ShowEntryForm=false;
+      this.showConfirm=true;  
+      break;
+      case "S4":
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
+      this.ShowEntryForm=false;
+      this.showConfirm=true;  
+      break;
+      case "S5":
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
+      this.ShowEntryForm=false;
+      this.showConfirm=true;  
+      break;
+      case "S6":
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
+      this.ShowEntryForm=false;
+      this.showConfirm=true;  
+      break;
+      default:
+      this.favouriteNew=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
+    }
   }
   StatesOfIndia = [
     {Id: "1", Name: "Delhi/NCR"},
@@ -888,8 +911,8 @@ OnConfirm(){
 }
     this.registerService.PostRecharge(this.rechargeModel).subscribe((data : any)=>{
       this.tranResponse=data;
+      this.showConfirm=false;
       this.toastr.success('Recharge is successful with ' + this.tranResponse.StatusCode, 'Success!');
-this.showConfirm=false;
 this.showSuccess=true;
 
     //},(err) => {console.log(err)});

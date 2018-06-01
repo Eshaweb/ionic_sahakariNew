@@ -6,16 +6,12 @@ import { BankingPage } from '../banking/banking';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { RegisterService } from '../services/app-data.service';
 import { PagePage } from '../page/page';
-import { SCRequest } from '../View Models/SCRequest';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
-import { User } from '../LocalStorageTables/User';
 import { AddBankResponse } from '../View Models/AddBankResponse';
 import { AddBankRequest } from '../View Models/AddBankRequest';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { Tenant } from '../LocalStorageTables/Tenant';
-import { OS } from '../LocalStorageTables/OS';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'page-login',
