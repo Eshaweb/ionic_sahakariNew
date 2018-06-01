@@ -128,7 +128,7 @@ export class RegisterService {
             PlanType: planRequest.PlanType,
             TenantId: planRequest.TenantId
         }
-        return this.httpclient.post<PlanResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetPlans"), body);
+        return this.httpclient.post<PlanResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetPlansX"), body);
 
     }
     PostRecharge(rechargeModel: RechargeModel) {
