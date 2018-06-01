@@ -11,7 +11,7 @@
   <ion-content padding id="page3">
       <span style="color: blue" *ngIf="HideMsg">Click on Account of your wish</span>  
     <div  *ngIf="ShowHide">   
-      <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetAccountBalance(order.AcHeadId,order.AcSubId)" style="background-color:bisque;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
+      <div *ngFor="let order of SelfCareAcsBasedOnTenantID" (click)="OnGetAccountBalance(order.AcHeadId,order.AcSubId)" style="background-color:#ddd;border: 1px solid lightgrey; padding: 15px; margin: 5px 0;">
         <span>Name: {{order.HeadName}}</span> 
         <br/>
         <span>Account No: {{order.AcNo}}</span> 
@@ -25,5 +25,10 @@
   <ion-footer color="primary">
     <ion-toolbar>
       <ion-title>{{ActiveBankName}}</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+  <ion-footer>
+    <ion-toolbar color="primary">
+      <ion-title>{{ActiveBankName}} All Rights Rserved</ion-title>
     </ion-toolbar>
   </ion-footer>
