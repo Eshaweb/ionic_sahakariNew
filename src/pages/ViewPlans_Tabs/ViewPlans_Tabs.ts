@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { Platform, LoadingController, NavParams, NavController, Tabs } from 'ionic-angular';
+import { Platform, LoadingController, NavParams, NavController, Tabs, Navbar } from 'ionic-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
@@ -8,13 +7,13 @@ import { PlanRequest } from '../View Models/PlanRequest';
 import { StorageService } from '../services/Storage_Service';
 import { PlanDet } from '../View Models/PlanResponse';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
-import { Tenant } from '../LocalStorageTables/Tenant';
 
 @Component({
 selector: 'page-ViewPlans_Tabs',
 templateUrl: 'ViewPlans_Tabs.html'
 })
 export class BasicPage implements OnInit{
+ // @ViewChild(Navbar) navBar: Navbar;
   navparams: any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
   circleId: string;
@@ -54,17 +53,29 @@ export class BasicPage implements OnInit{
         PlanType:this.planTypes[0],
         TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
       }
-      
   }
- 
+//   ionViewDidLoad() {
+//     this.setBackButtonAction()
+// }
+
+// //Method to override the default back button action
+// setBackButtonAction(){
+//    this.navBar.backButtonClick = () => {
+//    //Write here wherever you wanna do
+//       this.navCtrl.push(FavouritesPage);
+//    }
+// }
 }
 
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
+  
+  <ion-header>
+  <ion-navbar hideBackButton="true" color="primary">
+      <ion-title>
+        {{ActiveBankName}}  Mobile App
+      </ion-title>
+    </ion-navbar>
     </ion-header>
 
     <ion-content>
@@ -125,18 +136,19 @@ loading.dismiss();
     this.isButtonEnabled=true;
      this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname'),'ButtonEnabled':this.isButtonEnabled});
     //this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
-
+   
   }
   
 }
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
+  <ion-header>
+  <ion-navbar hideBackButton="true" color="primary">
+      <ion-title>
+        {{ActiveBankName}}  Mobile App
+      </ion-title>
+    </ion-navbar>
     </ion-header>
-
     <ion-content>
     Select the plans you want
     <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
@@ -190,12 +202,13 @@ export class TabBasicContentPage2 {
 }
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
+  <ion-header>
+  <ion-navbar hideBackButton="true" color="primary">
+      <ion-title>
+        {{ActiveBankName}}  Mobile App
+      </ion-title>
+    </ion-navbar>
     </ion-header>
-
     <ion-content>
     Select the plans you want
     <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
@@ -249,12 +262,13 @@ export class TabBasicContentPage3 {
 }
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
+  <ion-header>
+  <ion-navbar hideBackButton="true" color="primary">
+      <ion-title>
+        {{ActiveBankName}}  Mobile App
+      </ion-title>
+    </ion-navbar>
     </ion-header>
-
     <ion-content>
     Select the plans you want
     <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
@@ -308,12 +322,13 @@ export class TabBasicContentPage4 {
 }
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
+  <ion-header>
+  <ion-navbar hideBackButton="true" color="primary">
+      <ion-title>
+        {{ActiveBankName}}  Mobile App
+      </ion-title>
+    </ion-navbar>
     </ion-header>
-
     <ion-content>
     Select the plans you want
     <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
@@ -368,12 +383,13 @@ export class TabBasicContentPage5 {
 }
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar>
-        <ion-title>Tabs</ion-title>
-      </ion-navbar>
+  <ion-header>
+  <ion-navbar hideBackButton="true" color="primary">
+      <ion-title>
+        {{ActiveBankName}}  Mobile App
+      </ion-title>
+    </ion-navbar>
     </ion-header>
-
     <ion-content>
     Select the plans you want
     <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">

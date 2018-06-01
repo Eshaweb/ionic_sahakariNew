@@ -1,0 +1,38 @@
+<!--
+  Generated template for the PrepaidConfirmPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Confirm Prepaid{{ActiveBankName}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div class="row">
+    <div class="col s12 m7">
+      <div class="card">
+          <!--interpolation-->
+        <div class="card-content">     
+        <span>Selected Operator : {{ operator }}</span> <br>
+        <span>Mobile No : {{ SubscriptionId }}</span> <br>
+        <span>Recharge Amount : {{ Amount }}</span> <br>
+        </div>       
+      </div>
+    </div>
+    <button id="register-button8" ion-button color="positive" type="button" (click)="OnConfirm()" block>
+      Confirm
+    </button>
+  </div>
+  <div *ngIf="showSuccess">
+  <h1>Recharge is Successful...</h1>
+  </div>
+</ion-content>

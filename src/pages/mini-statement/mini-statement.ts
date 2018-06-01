@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
 import { StatementRequest } from '../View Models/StatementRequest';
 import { RegisterService } from '../services/app-data.service';
 import { MiniStatement } from '../View Models/MiniStatement';
 import { StatementItem } from '../View Models/StatementItem';
-import { Tenant } from '../LocalStorageTables/Tenant';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 
 @Component({

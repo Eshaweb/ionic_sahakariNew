@@ -5,18 +5,10 @@ import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
 import { RegisterService } from '../services/app-data.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Registervm } from '../View Models/register.vm';
 import { OTPRequest } from '../View Models/OTPrequest.vm';
 import { ToastrService } from 'ngx-toastr';
-import { Toast } from '@ionic-native/toast';
-import { ToastController } from 'ionic-angular';
-import { Platform } from 'ionic-angular';
 import { DigiCustWithOTPRefNo } from '../View Models/DigiCustWithOTPRefNo';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-import { DigiParty } from '../LocalStorageTables/DigiParty';
-import { StorageService } from '../services/Storage_Service';
-import { ConstantService } from '../services/Constants';
 import { TenantList } from '../View Models/TenantList';
 
 @Component({

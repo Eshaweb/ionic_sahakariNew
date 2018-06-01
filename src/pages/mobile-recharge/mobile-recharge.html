@@ -1,9 +1,8 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <button ion-button menuToggle type="button" (click)="OnBack()">
-
-  
+    <!-- <button ion-button menuToggle type="button" ng-click="OnBack()"> -->
+        <button ion-button menuToggle type="button" [navPush]="FavouritesPage">
       <ion-icon name="menu"></ion-icon>
     </button>
     <!-- <button ion-button type="button" (click)="OnBack()">
@@ -11,7 +10,7 @@
         Back
       </button> -->
     <ion-title>
-      Mobile Recharge  
+      {{title}} - {{ActiveBankName}}  
     </ion-title>
   </ion-navbar>
 </ion-header>

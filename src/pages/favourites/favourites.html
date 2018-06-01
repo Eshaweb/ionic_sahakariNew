@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      New Recharge
+      New {{title}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -14,7 +14,7 @@
           <ion-thumbnail item-start>
               <img src="assets/imgs/thumbnail-totoro.png">
             </ion-thumbnail>
-        <h2>New Recharge</h2>
+        <h2>New {{title}}</h2>
         </ion-item>
         <div class="row" *ngIf="favourites">
           <ion-item *ngFor="let order of favourites">
