@@ -4,6 +4,7 @@ import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { StorageService } from '../services/Storage_Service';
 import { Favourites } from '../LocalStorageTables/Favourites';
 import { ConstantService } from '../services/Constants';
+import { RechargePage } from '../recharge/recharge';
 
 @Component({
   selector: 'page-favourites',
@@ -11,11 +12,20 @@ import { ConstantService } from '../services/Constants';
 })
 export class FavouritesPage implements OnInit{
   title: string;
- // @ViewChild(Navbar) navBar: Navbar;
+  @ViewChild(Navbar) navBar: Navbar;
 
   constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
-    }
 
+  }
+  ionViewDidLoad() {
+    this.setBackButtonAction()
+}
+
+setBackButtonAction(){
+   this.navBar.backButtonClick = () => {
+      this.navCtrl.push(RechargePage);
+   }
+}
     ActiveBankName: string;
     ParentId: string;
     favourites: Favourites;

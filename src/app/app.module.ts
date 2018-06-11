@@ -22,7 +22,7 @@ import { ConfirmPagePage } from '../pages/confirm-page/confirm-page';
 import { RechargeSuccessfulPage } from '../pages/recharge-successful/recharge-successful';
 import { RegisterPage } from '../pages/register/register';
 import { BankListPage } from '../pages/bank-list/bank-list';
-import { EnterOTPPage } from '../pages/enter-otp/enter-otp';
+import { EnterOTPPage, FormatTimePipe } from '../pages/enter-otp/enter-otp';
 import { HttpClient,HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { AuthGuard } from '../pages/auth/auth.guard';
@@ -44,6 +44,7 @@ import { AutoLogoutService } from '../pages/services/AutoLogOutService';
 import { FundTransferPage } from '../pages/fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
 import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,TabBasicContentPage3, TabBasicContentPage4, TabBasicContentPage5, TabBasicContentPage6 } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
+//import { BasicPage } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
 import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
 import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
 
@@ -67,6 +68,7 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     EnterOTPPage,
     FundTransferPage,
     BalanceEnquiryPage,
+    //BasicPage,
     TabBasicPage,
     TabBasicContentPage1,
     TabBasicContentPage2,
@@ -75,7 +77,8 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     TabBasicContentPage5,
     TabBasicContentPage6,
     RechargeReportPage,
-    PrepaidConfirmPage
+    PrepaidConfirmPage,
+    FormatTimePipe
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
@@ -110,6 +113,7 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     EnterOTPPage,
     FundTransferPage,
     BalanceEnquiryPage,
+    //BasicPage,
     TabBasicPage,
     TabBasicContentPage1,
     TabBasicContentPage2,

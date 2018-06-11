@@ -1,0 +1,35 @@
+ion-segment {
+    display: block;
+    white-space: nowrap;
+    font-size: 0;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
+    }
+
+    ion-segment-button.segment-button {
+        display: inline-block;
+        min-width: 100px;
+        width: auto;
+    }
+}
+
+
+ion-scroll {
+    width: 100%;
+    height: 100%;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+    }
+
+    .swiper-slide {
+        //overflow-x: hidden;
+       overflow-y: scroll
+    }
+     .slide-zoom {
+         height: 100%;
+     }

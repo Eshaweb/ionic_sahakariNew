@@ -14,6 +14,7 @@ import { TranResponse } from '../View Models/TranResponse';
   templateUrl: 'prepaid-confirm.html',
 })
 export class PrepaidConfirmPage implements OnInit{
+  showTitle: boolean;
   ActiveBankName: string;
   showConfirm: boolean;
   showSuccess: boolean;
@@ -32,7 +33,7 @@ export class PrepaidConfirmPage implements OnInit{
     this.SubscriptionId=this.navParams.get('SubscriptionId');
     this.Amount=this.navParams.get('Amount');
     this.ActiveBankName =StorageService.GetActiveBankName();
-
+    this.showTitle=true;
   }
   DigiParties: DigiParty;
   digiparty: DigiParty;
@@ -77,7 +78,7 @@ export class PrepaidConfirmPage implements OnInit{
         this.toastr.success('Recharge is successful with ' + this.tranResponse.StatusCode, 'Success!');
   
   this.showSuccess=true;
-  
+  this.showTitle=false;
       //},(err) => {console.log(err)});
     //},(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
   },(error) => {this.toastr.error(error.message, 'Error!')

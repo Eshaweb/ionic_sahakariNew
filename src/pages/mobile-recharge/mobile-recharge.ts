@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, Navbar } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Navbar, ViewController } from 'ionic-angular';
 import { RegisterService } from '../services/app-data.service';
 import { StorageService } from '../services/Storage_Service';
 import { OSRequest } from '../View Models/OSRequest';
@@ -17,16 +17,17 @@ import { TranResponse } from '../View Models/TranResponse';
 import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
 import { OperaterCircle } from '../View Models/OperaterCircle';
 import { SingleState } from '../View Models/SingleState';
-import { BasicPage, TabBasicContentPage1 } from '../ViewPlans_Tabs/ViewPlans_Tabs';
+import { BasicPage } from '../ViewPlans_Tabs/ViewPlans_Tabs';
 import { FavouritesPage } from '../favourites/favourites';
 import { PrepaidConfirmPage } from '../prepaid-confirm/prepaid-confirm';
+import { PagePage } from '../page/page';
 @Component({
   selector: 'page-mobile-recharge',
   templateUrl: 'mobile-recharge.html'
 })
 export class MobileRechargePage implements OnInit{
   title: string;
- // @ViewChild(Navbar) navBar: Navbar;
+  @ViewChild(Navbar) navBar: Navbar;
   showNavbar: boolean;
   amount: AbstractControl;
   mobno: AbstractControl;
@@ -36,7 +37,7 @@ export class MobileRechargePage implements OnInit{
   ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
 
   
-  constructor(private toastr: ToastrService,public constant:ConstantService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,public formbuilder:FormBuilder) {
+  constructor(public viewCtrl:ViewController,private toastr: ToastrService,public constant:ConstantService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,public formbuilder:FormBuilder) {
     this.formGroup = formbuilder.group({
       //selectoperator:['',[Validators.required,Validators.minLength(2)]],
       mobno:['',[Validators.required,Validators.minLength(10)]],
@@ -50,15 +51,20 @@ export class MobileRechargePage implements OnInit{
     this.nickname = this.formGroup.controls['selectoperator'];
 
   }
-//   ionViewDidLoad() {
-//     this.setBackButtonAction()
-// }
+  ionViewDidLoad() {
+    this.navCtrl.remove(2,1);
+    //this.navCtrl.pop();
+    this.setBackButtonAction();
+}
 
-// setBackButtonAction(){
-//    this.navBar.backButtonClick = () => {
-//       this.navCtrl.push(FavouritesPage);
-//    }
-// }
+setBackButtonAction(){
+   this.navBar.backButtonClick = () => {
+      this.navCtrl.push(FavouritesPage).then(() => {
+        const index = this.viewCtrl.index;
+        this.navCtrl.remove(index, 1); //this will remove page3 and page2
+      });
+   }
+}
   Id: string;
   ParentId: string;
   amountforRecharge: string;
@@ -770,8 +776,9 @@ operatorname: string;
       this.label="Customer ID";
     }
   }
-  OnBack(){
-    this.navCtrl.push(FavouritesPage);
+  OnGoBack(){
+    this.navCtrl.setRoot(PagePage);
+    //this.navCtrl.popToRoot();
   }
   StateChanged(event){
     this.isStateEnabled=true;

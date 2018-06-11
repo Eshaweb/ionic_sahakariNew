@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-navbar color="primary">
+  <ion-navbar hideBackButton="true" color="primary">
     <!-- <button ion-button menuToggle type="button" ng-click="OnBack()"> -->
         <button ion-button menuToggle type="button" [navPush]="FavouritesPage">
       <ion-icon name="menu"></ion-icon>
@@ -194,6 +194,7 @@
           Next
       </button>
   </form>
+    <button ion-button clear item-centre (click)="OnGoBack()">GoBack</button>       
   <div class="row" *ngIf="showConfirm">
   <div class="col s12 m7">
     <div class="card">

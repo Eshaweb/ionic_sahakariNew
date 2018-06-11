@@ -9,15 +9,18 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>
-      Confirm Prepaid{{ActiveBankName}}
+    <ion-title *ngIf="showTitle">
+      Confirm Prepaid -{{ActiveBankName}}
+    </ion-title>
+    <ion-title *ngIf="showSuccess">
+      Prepaid Recharge -{{ActiveBankName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <div class="row">
+  <div class="row" *ngIf="showTitle">
     <div class="col s12 m7">
       <div class="card">
           <!--interpolation-->

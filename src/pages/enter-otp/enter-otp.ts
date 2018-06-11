@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { LoadingController, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
@@ -14,6 +14,7 @@ import { User } from '../LocalStorageTables/User';
 import { ToastrService } from 'ngx-toastr';
 import { OTPRequest } from '../View Models/OTPrequest.vm';
 import { DigiCustWithOTPRefNo } from '../View Models/DigiCustWithOTPRefNo';
+import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'page-enter-otp',
   templateUrl: 'enter-otp.html'
@@ -63,12 +64,22 @@ export class EnterOTPPage implements OnInit{
   OTPRefNo: string;
   MobileNo:string;
   TenantId:string;
+  countDown;
+  counter = 10;
+  tick = 1000;
   ngOnInit() {
     this.OTPRefNo=this.navParams.get('OTPRefNo');
     this.TenantId=this.navParams.get('TenantId');
     this.MobileNo=this.navParams.get('MobileNo');
-    }
+    // this.countDown = Observable.timer(0, this.tick)
+    //   .take(this.counter)
+    //   .map(() => --this.counter);
 
+      this.countDown = this.registerService.getCounter().do(() => --this.counter);
+    }
+    // stopTimer() {
+    //   this.countDown = null;
+    // }
   matchingPasswords(group: FormGroup) { // here we have the 'passwords' group
     let password = group.controls.password.value;
     let confirmpwd = group.controls.confirmpwd.value;
@@ -105,6 +116,7 @@ export class EnterOTPPage implements OnInit{
         this.ShowIf = false;
         this.HideIf = true;
         this.toastrService.error("OTP is Invalid", 'Error!')
+        this.otp.reset();
       }
       
     })
@@ -182,6 +194,8 @@ export class EnterOTPPage implements OnInit{
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
   }
 
+
+  
   goToHome(params) {
     if (!params) params = {};
     this.navCtrl.push(HomePage);
@@ -192,4 +206,26 @@ export class EnterOTPPage implements OnInit{
     if (!params) params = {};
     this.navCtrl.push(BankingPage);
   }
+}
+
+@Pipe({
+  name: 'formatTime'
+})
+export class FormatTimePipe implements PipeTransform {
+
+  transform(value: number): string {
+    const minutes: number = Math.floor(value / 60);
+    return ('00' + minutes).slice(-2) + ':' + ('00' + Math.floor(value - minutes * 60)).slice(-2);
+  }
+
+
+  //for HH:MM:SS format
+
+// transform(value: number): string {
+//   const hours: number = Math.floor(value / 3600);
+//   const minutes: number = Math.floor((value % 3600) / 60);
+//   return ('00' + hours).slice(-2) + ':' + ('00' + minutes).slice(-2) + ':' + ('00' + Math.floor(value - minutes * 60)).slice(-2);
+// }
+
+
 }

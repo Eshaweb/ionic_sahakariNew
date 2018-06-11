@@ -128,7 +128,8 @@ export class RegisterService {
             PlanType: planRequest.PlanType,
             TenantId: planRequest.TenantId
         }
-        return this.httpclient.post<PlanResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetPlansX"), body);
+        return this.httpclient.post<PlanResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetPlans"), body);
+        // return this.httpclient.post<PlanResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetPlans"), body);
 
     }
     PostRecharge(rechargeModel: RechargeModel) {
@@ -209,6 +210,15 @@ export class RegisterService {
         }
         return this.httpclient.post<StatementRequest>(this.uIHelperService.CallWebAPIUrlNew("/Recharge/GetRechargeReport"), body);
     }
+    countDown;
+    //counter = 30*60;
+    counter = 10;
+    tick = 1000;
+    getCounter() {
+        return Observable.timer(0, this.tick)
+          .take(this.counter)
+          .map(() => --this.counter)
+      }
     private ExtractData(res: Response) {
 
         let body = res.json();

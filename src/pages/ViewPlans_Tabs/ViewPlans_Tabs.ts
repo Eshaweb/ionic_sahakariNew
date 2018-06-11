@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Platform, LoadingController, NavParams, NavController, Tabs, Navbar } from 'ionic-angular';
+import { Platform, LoadingController, NavParams, NavController, Tabs, Navbar, Slides } from 'ionic-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
@@ -13,6 +13,8 @@ selector: 'page-ViewPlans_Tabs',
 templateUrl: 'ViewPlans_Tabs.html'
 })
 export class BasicPage implements OnInit{
+  @ViewChild('slider') slider: Slides;
+  page = 0;
  // @ViewChild(Navbar) navBar: Navbar;
   navparams: any;
   planTypes:string[]= ["FTT","TUP","LSC","SMS","OTR","RMG"];
@@ -30,7 +32,11 @@ export class BasicPage implements OnInit{
   SMSPage = TabBasicContentPage4;
   OTRPage= TabBasicContentPage5;
   RMGPage= TabBasicContentPage6;
-  constructor(private toastr: ToastrService,public constant:ConstantService,private regService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+
+  planResponse: PlanDet;
+  isAndroid: boolean = false;
+  isButtonEnabled: boolean=false;
+  constructor(private toastr: ToastrService,public constant:ConstantService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
     this.FTT="FullTalkTime";
       this.LSC="LSC";
       this.TUP="TopUp";
@@ -40,19 +46,122 @@ export class BasicPage implements OnInit{
       this.operatorId=this.navParams.get('OperatorId');
       this.circleId=this.navParams.get('CircleId');
       this.navparams=this.navParams.data;
+      let loading = this.loadingController.create({
+        content: 'Please wait till the screen loads'
+      });
+  
+      loading.present();
+      this.isAndroid = platform.is('android');
       
-  }
-  ActiveBankName: string;
-  planRequest: PlanRequest;
-
-  ngOnInit(){
-      this.ActiveBankName=StorageService.GetActiveBankName();   
+      this.operatorId=this.navParams.get('OperatorId');
+      this.circleId=this.navParams.get('CircleId');
+      this.navparams=this.navParams.data;
+   
       this.planRequest={
         OSId:this.operatorId,
         CircleId:this.circleId,
         PlanType:this.planTypes[0],
         TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
       }
+    //this.planResponse=this.bpage.planResponse;
+    this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
+      this.planResponse=data;
+    },(error) => {this.toastr.error(error.message, 'Error!')
+      });
+  loading.dismiss();
+    }
+
+  // @ViewChild('mySlider') slider: Slides;
+  // selectedSegment: string;
+  // slides: any;
+
+  // constructor(private toastr: ToastrService,public constant:ConstantService,private registerService : RegisterService, public loadingController: LoadingController, public navParams: NavParams,public navCtrl: NavController,platform: Platform) {
+  //   this.selectedSegment = 'first';
+  //   this.slides = [
+  //     {
+  //       id: "first",
+  //       title: "First Slide"
+  //     },
+  //     {
+  //       id: "second",
+  //       title: "Second Slide"
+  //     },
+  //     {
+  //       id: "third",
+  //       title: "Third Slide"
+  //     }
+  //   ];
+  // }
+
+  // onSegmentChanged(segmentButton) {
+  //   console.log("Segment changed to", segmentButton.value);
+  //   const selectedIndex = this.slides.findIndex((slide) => {
+  //     return slide.id === segmentButton.value;
+  //   });
+  //   this.slider.slideTo(selectedIndex);
+  // }
+
+  // onSlideChanged(slider) {
+  //   console.log('Slide changed');
+  //   const currentSlide = this.slides[slider.activeIndex];
+  //   this.selectedSegment = currentSlide.id;
+  // }
+
+  ActiveBankName: string;
+  planRequest: PlanRequest;
+
+  ngOnInit(){
+      this.ActiveBankName=StorageService.GetActiveBankName();   
+      // this.planRequest={
+      //   OSId:this.operatorId,
+      //   CircleId:this.circleId,
+      //   PlanType:this.planTypes[0],
+      //   TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
+      // }
+  }
+
+  selectedTab(index) {
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+    loading.present();
+    this.slider.slideTo(index);
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[index],
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
+    }
+    this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
+      this.planResponse=data;
+    },(error) => {this.toastr.error(error.message, 'Error!')
+      });
+      loading.dismiss();
+  }
+  slideChanged() {
+    let currentIndex = this.slider.getActiveIndex();
+    console.log('Current index is', currentIndex);
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+    loading.present();
+    this.slider.slideTo(currentIndex);
+    this.planRequest={
+      OSId:this.operatorId,
+      CircleId:this.circleId,
+      PlanType:this.planTypes[currentIndex],
+      TenantId:JSON.parse(StorageService.GetUser()).ActiveTenantId
+    }
+    this.registerService.GetPlans(this.planRequest).subscribe((data : any)=>{
+      this.planResponse=data;
+    },(error) => {this.toastr.error(error.message, 'Error!')
+      });
+      loading.dismiss();
+  }
+  OnAmount(amount){
+    this.isButtonEnabled=true;
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname'),'ButtonEnabled':this.isButtonEnabled});
+ 
   }
 //   ionViewDidLoad() {
 //     this.setBackButtonAction()
@@ -134,8 +243,16 @@ loading.dismiss();
   }
   OnAmount(amount){
     this.isButtonEnabled=true;
-     this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname'),'ButtonEnabled':this.isButtonEnabled});
-    //this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname')});
+
+    // let resultIndex = this.navCtrl.last().index; 
+
+    //  this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname'),'ButtonEnabled':this.isButtonEnabled}).then(() => {
+    //   // Once it's pushed, this block is called and now we can remove the ResultPage from the stack.
+    //   this.navCtrl.remove(resultIndex, 1); 
+    //   // second parameter is optional and defaults to 1, if you want to remove more pages from stack start with the bottom most index you want to remove and pass number of pages you want to remove starting from the given index. 
+    
+    // });
+    this.navCtrl.push(MobileRechargePage, { 'Amount':amount,'ParentId':this.navParams.get('ParentId'),'OperatorId':this.navParams.get('OperatorId'),'CircleId':this.navParams.get('CircleId'),'SubscriptionId':this.navParams.get('SubscriptionId'),'nname':this.navParams.get('nname'),'ButtonEnabled':this.isButtonEnabled});
    
   }
   
