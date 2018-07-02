@@ -174,9 +174,7 @@ if(this.ShowIf==null){
   userResult: UserResult;
   userPost: UserPost;
 
-  // OnSavePassword(pin) {
     OnSavePassword() {
-    //this.pin = pin;
     this.userPost = {
       DigiPartyId: this.DigiPartyId,
       TenantId: this.registerService.TenantId,  //ActiveTenantId

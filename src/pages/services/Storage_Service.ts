@@ -5,14 +5,18 @@ import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { User } from '../LocalStorageTables/User';
 import { OS } from '../View Models/OS';
+import { ConstantService } from './Constants';
 //import { OS } from '../LocalStorageTables/OS';
 
 
 @Injectable()
 export class StorageService {
+    constructor(public constant: ConstantService) {
+
+    }
     static SelfCareAcsBasedOnTenantID: SelfCareAc;
     static SelfCareACs: SelfCareAc;
-    static digipartyname:string;
+    static digipartyname: string;
     static digiparty: DigiParty;
     static DigiParties: DigiParty;
     static Tenant: Tenant;
@@ -38,77 +42,88 @@ export class StorageService {
 
         localStorage.removeItem(param);
     }
-    static GetActiveBankName():string {
-        var ActiveTenantId =this.GetUser().ActiveTenantId;
+    static GetActiveBankName(): string {
+        var ActiveTenantId = this.GetUser().ActiveTenantId;
         this.Tenants = this.GetTenant();
         //let x=Object.assign({},this.Tenants);
-        this.Tenant = this.Tenants.find(function (obj:Tenant) { return obj.Id === ActiveTenantId; });
+        this.Tenant = this.Tenants.find(function (obj: Tenant) { return obj.Id === ActiveTenantId; });
         return this.Tenant.Name;
     }
-    static Getdigipartyname():string{
-        var ActiveTenantId =this.GetUser().ActiveTenantId;
-        this.DigiParties=StorageService.GetDigiParty();
-          this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-         return this.digipartyname = this.digiparty.Name;
+    static Getdigipartyname(): string {
+        var ActiveTenantId = this.GetUser().ActiveTenantId;
+        this.DigiParties = StorageService.GetDigiParty();
+        this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+        return this.digipartyname = this.digiparty.Name;
     }
-    
-    static GetSelfCareAcsBasedOnTenantID():SelfCareAc{
-        var ActiveTenantId =this.GetUser().ActiveTenantId;
-        this.SelfCareACs=this.GetSelfCareAc(); 
-        return this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
+
+    static GetSelfCareAcsBasedOnTenantID(): SelfCareAc {
+        var ActiveTenantId = this.GetUser().ActiveTenantId;
+        this.SelfCareACs = this.GetSelfCareAc();
+        return this.SelfCareAcsBasedOnTenantID = this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
     }
-    static GetDigiPartyID():string{
-        var ActiveTenantId =this.GetUser().ActiveTenantId;
-        this.DigiParties=StorageService.GetDigiParty();
-           this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-           return this.digiparty.DigiPartyId;
-      }
-    
-    static GetUser():User {
+    static GetDigiPartyID(): string {
+        var ActiveTenantId = this.GetUser().ActiveTenantId;
+        this.DigiParties = StorageService.GetDigiParty();
+        this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+        return this.digiparty.DigiPartyId;
+    }
+
+    static GetUser(): User {
         return JSON.parse(localStorage.getItem("User")) as User;
     }
-    static GetTenant() :Tenant{
+    static GetTenant(): Tenant {
         return JSON.parse(localStorage.getItem("Tenant")) as Tenant;
     }
-    static GetDigiParty():DigiParty {
+    static GetDigiParty(): DigiParty {
         return JSON.parse(localStorage.getItem("DigiParty")) as DigiParty;
     }
-    static GetOS() :OS{
+    static GetOS(): OS {
         return JSON.parse(localStorage.getItem("OS")) as OS;
     }
-    static GetSelfCareAc():SelfCareAc {
+    static GetSelfCareAc(): SelfCareAc {
         return JSON.parse(localStorage.getItem("SelfCareAc")) as SelfCareAc;
     }
 
 
-    
+
     static SetUser(param) {
-        localStorage.setItem("User",param);
+        localStorage.setItem("User", param);
     }
     static SetTenant(param) {
-        localStorage.setItem("Tenant",param);
+        localStorage.setItem("Tenant", param);
     }
     static SetDigiParty(param) {
-        localStorage.setItem("DigiParty",param);
+        localStorage.setItem("DigiParty", param);
     }
     static SetOS(param) {
-        localStorage.setItem("OS",param);
+        localStorage.setItem("OS", param);
     }
     static SetSelfCareAc(param) {
-        localStorage.setItem("SelfCareAc",param);
+        localStorage.setItem("SelfCareAc", param);
     }
 
-    static RemoveRecordsForLogout(){
+    RemoveRecordsForLogout() {
         localStorage.removeItem("OS");
-        this.RemoveItem("Tenant");
-        this.RemoveItem("DigiParty");
-        this.RemoveItem("SelfCareAc");
-        this.RemoveItem("userToken");
-// for(i=0;i<8;i++){
+        localStorage.removeItem("Tenant");
+        localStorage.removeItem("DigiParty");
+        StorageService.RemoveItem("SelfCareAc");
+        localStorage.removeItem("userToken");
 
-// }
-// for(j=0;j<8;j++){
+        localStorage.removeItem(this.constant.favouriteBasedOnParentId.Favourite_S1);
+        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S2);
+        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S3);
+        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S4);
+        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S5);
+        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S6);
+        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S7);
 
-// }
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S1);
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S2);
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S3);
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S4);
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S5);
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S6);
+        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S7);
+
     }
 }

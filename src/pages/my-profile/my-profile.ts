@@ -34,14 +34,14 @@ export class MyProfilePage implements OnInit{
       this.tenants = StorageService.GetTenant(); 
     });
   }
-  constructor(private registerService: RegisterService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private storageService: StorageService,private registerService: RegisterService,public navCtrl: NavController, public navParams: NavParams) {
   }
   OnChange(){
     var ischangePassword:boolean=true;
     this.navCtrl.push(EnterOTPPage,{'ischangePassword':ischangePassword});
   }
   OnLogOut(){
-StorageService.RemoveRecordsForLogout();
+this.storageService.RemoveRecordsForLogout();
 this.navCtrl.push(LoginPage);
   }
 }
