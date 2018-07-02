@@ -3,6 +3,9 @@ import { TokenParams } from '../View Models/TokenParams';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
+import { User } from '../LocalStorageTables/User';
+import { OS } from '../View Models/OS';
+//import { OS } from '../LocalStorageTables/OS';
 
 
 @Injectable()
@@ -12,7 +15,6 @@ export class StorageService {
     static digipartyname:string;
     static digiparty: DigiParty;
     static DigiParties: DigiParty;
-    static ActiveBankName: string;
     static Tenant: Tenant;
     static Tenants: Tenant;
     static SetAuthorizationData(auth: TokenParams): void {
@@ -36,58 +38,77 @@ export class StorageService {
 
         localStorage.removeItem(param);
     }
-    static GetActiveBankName() {
-        var ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-        this.Tenants = JSON.parse(StorageService.GetTenant());
-        this.Tenant = this.Tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
-        this.ActiveBankName = this.Tenant.Name;
-        return this.ActiveBankName;
+    static GetActiveBankName():string {
+        var ActiveTenantId =this.GetUser().ActiveTenantId;
+        this.Tenants = this.GetTenant();
+        //let x=Object.assign({},this.Tenants);
+        this.Tenant = this.Tenants.find(function (obj:Tenant) { return obj.Id === ActiveTenantId; });
+        return this.Tenant.Name;
     }
-    static Getdigipartyname(){
-        var ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-        this.DigiParties = JSON.parse(StorageService.GetDigiParty());
+    static Getdigipartyname():string{
+        var ActiveTenantId =this.GetUser().ActiveTenantId;
+        this.DigiParties=StorageService.GetDigiParty();
           this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
          return this.digipartyname = this.digiparty.Name;
     }
-    static GetSelfCareAcsBasedOnTenantID(){
-        var ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
-        this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc()); 
+    
+    static GetSelfCareAcsBasedOnTenantID():SelfCareAc{
+        var ActiveTenantId =this.GetUser().ActiveTenantId;
+        this.SelfCareACs=this.GetSelfCareAc(); 
         return this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
     }
-    static GetDigiPartyID(){
-        var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
-        this.DigiParties=JSON.parse(StorageService.GetDigiParty());
+    static GetDigiPartyID():string{
+        var ActiveTenantId =this.GetUser().ActiveTenantId;
+        this.DigiParties=StorageService.GetDigiParty();
            this.digiparty=this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
            return this.digiparty.DigiPartyId;
       }
-    static GetUser() {
-        return localStorage.getItem("User");
+    
+    static GetUser():User {
+        return JSON.parse(localStorage.getItem("User")) as User;
     }
+    static GetTenant() :Tenant{
+        return JSON.parse(localStorage.getItem("Tenant")) as Tenant;
+    }
+    static GetDigiParty():DigiParty {
+        return JSON.parse(localStorage.getItem("DigiParty")) as DigiParty;
+    }
+    static GetOS() :OS{
+        return JSON.parse(localStorage.getItem("OS")) as OS;
+    }
+    static GetSelfCareAc():SelfCareAc {
+        return JSON.parse(localStorage.getItem("SelfCareAc")) as SelfCareAc;
+    }
+
+
+    
     static SetUser(param) {
         localStorage.setItem("User",param);
-    }
-    static GetTenant() {
-        return localStorage.getItem("Tenant");
     }
     static SetTenant(param) {
         localStorage.setItem("Tenant",param);
     }
-    static GetDigiParty() {
-        return localStorage.getItem("DigiParty");
-    }
     static SetDigiParty(param) {
         localStorage.setItem("DigiParty",param);
-    }
-    static GetOS() {
-        return localStorage.getItem("OS");
     }
     static SetOS(param) {
         localStorage.setItem("OS",param);
     }
-    static GetSelfCareAc() {
-        return localStorage.getItem("SelfCareAc");
-    }
     static SetSelfCareAc(param) {
         localStorage.setItem("SelfCareAc",param);
+    }
+
+    static RemoveRecordsForLogout(){
+        localStorage.removeItem("OS");
+        this.RemoveItem("Tenant");
+        this.RemoveItem("DigiParty");
+        this.RemoveItem("SelfCareAc");
+        this.RemoveItem("userToken");
+// for(i=0;i<8;i++){
+
+// }
+// for(j=0;j<8;j++){
+
+// }
     }
 }

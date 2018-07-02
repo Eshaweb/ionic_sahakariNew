@@ -12,7 +12,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
   templateUrl: 'mini-statement.html'
 })
 export class MiniStatementPage implements OnInit {
-  ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
+  ActiveTenantId = StorageService.GetUser().ActiveTenantId;
   constructor(public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
 
   }
@@ -30,7 +30,7 @@ export class MiniStatementPage implements OnInit {
   statementRequest: StatementRequest;
   statementItem: StatementItem;
   miniStatement: MiniStatement;
-  balance: any;
+  balance: string;
   OnGetMiniStatement(AcHeadId, AcSubId) {
     let loading = this.loadingController.create({
       content: 'Loading the Mini Statement..'

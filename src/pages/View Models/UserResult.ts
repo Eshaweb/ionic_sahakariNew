@@ -4,7 +4,7 @@ export class UserResult
     UserId: string;
     UserName: string;
     UniqueKey: string;
-    TenantId: string;
-    TenantName:string;
-    TenantAddress:string;
+    // TenantId: string;
+    // TenantName:string;
+    // TenantAddress:string;
 }

@@ -43,10 +43,11 @@ import { ConstantService } from '../pages/services/Constants';
 import { AutoLogoutService } from '../pages/services/AutoLogOutService';
 import { FundTransferPage } from '../pages/fund-transfer/fund-transfer';
 import { BalanceEnquiryPage } from '../pages/balance-enquiry/balance-enquiry';
-import { BasicPage as TabBasicPage, TabBasicContentPage1,TabBasicContentPage2,TabBasicContentPage3, TabBasicContentPage4, TabBasicContentPage5, TabBasicContentPage6 } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
-//import { BasicPage } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
+import { BasicPage } from '../pages/ViewPlans_Tabs/ViewPlans_Tabs';
 import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
 import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
+import { UISercice } from '../pages/services/UIService';
+import { MyProfilePage } from '../pages/my-profile/my-profile';
 
 @NgModule({
   declarations: [
@@ -68,17 +69,11 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     EnterOTPPage,
     FundTransferPage,
     BalanceEnquiryPage,
-    //BasicPage,
-    TabBasicPage,
-    TabBasicContentPage1,
-    TabBasicContentPage2,
-    TabBasicContentPage3,
-    TabBasicContentPage4,
-    TabBasicContentPage5,
-    TabBasicContentPage6,
+    BasicPage,
     RechargeReportPage,
     PrepaidConfirmPage,
-    FormatTimePipe
+    FormatTimePipe,
+    MyProfilePage
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
@@ -113,16 +108,10 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     EnterOTPPage,
     FundTransferPage,
     BalanceEnquiryPage,
-    //BasicPage,
-    TabBasicPage,
-    TabBasicContentPage1,
-    TabBasicContentPage2,
-    TabBasicContentPage3,
-    TabBasicContentPage4,
-    TabBasicContentPage5,
-    TabBasicContentPage6,
+    BasicPage,
     RechargeReportPage,
-    PrepaidConfirmPage
+    PrepaidConfirmPage,
+    MyProfilePage
   ],
   providers: [AuthGuard,Toast, {
     provide : HTTP_INTERCEPTORS,
@@ -134,6 +123,7 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     StorageService,
     ConstantService,
     AutoLogoutService,
+    UISercice,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

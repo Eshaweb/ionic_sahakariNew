@@ -22,13 +22,14 @@ export class RechargeReportPage implements OnInit {
   digiPartyId: string;
   ActiveBankName: string;
   ActiveTenantId: string;
-  categories: OS[] = [];
+  // categories: OS[] = [];
+  categories: OS;
   constructor(public loadingController: LoadingController, private toastr: ToastrService, private registerService: RegisterService, public navCtrl: NavController, public navParams: NavParams) {
 
   }
   ngOnInit() {
-    this.categories = JSON.parse(StorageService.GetOS());
-    this.ActiveTenantId = JSON.parse(StorageService.GetUser()).ActiveTenantId;
+    this.categories = StorageService.GetOS();
+    this.ActiveTenantId = StorageService.GetUser().ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
     this.digiPartyId = StorageService.GetDigiPartyID();
   }

@@ -14,8 +14,7 @@ export class RechargePage implements OnInit {
   @ViewChild(Navbar) navBar: Navbar;
 
   ActiveBankName: string;
-  categories:OS[]=[];
-  NewCategories:OS[]=[];
+  NewCategories:OS;
   constructor(public constant:ConstantService,public navCtrl: NavController) {
   }
   ionViewDidLoad() {
@@ -27,15 +26,15 @@ export class RechargePage implements OnInit {
    }
   }
   ngOnInit(){
-this.categories=JSON.parse(StorageService.GetOS());
-this.NewCategories=this.categories.filter(function (obj) { return obj.Id === "S1"||obj.Id === "S2"||obj.Id === "S3"||obj.Id === "S5"; });
+var categories=StorageService.GetOS();
+this.NewCategories=categories.filter(function (obj) { return obj.Id === "S1"||obj.Id === "S2"||obj.Id === "S3"||obj.Id === "S5"; });
 
    this.ActiveBankName=StorageService.GetActiveBankName();
   }
-  ParentId: string;
+  //ParentId: string;
   OnOperatorSelection(ParentId){
-    this.ParentId=ParentId;
-    this.navCtrl.push(FavouritesPage, { 'ParentId': this.ParentId });
+    //this.ParentId=ParentId;
+    this.navCtrl.push(FavouritesPage, { 'ParentId': ParentId });
 
   }
   OnReports(){

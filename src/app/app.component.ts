@@ -12,6 +12,7 @@ import { StorageService } from '../pages/services/Storage_Service';
 import { RegisterService } from '../pages/services/app-data.service';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
+import { MyProfilePage } from '../pages/my-profile/my-profile';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class MyApp {
       splashScreen.hide();
 
       //localStorage.clear();
-      
+      //localStorage.removeItem('userToken');
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.digipartyname = StorageService.Getdigipartyname();
@@ -46,10 +47,13 @@ export class MyApp {
         
 
       }
-      else {
+      else if (StorageService.GetUser() != null&&localStorage.getItem('userToken') != null){
         this.rootPage = PagePage;
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.digipartyname = StorageService.Getdigipartyname();
+        }
+        else{
+          this.rootPage=LoginPage;
         }
     });
   }
@@ -73,5 +77,9 @@ export class MyApp {
   goToChangeBank(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(ChangeBankPage);
+  }
+  goToMyProfile(params) {
+    if (!params) params = {};
+    this.navCtrl.setRoot(MyProfilePage);
   }
 }

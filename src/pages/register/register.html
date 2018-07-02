@@ -1,52 +1,36 @@
-
-<ion-content padding id="page13" class="back-image" >
-  <form *ngIf="hidethisform" [formGroup]="formgroup" id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnGetTenants(MobileNo.value)">
-    <!-- <form id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnSubmit(MobileNo.value)"> -->
-      <div class="spacer" style="width:300px;height:217px;" id="register-spacer10"></div>
-      <h5 id="register-heading1" style="color:#DEE1EE;">
-        Enter mobile number to search your bank
-      </h5>
+<ion-content padding id="page13" class="back-image">
+  <form *ngIf="hidethisform" [formGroup]="formgroup1" id="register-form3" #registrationForm="ngForm" (ngSubmit)="OnGetTenants()">
+    <div class="spacer" style="width:300px;height:217px;" id="register-spacer10"></div>
+    <h5 id="register-heading1" style="color:#DEE1EE;">
+      Enter mobile number to search your bank
+    </h5>
     <ion-list id="register-list11">
       <ion-item id="register-input8">
         <ion-label>
           Phone Number
         </ion-label>
-        <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo" placeholder=""></ion-input>
-        <!-- <ion-input type="number" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="order.Id"></ion-input> -->
+        <ion-input formControlName="mobilenum" type="number" placeholder=""></ion-input>
       </ion-item>
-      <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
-        <p style="color:red;"> *MobileNumber is required</p>
-      </ion-item>
+      <!-- <p style="color:black;" *ngIf="mobilenum.hasError('required') && mobilenum.touched">*MobileNumber is required</p> -->
+      <p style="color:darkorange">{{userMessage}}</p>
     </ion-list>
     <button [disabled]="registrationForm.invalid" id="register-button7" ion-button color="positive" block>
       Search Bank
     </button>
-
   </form>
 
-  
-    <!-- <div *ngIf="tenantList">
-    <p style="color: #fff">Click on Account of your wish</p>  
+  <div *ngIf="tenant">
+    <p style="color: #fff">Click on Account of your wish</p>
   </div>
-    <ion-list >
-    <ion-item *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)">
-      <h3>Bank Name: {{ order.Name | json }}</h3>
-      
-      <h4>Branch : {{ order.Address }}</h4>
-    </ion-item>
-  </ion-list> -->
-  <div *ngIf="tenantList">
-    <p style="color: #fff">Click on Account of your wish</p>  
-  </div>
-    <ion-list >
-    <ion-item *ngFor="let order of tenantList" (click)="OnRequestOTP(order.Id)">
-      <ion-thumbnail item-start>
-        <img src={{order.IconHtml}}/>
+  <ion-list>
+    <ion-item *ngFor="let order of tenant" (click)="OnRequestOTP(order.Id)">
+      <!-- <img src={{order.IconHtml}}/> -->
         <!-- <img [src]="order.IconHtml"/> -->
+      <!-- <ion-thumbnail item-start>
         <img src="data:image/png;base64,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…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"
         />
-      </ion-thumbnail>
-      
+      </ion-thumbnail> -->
+
       <h3>{{ order.Name | json }}</h3>
       <h4>{{ order.Address }}</h4>
     </ion-item>
@@ -56,6 +40,24 @@
         {{j}}
     </span>
 </div> -->
+
+<form *ngIf="isForgotPassword" [formGroup]="formgroup2" id="register-form4" #AskingMobNoForOTPForm="ngForm" (ngSubmit)="OnMobNo()">
+  <div class="spacer" style="width:300px;height:217px;" id="register-spacer10"></div>
+  <h5 id="register-heading1" style="color:#DEE1EE;">
+    Enter Registered Mobile Number
+  </h5>
+  <ion-list id="register-list11">
+    <ion-item id="register-input8">
+      <ion-label>
+        Phone Number
+      </ion-label>
+      <ion-input formControlName="mobilenumforOTP" type="number" placeholder=""></ion-input>
+    </ion-item>
+    <!-- <p style="color:black;" *ngIf="mobilenum.hasError('required') && mobilenum.touched">*MobileNumber is required</p> -->
+    
+  </ion-list>
+  <button [disabled]="AskingMobNoForOTPForm.invalid" id="register-button7" ion-button color="positive" block>
+    Send OTP
+  </button>
+</form>
 </ion-content>
-
-

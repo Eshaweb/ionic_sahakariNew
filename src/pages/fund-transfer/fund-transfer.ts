@@ -10,12 +10,15 @@ import { DoFundTransfer } from '../View Models/DoFundTransfer';
 import { FundTransferDone } from '../View Models/FundTransferDone';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { ToastrService } from 'ngx-toastr';
+import { UISercice } from '../services/UIService';
 
 @Component({
   selector: 'page-fund-transfer',
   templateUrl: 'fund-transfer.html'
 })
 export class FundTransferPage implements OnInit{
+  amountMessage: string;
+  mobileMessage: string;
   amount: AbstractControl;
   formgroup2: FormGroup;
   mobilenum: AbstractControl;
@@ -23,24 +26,48 @@ export class FundTransferPage implements OnInit{
  
   
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-    constructor(private toastr: ToastrService,public loadingController: LoadingController,private registerService : RegisterService, public formbuilder:FormBuilder,public navCtrl: NavController) {
+    constructor(private uiService: UISercice, private toastr: ToastrService,public loadingController: LoadingController,private registerService : RegisterService, public formbuilder:FormBuilder,public navCtrl: NavController) {
 
   //StorageService.SetItem('lastAction', Date.now().toString());
     this.formgroup1 = formbuilder.group({
       mobilenum:['',[Validators.required,Validators.minLength(10)]]
     });
     this.mobilenum = this.formgroup1.controls['mobilenum'];
+    const mobileControl = this.formgroup1.get('mobilenum');
+    mobileControl.valueChanges.subscribe(value => this.setErrorMessage(mobileControl));
+    
     this.formgroup2 = formbuilder.group({
       amount:['',[Validators.required,Validators.minLength(1)]]
     });
     this.amount = this.formgroup2.controls['amount'];
-
+    const amountControl = this.formgroup2.get('amount');
+    amountControl.valueChanges.subscribe(value => this.setErrorMessage(amountControl));
   }
+  setErrorMessage(c: AbstractControl): void {
+    this.mobileMessage='';
+    this.amountMessage='';
+       let control = this.uiService.getControlName(c);
+       if ((c.touched || c.dirty) && c.errors) {
+         if (control === 'mobilenum') {
+           this.mobileMessage = Object.keys(c.errors).map(key => this.validationMessages[control + '_' + key]).join(' ');
+         }
+         else if (control === 'amount') {
+          this.amountMessage = Object.keys(c.errors).map(key => this.validationMessages[control + '_' + key]).join(' ');
+        }
+       }
+     }
+     private validationMessages = {
+       mobilenum_required: '*Enter mobile number',
+       mobilenum_minlength: '*Enter 10 Digit Mobile Number',
+
+       amount_required: '*Enter Amount'
+     };
+   
   ShowHide: boolean;
   disablenextwithoutToAccount: boolean;
   disablenextwithoutFromAccount: boolean;
   ActiveBankName: string;
-  ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+  ActiveTenantId=StorageService.GetUser().ActiveTenantId;
   selfCareAC: SelfCareAc;
   SelfCareACs: SelfCareAc;
   ShowManyAccounts: boolean;
@@ -49,9 +76,9 @@ export class FundTransferPage implements OnInit{
     this.ShowHide=true;
     this.disablenextwithoutFromAccount=true;
     this.disablenextwithoutToAccount=true;
-    var ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
+    var ActiveTenantId=StorageService.GetUser().ActiveTenantId;
        this.ActiveBankName=StorageService.GetActiveBankName();
-       this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());    
+      this.SelfCareACs=StorageService.GetSelfCareAc();    
        this.SelfCareAcsBasedOnTenantID=this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB";})       
        this.ShowManyAccounts=true;
   }
@@ -61,7 +88,8 @@ export class FundTransferPage implements OnInit{
   OnFromAccount(AcSubId){
    this.AcSubId=AcSubId;
    this.errormsg=null;
-  this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
+  // this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
+  this.SelfCareACs=StorageService.GetSelfCareAc();
   this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.AcSubId === AcSubId&&obj.AcActId=="#SB"; });
   if(this.selfCareAC==null){
   this.errormsg="Through Pigmy Account Fund can not be transferred";
@@ -74,7 +102,7 @@ export class FundTransferPage implements OnInit{
 
   GetSelfCareAcByTenantID(ActiveTenantId){
     var AcSubId=this.AcSubId; 
-    this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
+    this.SelfCareACs=StorageService.GetSelfCareAc();
     // this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"&&obj.AcSubId===this.AcSubId; });
     this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcSubId===AcSubId; });
     return this.selfCareAC;
@@ -82,14 +110,14 @@ export class FundTransferPage implements OnInit{
   }
   fundTransferRequest: FundTransferRequest;
   fundTransferResponse: FundTransferResponse;
-  OnSearchingAccount(mobno){
+  OnSearchingAccount(){
     let loading = this.loadingController.create({
       content: 'Searching For the Account'
     });
     loading.present();
     this.fundTransferRequest={
       TenantId:this.ActiveTenantId,
-      MobileNo:mobno
+      MobileNo:this.mobilenum.value
     }
     this.registerService.GetFTAccount(this.fundTransferRequest).subscribe((data : any)=>{
       this.fundTransferResponse=data;
@@ -100,9 +128,9 @@ export class FundTransferPage implements OnInit{
  
   Rs: string;
   confirm: FundTransferResponse;
-  OnNext(amnt){
+  OnNext(){
 this.confirm=this.fundTransferResponse;
-this.Rs=amnt;
+this.Rs=this.amount.value;
 this.ShowHide=false;
   }
   showstatus: boolean;
