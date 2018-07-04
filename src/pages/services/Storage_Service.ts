@@ -44,27 +44,31 @@ export class StorageService {
     }
     static GetActiveBankName(): string {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
-        this.Tenants = this.GetTenant();
+        var Tenants = this.GetTenant();
         //let x=Object.assign({},this.Tenants);
-        this.Tenant = this.Tenants.find(function (obj: Tenant) { return obj.Id === ActiveTenantId; });
+        this.Tenant = Tenants.find(function (obj: Tenant) { return obj.Id === ActiveTenantId; });
         return this.Tenant.Name;
     }
     static Getdigipartyname(): string {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
-        this.DigiParties = StorageService.GetDigiParty();
-        this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-        return this.digipartyname = this.digiparty.Name;
+        var DigiParties = StorageService.GetDigiParty();
+        this.digiparty = DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+        return this.digiparty.Name;
     }
-
+    // static GetOSBasedOnParentID(param): OS {
+    //     var GetOSBasedOnParentID=localStorage.getItem("OS("+param+")");
+    //     return this.SelfCareAcsBasedOnTenantID = SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
+    // }
+    
     static GetSelfCareAcsBasedOnTenantID(): SelfCareAc {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
-        this.SelfCareACs = this.GetSelfCareAc();
-        return this.SelfCareAcsBasedOnTenantID = this.SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
+        var SelfCareACs = this.GetSelfCareAc();
+        return this.SelfCareAcsBasedOnTenantID = SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
     }
     static GetDigiPartyID(): string {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
-        this.DigiParties = StorageService.GetDigiParty();
-        this.digiparty = this.DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
+        var DigiParties = StorageService.GetDigiParty();
+        this.digiparty = DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
         return this.digiparty.DigiPartyId;
     }
 

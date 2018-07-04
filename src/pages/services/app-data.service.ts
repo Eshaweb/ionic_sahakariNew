@@ -25,6 +25,8 @@ import { PlanResponse } from '../View Models/PlanResponse';
 import { RRRequest } from '../View Models/RRRequest';
 import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
 import { Tenant } from '../LocalStorageTables/Tenant';
+import { ChangePassword } from '../View Models/ChangePassword';
+import { ChangePasswordResult } from '../View Models/ChangePasswordResult';
 
 @Injectable()
 export class RegisterService {
@@ -63,6 +65,9 @@ export class RegisterService {
         return this.httpclient.post<UserResult>(this.uIHelperService.CallWebAPIUrlNew("/User/SaveMPin"), userPost);
     }
 
+    ChangePassword(changePassword:ChangePassword){
+        return this.httpclient.post<ChangePasswordResult>(this.uIHelperService.CallWebAPIUrlNew("/User/ChangePassword"), changePassword);
+    }
     loginbyHttpClient(userName, password, unique): Observable<TokenParams> {
         var data = "username=" + userName + "&password=" + password + "&unique=" + unique + "&grant_type=password";
         return this.httpclient.post<TokenParams>(this.uIHelperService.CallWebAPIUrl("/token"), data);

@@ -70,7 +70,7 @@
                   <ion-input formControlName="mobilenum" type="text"></ion-input>
                   <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
                 </ion-item>
-                <p style="color:red;" *ngIf="mobilenum.hasError('required') && mobilenum.touched"> *MobileNumber is required</p>
+                <!-- <p style="color:red;" *ngIf="mobilenum.hasError('required') && mobilenum.touched"> *MobileNumber is required</p> -->
                 <p style="color:darkorange;">{{mobileMessage}}</p>
               </ion-list> 
               <button [disabled]="fundtransferForm1.invalid" id="register-button7" ion-button color="positive" block>

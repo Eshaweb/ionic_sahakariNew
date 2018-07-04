@@ -21,7 +21,7 @@
         <ion-input formControlName="password" type="password" placeholder=""></ion-input>
       </ion-item>
       <a style="color:darkorange;" (click)="OnForgot()">Forgot password?</a>
-      <p style="color:red;" *ngIf="password.hasError('required') && password.touched"> *Please Enter Password</p>
+      <!-- <p style="color:red;" *ngIf="password.hasError('required') && password.touched"> *Please Enter Password</p> -->
       <p style="color:darkorange;">{{passwordMessage}}</p>
     </ion-list>
     <div class="spacer" style="height:40px;" id="login-spacer1"></div>
@@ -32,7 +32,5 @@
       Reset Password
     </button> -->
   </form>
-  <!-- <form *ngIf="isForgotten">
-
-  </form> -->
+ 
 </ion-content>

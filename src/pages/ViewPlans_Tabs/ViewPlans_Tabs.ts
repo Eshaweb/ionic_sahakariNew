@@ -21,33 +21,17 @@ export class BasicPage implements OnInit {
   // @ViewChild(Navbar) navBar: Navbar;
   navparams: any;
   planTypes: string[] = ["FTT", "TUP", "LSC", "SMS", "OTR", "RMG"];
-  circleId: string;
-  operatorId: string;
-  // RMG: string;
-  // OTR: string;
-  // SMS: string;
-  // TUP: string;
-  // LSC: string;
-  // FTT: string;
   planResponse: PlanDet;
   isAndroid: boolean = false;
   isButtonEnabled: boolean = false;
   constructor(private viewCtrl: ViewController, private toastr: ToastrService, public constant: ConstantService, private registerService: RegisterService, public loadingController: LoadingController, public navParams: NavParams, public navCtrl: NavController, platform: Platform) {
     this.active_Segmant = "0";
-    // this.FTT = "FullTalkTime";
-    // this.LSC = "LSC";
-    // this.TUP = "TopUp";
-    // this.SMS = "SMS";
-    // this.OTR = "Other";
-    // this.RMG = "Roaming";
     var FTT = "FullTalkTime";
     var LSC = "LSC";
     var TUP = "TopUp";
     var SMS = "SMS";
     var OTR = "Other";
     var RMG = "Roaming";
-    this.operatorId = this.navParams.get('OperatorId');
-    this.circleId = this.navParams.get('CircleId');
     this.navparams = this.navParams.data;
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
@@ -55,18 +39,16 @@ export class BasicPage implements OnInit {
 
     loading.present();
     this.isAndroid = platform.is('android');
-
-    this.operatorId = this.navParams.get('OperatorId');
-    this.circleId = this.navParams.get('CircleId');
     this.navparams = this.navParams.data;
-
-    this.planRequest = {
-      OSId: this.operatorId,
-      CircleId: this.circleId,
+    var operatorId = this.navParams.get('OperatorId');
+    var circleId = this.navParams.get('CircleId');
+    const planRequest = {
+      OSId: operatorId,
+      CircleId: circleId,
       PlanType: this.planTypes[0],
       TenantId: StorageService.GetUser().ActiveTenantId
     }
-    this.registerService.GetPlans(this.planRequest).subscribe((data: any) => {
+    this.registerService.GetPlans(planRequest).subscribe((data: any) => {
       this.planResponse = data;
     }, (error) => {
       this.toastr.error(error.message, 'Error!')
@@ -75,13 +57,11 @@ export class BasicPage implements OnInit {
   }
 
   ActiveBankName: string;
-  planRequest: PlanRequest;
 
   ngOnInit() {
     this.ActiveBankName = StorageService.GetActiveBankName();
   }
 
-  //onSegmentChange(segmentButton: SegmentButton) {
   onSegmentChange(event) {
     // this.slider.slideTo(event.value);
     // this.active_Segmant=event.value.toString();
@@ -89,6 +69,8 @@ export class BasicPage implements OnInit {
     this.slider.slideTo(event);
   }
   slideChanged() {
+    var operatorId = this.navParams.get('OperatorId');
+    var circleId = this.navParams.get('CircleId');
     let currentIndex = this.slider.getActiveIndex();
     this.active_Segmant = currentIndex.toString();
     if (this.active_Segmant == "6") {
@@ -101,13 +83,13 @@ export class BasicPage implements OnInit {
     });
     loading.present();
     this.slider.slideTo(currentIndex);
-    this.planRequest = {
-      OSId: this.operatorId,
-      CircleId: this.circleId,
+    const planRequest = {
+      OSId: operatorId,
+      CircleId: circleId,
       PlanType: this.planTypes[currentIndex],
       TenantId: StorageService.GetUser().ActiveTenantId
     }
-    this.registerService.GetPlans(this.planRequest).subscribe((data: any) => {
+    this.registerService.GetPlans(planRequest).subscribe((data: any) => {
       this.planResponse = data;
     }, (error) => {
       this.toastr.error(error.message, 'Error!')

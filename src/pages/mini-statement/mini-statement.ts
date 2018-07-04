@@ -27,7 +27,6 @@ export class MiniStatementPage implements OnInit {
     this.SelfCareAcsBasedOnTenantID =StorageService.GetSelfCareAcsBasedOnTenantID();
   }
 
-  statementRequest: StatementRequest;
   statementItem: StatementItem;
   miniStatement: MiniStatement;
   balance: string;
@@ -36,12 +35,12 @@ export class MiniStatementPage implements OnInit {
       content: 'Loading the Mini Statement..'
     });
     loading.present();
-    this.statementRequest = {
+    const statementRequest = {
       AcMastId: AcHeadId,
       AcSubId: AcSubId,
       TenantId: this.ActiveTenantId
     }
-    this.registerService.GetStatement(this.statementRequest).subscribe((data: any) => {
+    this.registerService.GetStatement(statementRequest).subscribe((data: any) => {
       this.balance = data;
       this.miniStatement = data;
       this.statementItem = data.StatementItems;

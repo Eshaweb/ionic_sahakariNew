@@ -24,6 +24,7 @@ export class MyApp {
   ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
+  showProfileAndChangeBank: boolean;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
   constructor(private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
     this.event.subscribe('UNAUTHORIZED', () => {
@@ -41,7 +42,8 @@ export class MyApp {
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.digipartyname = StorageService.Getdigipartyname();
-      });
+          this.showProfileAndChangeBank=true;
+        });
       if (StorageService.GetUser() == null) {
         this.rootPage = RegisterPage;
         
@@ -51,9 +53,12 @@ export class MyApp {
         this.rootPage = PagePage;
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.digipartyname = StorageService.Getdigipartyname();
+          this.showProfileAndChangeBank=true;
         }
         else{
           this.rootPage=LoginPage;
+          this.showProfileAndChangeBank=false;
+
         }
     });
   }

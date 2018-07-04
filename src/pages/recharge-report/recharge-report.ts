@@ -19,7 +19,6 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: 'recharge-report.html',
 })
 export class RechargeReportPage implements OnInit {
-  digiPartyId: string;
   ActiveBankName: string;
   ActiveTenantId: string;
   // categories: OS[] = [];
@@ -29,25 +28,24 @@ export class RechargeReportPage implements OnInit {
   }
   ngOnInit() {
     this.categories = StorageService.GetOS();
-    this.ActiveTenantId = StorageService.GetUser().ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
-    this.digiPartyId = StorageService.GetDigiPartyID();
   }
   rRResponse: RRResponse;
-  rRRequest: RRRequest;
 
   ObjChanged(event) {
+    var ActiveTenantId = StorageService.GetUser().ActiveTenantId;
+    var digiPartyId = StorageService.GetDigiPartyID();
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
     loading.present();
-    this.rRRequest = {
-      TenantId: this.ActiveTenantId,
-      DigiPartyId: this.digiPartyId,
+    const rRRequest = {
+      TenantId: ActiveTenantId,
+      DigiPartyId: digiPartyId,
       SelectedType: event,
       Number: 10
     }
-    this.registerService.GetRechargeReport(this.rRRequest).subscribe((data: any) => {
+    this.registerService.GetRechargeReport(rRRequest).subscribe((data: any) => {
       this.rRResponse = data;
 
     }, (error) => {

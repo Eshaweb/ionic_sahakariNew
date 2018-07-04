@@ -9,10 +9,13 @@
     <ion-title *ngIf="ShowIf">
       Password Entry
     </ion-title>
+    <ion-title *ngIf="ShowUserNameAndOldPassword">
+      Change Password 
+    </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding class="back-image" id="page15">
-    <div class="spacer" style="width:300px;height:199px;" id="enterOTP-spacer11"></div>
+    <!-- <div class="spacer" style="width:300px;height:199px;" id="enterOTP-spacer11"></div> -->
     <div *ngIf="HideIf">
   <form [formGroup]="formgroup" id="enterOTP-form4" #enterOTPForm="ngForm" (ngSubmit)="OnSubmit()">
     <ion-list id="enterOTP-list18">
@@ -25,7 +28,7 @@
         <!-- <ion-input type="number" placeholder="" name="OTPNo" #OTPNo="ngModel" [(ngModel)]="order.Id"></ion-input> -->
      
       </ion-item>
-      <p style="color:darkorange;" *ngIf="otp.hasError('required') && otp.touched"> *OTP is required</p>
+      <!-- <p style="color:darkorange;" *ngIf="otp.hasError('required') && otp.touched"> *OTP is required</p> -->
       <p style="color:darkorange;">{{userMessage}}</p>
     </ion-list>
     <div class="spacer" style="height:40px;" id="enterOTP-spacer8"></div>
@@ -41,7 +44,7 @@
   <div *ngIf="ShowIf">
   <!-- <form id="enterOTP-form2" [formGroup]="SavePasswordForm"  #NewPasswordEntryForm="ngForm" (ngSubmit)="OnSavePassword(CPassword.value)"> -->
     <form id="enterOTP-form2" [formGroup]="SavePasswordForm"  #NewPasswordEntryForm="ngForm" (ngSubmit)="OnSavePassword()">
-    <ion-item id="enterOTP-input3">
+      <ion-item id="enterOTP-input3">
       <ion-label floating>
         New Password
       </ion-label>
@@ -70,5 +73,37 @@
     </button>
   </form>
   <div style="color:red;" *ngIf="NewPasswordEntryForm.errors?.notSame"><span>Passwords do not match</span></div>
+</div>
+
+
+<div *ngIf="ShowUserNameAndOldPassword">
+    <form id="enterOTP-form2" [formGroup]="ChangePasswordForm"  #ChangePasswordEntryForm="ngForm" (ngSubmit)="OnChangePassword()">
+      <ion-item id="enterOTP-input3">
+        <ion-label floating>
+          Old Password
+        </ion-label>
+        <ion-input formControlName="oldPassword" type="password" placeholder=""></ion-input>      
+      </ion-item>
+      <p style="color:darkorange;">{{oldPasswordMessage}}</p>
+      <ion-item id="enterOTP-input3">
+      <ion-label floating>
+        New Password
+      </ion-label>
+      <ion-input formControlName="newPassword" type="password" placeholder=""></ion-input>      
+    </ion-item>
+    <p style="color:darkorange;">{{passwordMessage}}</p>
+    <ion-item id="enterOTP-input5">
+      <ion-label floating>
+        Confirm Password
+      </ion-label>
+      <ion-input formControlName="confirmNewpwd" type="password" Equalvalidate="password" placeholder=""></ion-input>
+    </ion-item>
+    <p style="color:darkorange;">{{confirmpasswordMessage}}</p>
+    <a style="color:darkorange;" (click)="OnForgot()">Forgot password?</a>
+    <button [disabled]="ChangePasswordEntryForm.invalid" id="enterOTP-button9" ion-button color="positive" block>
+      Change Password
+    </button>
+  </form>
+  <div style="color:red;" *ngIf="ChangePasswordEntryForm.errors?.notSame"><span>Passwords do not match</span></div>
 </div>
 </ion-content>

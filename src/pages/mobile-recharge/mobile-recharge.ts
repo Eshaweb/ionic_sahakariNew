@@ -29,17 +29,13 @@ import { UISercice } from '../services/UIService';
 export class MobileRechargePage implements OnInit {
   nicknameMessage: string;
   subscriptionIdMessage: string;
-  circleId: AbstractControl;
-  operatorId: AbstractControl;
+
   title: string;
   @ViewChild(Navbar) navBar: Navbar;
   showNavbar: boolean;
-  amount: AbstractControl;
-  subscriptionId: AbstractControl;
-  nickname: AbstractControl;
+
   gender: string;
   formGroup: FormGroup;
-  // ActiveTenantId=JSON.parse(StorageService.GetUser()).ActiveTenantId;
   ActiveTenantId = StorageService.GetUser().ActiveTenantId;
 
 
@@ -52,13 +48,7 @@ export class MobileRechargePage implements OnInit {
       amount: ['', [Validators.required, Validators.minLength(1)]],
       nickname: ['', [Validators.required, Validators.minLength(2)]]
     });
-    //this.selectoperator = this.formgroup.controls['selectoperator'];
-    this.subscriptionId = this.formGroup.controls['subscriptionId'];
-    this.amount = this.formGroup.controls['amount'];
-    this.nickname = this.formGroup.controls['nickname'];
-    this.operatorId = this.formGroup.controls['operatorId'];
-    this.circleId = this.formGroup.controls['circleId'];
-    //this.circleId = this.formGroup.controls['circleId'];
+
     const subscriptionIdControl = this.formGroup.get('subscriptionId');
     subscriptionIdControl.valueChanges.subscribe(value => this.setErrorMessage(subscriptionIdControl));
     const nicknameControl = this.formGroup.get('nickname');
@@ -70,36 +60,40 @@ export class MobileRechargePage implements OnInit {
     this.setBackButtonAction();
   }
   setErrorMessage(c: AbstractControl): void {
+    let subscriptionId = this.formGroup.controls['subscriptionId'];
+    // this.amount = this.formGroup.controls['amount'];
+    let nickname = this.formGroup.controls['nickname'];
+    // this.circleId = this.formGroup.controls['circleId'];
     this.subscriptionIdMessage = '';
     this.nicknameMessage = '';
     let control = this.uiService.getControlName(c);
     if ((c.touched || c.dirty) && c.errors) {
-      if (control === 'subscriptionId' && this.subscriptionId.value != null && (this.ParentId == "S3" || this.ParentId == "S5")) {
+      if (control === 'subscriptionId' && subscriptionId.value != null && (this.ParentId == "S3" || this.ParentId == "S5")) {
         this.subscriptionIdMessage = Object.keys(c.errors).map(key => this.validationMessages[control + '_' + key]).join(' ');
-      if(this.subscriptionId.value.length<10){
-        this.isMobileNoEntered = false;
-      }else{
-        this.isMobileNoEntered = true;
+        if (subscriptionId.value.length < 10) {
+          this.isMobileNoEntered = false;
+        } else {
+          this.isMobileNoEntered = true;
+        }
       }
-      }
-      else if (control === 'subscriptionId' && this.subscriptionId.value != null) {
+      else if (control === 'subscriptionId' && subscriptionId.value != null) {
         this.subscriptionIdMessage = Object.keys(c.errors).map(key => this.validationMessages[control + '_' + key]).join(' ');
-        this.OnMobileNo(this.subscriptionId.value);
+        this.OnMobileNo(subscriptionId.value);
       }
-      else if (control === 'nickname'&& this.nickname.value != null) {
+      else if (control === 'nickname' && nickname.value != null) {
         this.nicknameMessage = Object.keys(c.errors).map(key => this.validationMessages[control + '_' + key]).join(' ');
-        this.onNickName(this.nickname.value);
+        this.onNickName(nickname.value);
       }
     }
     else {
-      if (control === 'subscriptionId' && this.subscriptionId.value != null && (this.ParentId == "S3" || this.ParentId == "S5")) {
+      if (control === 'subscriptionId' && subscriptionId.value != null && (this.ParentId == "S3" || this.ParentId == "S5")) {
         //this.OnMobileNo(this.subscriptionId.value);
       }
-      else if (control === 'subscriptionId' && this.subscriptionId.value != null) {
-        this.OnMobileNo(this.subscriptionId.value);
+      else if (control === 'subscriptionId' && subscriptionId.value != null) {
+        this.OnMobileNo(subscriptionId.value);
       }
-      else if (control === 'nickname'&& this.nickname.value != null) {
-        this.onNickName(this.nickname.value);
+      else if (control === 'nickname' && nickname.value != null) {
+        this.onNickName(nickname.value);
       }
     }
   }
@@ -285,33 +279,9 @@ export class MobileRechargePage implements OnInit {
       SubscriptionId: this.navParams.get('SubscriptionId'),
       Amount: this.navParams.get('Amount'),
       CircleId: this.navParams.get('CircleId')
-      
+
     }
   }
-
-  //favouriteitem: FavouriteItem;
-
-  // resetForm(form?: NgForm) {
-  //   if (form != null)
-  //     form.reset();
-  //   // this.favouriteitem = {
-  //   //   Id: '',
-  //   //   NickName: '',
-  //   //   OperatorId: '',
-  //   //   ParentId: '',
-  //   //   SubscriptionId: '',
-  //   //   CircleId: ''
-  //   // }
-  //   // this.rechargeitem = {
-  //   //   Id: '',
-  //   //   NickName: '',
-  //   //   OperatorId: '',
-  //   //   ParentId: '',
-  //   //   SubscriptionId: '',
-  //   //   Amount: '',
-  //   //   CircleId: ''
-  //   // }
-  // }
 
   existingentry: FavouriteItem;
   duplicateFavourite: FavouriteItem;
@@ -319,161 +289,55 @@ export class MobileRechargePage implements OnInit {
   label: string;
   operator: string;
   favouriteNew: Favourites;
-
-  // OnNext(form: NgForm){
+  
   OnNext() {
-    switch (this.operatorId.value) {
-      case "O1":
-        this.operator = "Airtel";
-        break;
-      case "O2":
-        this.operator = "BSNL";
-        break;
-      case "O3":
-        this.operator = "Vodafone";
-        break;
-      case "O4":
-        this.operator = "Idea";
-        break;
-      case "O5":
-        this.operator = "Jio";
-        break;
-      case "O6":
-        this.operator = "Reliance GSM";
-        break;
-      case "O7":
-        this.operator = "Reliance CDMA";
-        break;
-      case "O8":
-        this.operator = "Tata Indicom";
-        break;
-      case "O9":
-        this.operator = "Tata Docomo";
-        break;
-      case "O10":
-        this.operator = "Telenor";
-        break;
-      case "O11":
-        this.operator = "MTNL";
-        break;
-      case "O12":
-        this.operator = "Aircel";
-        break;
-      case "O13":
-        this.operator = "Videocon";
-        break;
-      case "O14":
-        this.operator = "MTS";
-        break;
-      case "O15":
-        this.operator = "BSNL STV";
-        break;
-      case "O16":
-        this.operator = "Tata Docomo STV";
-        break;
-      case "O17":
-        this.operator = "Telenor STV";
-        break;
-      case "O18":
-        this.operator = "VIDEOCON STV";
-        break;
-      case "O19":
-        this.operator = "MTNL STV";
-        break;
-      case "O20":
-        this.operator = "Airtel";
-        break;
-      case "O21":
-        this.operator = "Idea";
-        break;
-      case "O22":
-        this.operator = "Vodafone";
-        break;
-      case "O23":
-        this.operator = "Reliance GSM";
-        break;
-      case "O24":
-        this.operator = "Reliance CDMA";
-        break;
-      case "O25":
-        this.operator = "Tata Docomo";
-        break;
-      case "O26":
-        this.operator = "Aircel";
-        break;
-      case "O27":
-        this.operator = "MTS";
-        break;
-      case "O28":
-        this.operator = "BSNL";
-        break;
-      case "O29":
-        this.operator = "Dish TV";
-        this.label = "Viewing Card Number";
-        break;
-      case "O30":
-        this.operator = "TATA Sky";
-        this.label = "Registered Mobile Number or Subscriber ID";
-        break;
-      case "O31":
-        this.operator = "Sun TV";
-        this.label = "Smart Card Number";
-        break;
-      case "O32":
-        this.operator = "Videocon D2H TV";
-        this.label = "Subscriber ID";
-        break;
-      case "O33":
-        this.operator = "Reliance Big TV";
-        this.label = "Smart Card Number";
-        break;
-      case "O34":
-        this.operator = "Airtel Digital TV";
-        this.label = "Customer ID";
-        break;
-      default:
-        this.operator = "BESCOM";
-    }
+    let subscriptionId = this.formGroup.controls['subscriptionId'];
+    let amount = this.formGroup.controls['amount'];
+    let nickname = this.formGroup.controls['nickname'];
+    let circleId = this.formGroup.controls['circleId'];
+    let operatorId = this.formGroup.controls['operatorId'];
+    this.operator=this.GetOperatorBasedOnID(operatorId.value);
+
     if (this.Id == null) {
-      
+
       this.rechargeitem = {
         Id: this.guid(),
-        OperatorId: this.operatorId.value,
-        SubscriptionId: this.subscriptionId.value,
+        OperatorId: operatorId.value,
+        SubscriptionId: subscriptionId.value,
         ParentId: this.OSResponseNew[0].ParentId,
-        NickName: this.nickname.value,
-        Amount: this.amount.value,
-        CircleId: this.circleId.value
+        NickName: nickname.value,
+        Amount: amount.value,
+        CircleId: circleId.value
       }
       var favouriteitem = {
         Id: this.guid(),
-        NickName: this.nickname.value,
-        OperatorId: this.operatorId.value,
+        NickName: nickname.value,
+        OperatorId: operatorId.value,
         ParentId: this.OSResponseNew[0].ParentId,
-        SubscriptionId: this.subscriptionId.value,
-        CircleId: this.circleId.value
+        SubscriptionId: subscriptionId.value,
+        CircleId: circleId.value
       }
       switch (this.OSResponseNew[0].ParentId) {
         case "S1":
-          var existingEntries:FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
           break;
         case "S2":
-          var existingEntries:FavouriteItem  = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
           break;
         case "S3":
-          var existingEntries:FavouriteItem  = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
           break;
         case "S4":
-          var existingEntries:FavouriteItem  = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
           break;
         case "S5":
-          var existingEntries:FavouriteItem  = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
           break;
         case "S6":
-          var existingEntries:FavouriteItem  = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
           break;
         default:
-          var existingEntries:FavouriteItem  = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
+          var existingEntries: FavouriteItem = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
       }
       if (existingEntries == null) {
         switch (this.OSResponseNew[0].ParentId) {
@@ -502,13 +366,11 @@ export class MobileRechargePage implements OnInit {
       }
 
       else {
-        var MobileNumber:string = favouriteitem.SubscriptionId;
-        var NickName:string = favouriteitem.NickName;
-        var duplicateFavourite:FavouriteItem = existingEntries.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
-
+        var MobileNumber: string = favouriteitem.SubscriptionId;
+        var NickName: string = favouriteitem.NickName;
+        var duplicateFavourite: FavouriteItem = existingEntries.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
         if (duplicateFavourite == null) {
           existingEntries.push(favouriteitem);
-
           switch (this.OSResponseNew[0].ParentId) {
             case "S1":
               StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1, JSON.stringify(existingEntries));
@@ -531,11 +393,10 @@ export class MobileRechargePage implements OnInit {
             default:
               StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S7, JSON.stringify(existingEntries));
           }
-
         }
         else {
           //No action needed
-          
+
         }
 
       }
@@ -553,7 +414,7 @@ export class MobileRechargePage implements OnInit {
         case "S3":
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
           // this.navCtrl.push(PrepaidConfirmPage, { 'ParentId':"S3",'Operator': this.operator, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S3", 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S3", 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           // this.ShowEntryForm = false;
           // this.showConfirm = true;
           break;
@@ -579,122 +440,122 @@ export class MobileRechargePage implements OnInit {
       }
     }
     else {
-      var MobileNumber: string = this.subscriptionId.value;
-      var NickName: string = this.nickname.value;
+      var MobileNumber: string = subscriptionId.value;
+      var NickName: string = nickname.value;
       var Id = this.Id;
       switch (this.OSResponseNew[0].ParentId) {
         case "S1":
-          var favouriteNew:Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
-          var duplicateFavourite:FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
+          var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
+          var duplicateFavourite: FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
           favouriteNew = favouriteNew.filter(function (obj) {
             return obj.Id !== Id;
           });
-          duplicateFavourite= {
+          duplicateFavourite = {
             Id: this.Id,
-            NickName: this.nickname.value,
-            OperatorId: this.operatorId.value,
+            NickName: nickname.value,
+            OperatorId: operatorId.value,
             ParentId: this.OSResponseNew[0].ParentId,
-            SubscriptionId: this.subscriptionId.value,
-            CircleId: this.circleId.value
+            SubscriptionId: subscriptionId.value,
+            CircleId: circleId.value
           }
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S2":
-          var favouriteNew:Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
-          var duplicateFavourite:FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
+          var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
+          var duplicateFavourite: FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
           favouriteNew = favouriteNew.filter(function (obj) {
             return obj.Id !== Id;
           });
           duplicateFavourite = {
             Id: this.Id,
-            NickName: this.nickname.value,
-            OperatorId: this.operatorId.value,
+            NickName: nickname.value,
+            OperatorId: operatorId.value,
             ParentId: this.OSResponseNew[0].ParentId,
-            SubscriptionId: this.subscriptionId.value,
-            CircleId: this.circleId.value
+            SubscriptionId: subscriptionId.value,
+            CircleId: circleId.value
           }
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S2, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S3":
-          var favouriteNew:Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
-          var duplicateFavourite:FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
+          var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
+          var duplicateFavourite: FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
           favouriteNew = favouriteNew.filter(function (obj) {
             return obj.Id !== Id;
           });
           duplicateFavourite = {
             Id: this.Id,
-            NickName: this.nickname.value,
-            OperatorId: this.operatorId.value,
+            NickName: nickname.value,
+            OperatorId: operatorId.value,
             ParentId: this.OSResponseNew[0].ParentId,
-            SubscriptionId: this.subscriptionId.value,
-            CircleId: this.circleId.value
+            SubscriptionId: subscriptionId.value,
+            CircleId: circleId.value
           }
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S3, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S4":
-          var favouriteNew:Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
-          var duplicateFavourite:FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
+          var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
+          var duplicateFavourite: FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
           favouriteNew = favouriteNew.filter(function (obj) {
             return obj.Id !== Id;
           });
           duplicateFavourite = {
             Id: this.Id,
-            NickName: this.nickname.value,
-            OperatorId: this.operatorId.value,
+            NickName: nickname.value,
+            OperatorId: operatorId.value,
             ParentId: this.OSResponseNew[0].ParentId,
-            SubscriptionId: this.subscriptionId.value,
-            CircleId: this.circleId.value
+            SubscriptionId: subscriptionId.value,
+            CircleId: circleId.value
           }
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S4, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S5":
-          var favouriteNew:Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
-          var duplicateFavourite:FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
+          var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
+          var duplicateFavourite: FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
           favouriteNew = favouriteNew.filter(function (obj) {
             return obj.Id !== Id;
           });
           duplicateFavourite = {
             Id: this.Id,
-            NickName: this.nickname.value,
-            OperatorId: this.operatorId.value,
+            NickName: nickname.value,
+            OperatorId: operatorId.value,
             ParentId: this.OSResponseNew[0].ParentId,
-            SubscriptionId: this.subscriptionId.value,
-            CircleId: this.circleId.value
+            SubscriptionId: subscriptionId.value,
+            CircleId: circleId.value
           }
           favouriteNew.push(duplicateFavourite);
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S5, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S6":
-          var favouriteNew :Favourites= JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
-          var duplicateFavourite:FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
+          var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
+          var duplicateFavourite: FavouriteItem = favouriteNew.find(function (obj) { return obj.SubscriptionId === MobileNumber || obj.NickName === NickName; });
           favouriteNew = favouriteNew.filter(function (obj) {
             return obj.Id !== Id;
           });
           duplicateFavourite = {
             Id: this.Id,
-            NickName: this.nickname.value,
-            OperatorId: this.operatorId.value,
+            NickName: nickname.value,
+            OperatorId: operatorId.value,
             ParentId: this.OSResponseNew[0].ParentId,
-            SubscriptionId: this.subscriptionId.value,
-            CircleId: this.circleId.value
+            SubscriptionId: subscriptionId.value,
+            CircleId: circleId.value
           }
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S6, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': this.subscriptionId.value, 'Amount': this.amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         default:
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
@@ -702,6 +563,54 @@ export class MobileRechargePage implements OnInit {
     }
     //above code is for updating or adding row for FavouriteKey local storage.
 
+  }
+
+
+  GetOperatorBasedOnID(operatorId): string {
+    switch (this.ParentId) {
+      case "S1": var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S1)"));
+        break;
+      case "S2": var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S2)"));
+        break;
+      case "S3": var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S3)"));
+        break;
+      case "S4": var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S4)"));
+        break;
+      case "S5": var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S5)"));
+        break;
+      case "S6": var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S6)"));
+        break;
+      default: var ListOfOperatorsBasedOnParentID = JSON.parse(StorageService.GetItem("OS(S7)"));
+        break;
+    }
+    var SingleOperatorDetailBasedOnId = ListOfOperatorsBasedOnParentID.find(function (obj) { return obj.Id === operatorId; });
+    switch (SingleOperatorDetailBasedOnId.Operator) {
+      case "Dish TV":
+        this.label = "Viewing Card Number";
+        this.osid="29";
+        break;
+      case "TATA Sky":
+        this.label = "Registered Mobile Number or Subscriber ID";
+        this.osid="30";
+        break;
+      case "Sun TV":
+        this.label = "Smart Card Number";
+        this.osid="31";
+        break;
+      case "Videocon D2H TV":
+        this.label = "Subscriber ID";
+        this.osid="32";
+        break;
+      case "Reliance Big TV":
+        this.label = "Smart Card Number";
+        this.osid="33";
+        break;
+      default:
+        this.label = "Customer ID";
+        this.osid="34";
+        break;
+    }
+    return SingleOperatorDetailBasedOnId.Operator;
   }
   StatesOfIndia = [
     { Id: "1", Name: "Delhi/NCR" },
@@ -767,7 +676,7 @@ export class MobileRechargePage implements OnInit {
       this.registerService.GetOperaterCircle(operaterCircleQuery).subscribe((data: any) => {
         this.operaterCircle = data;
         var operator = this.operaterCircle.operator;
-        this.operatorname = this.operaterCircle.operator;
+        //this.operatorname = this.operaterCircle.operator;
         this.singleosrespone = this.OSResponseNew.find(function (obj) { return obj.Operator === operator; });
         this.oid = this.singleosrespone.Id;
         this.rechargeitem.OperatorId = this.oid;
@@ -784,168 +693,26 @@ export class MobileRechargePage implements OnInit {
     }
   }
 
-  // DigiParties: DigiParty;
-  // digiparty: DigiParty;
-
   GetDigiPartyandPartyMastID(ActiveTenantId) {
-    // this.DigiParties=JSON.parse(StorageService.GetDigiParty());
     const DigiParties = StorageService.GetDigiParty();
     const digiparty = DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
     return digiparty;
   }
-  // selfCareAC: SelfCareAc;
-  // SelfCareACs: SelfCareAc;
+
   GetSelfCareAcByTenantID(ActiveTenantId) {
-    // this.SelfCareACs=JSON.parse(StorageService.GetSelfCareAc());
     const SelfCareACs = StorageService.GetSelfCareAc();
     const selfCareAC = SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId && obj.AcActId == "#SB"; });
     return selfCareAC;
   }
   OperatorChanged(event) {
     this.isOperatorEnabled = true;
-    switch (event) {
-      case "O1":
-        this.operatorname = "Airtel";
-        break;
-      case "O2":
-        this.operatorname = "BSNL";
-        break;
-      case "O3":
-        this.operatorname = "Vodafone";
-        break;
-      case "O4":
-        this.operatorname = "Idea";
-        break;
-      case "O5":
-        this.operatorname = "Jio";
-        break;
-      case "O6":
-        this.operatorname = "Reliance GSM";
-        break;
-      case "O7":
-        this.operatorname = "Reliance CDMA";
-        break;
-      case "O8":
-        this.operatorname = "Tata Indicom";
-        break;
-      case "O9":
-        this.operatorname = "Tata Docomo";
-        break;
-      case "O10":
-        this.operatorname = "Telenor";
-        break;
-      case "O11":
-        this.operatorname = "MTNL";
-        break;
-      case "O12":
-        this.operatorname = "Aircel";
-        break;
-      case "O13":
-        this.operatorname = "Videocon";
-        break;
-      case "O14":
-        this.operatorname = "MTS";
-        break;
-      case "O15":
-        this.operatorname = "BSNL STV";
-        break;
-      case "O16":
-        this.operatorname = "Tata Docomo STV";
-        break;
-      case "O17":
-        this.operatorname = "Telenor STV";
-        break;
-      case "O18":
-        this.operatorname = "VIDEOCON STV";
-        break;
-      case "O19":
-        this.operatorname = "MTNL STV";
-        break;
-      case "O20":
-        this.operatorname = "Airtel";
-        break;
-      case "O21":
-        this.operatorname = "Idea";
-        break;
-      case "O22":
-        this.operatorname = "Vodafone";
-        break;
-      case "O23":
-        this.operatorname = "Reliance GSM";
-        break;
-      case "O24":
-        this.operatorname = "Reliance CDMA";
-        break;
-      case "O25":
-        this.operatorname = "Tata Docomo";
-        break;
-      case "O26":
-        this.operatorname = "Aircel";
-        break;
-      case "O27":
-        this.operatorname = "MTS";
-        break;
-      case "O28":
-        this.operatorname = "BSNL";
-        break;
-      case "O29":
-        this.label = "Viewing Card Number";
-        this.osid = "O29";
-        break;
-      case "O30":
-        this.label = "Registered Mobile Number or Subscriber ID";
-        this.osid = "O30";
-        break;
-      case "O31":
-        this.label = "Smart Card Number";
-        this.osid = "O31"
-        break;
-      case "O32":
-        this.label = "Subscriber ID";
-        this.osid = "O32"
-        break;
-      case "O33":
-        this.label = "Smart Card Number";
-        this.osid = "O33";
-        break;
-      case "O35":
-        this.osid = "O35";
-        break;
-      default:
-        this.label = "Customer ID";
-    }
+    //this.operatorname=this.GetOperatorBasedOnID(event);
   }
 
   ObjChanged(event) {
     this.ShowLabel = false;
     this.isOperatorEnabled = true;
-    switch (event) {
-      case "O29":
-        this.label = "Viewing Card Number";
-        this.osid = "O29";
-        break;
-      case "O30":
-        this.label = "Registered Mobile Number or Subscriber ID";
-        this.osid = "O30";
-        break;
-      case "O31":
-        this.label = "Smart Card Number";
-        this.osid = "O31"
-        break;
-      case "O32":
-        this.label = "Subscriber ID";
-        this.osid = "O32"
-        break;
-      case "O33":
-        this.label = "Smart Card Number";
-        this.osid = "O33";
-        break;
-      case "O35":
-        this.osid = "O35";
-        break;
-      default:
-        this.label = "Customer ID";
-    }
+    this.GetOperatorBasedOnID(event);
   }
   OnGoBack() {
     this.navCtrl.setRoot(PagePage);
@@ -1024,36 +791,38 @@ export class MobileRechargePage implements OnInit {
     }
   }
   OnSubscriberID(value) {
-    if(value.length<10){
+    if (value.length < 10) {
       this.isMobileNoEntered = false;
-    }else{
+    } else {
       this.isMobileNoEntered = true;
     }
   }
   onAmount(event) {
-    // this.isAmountEntered = true;
-    // this.isButtonEnabled = true;
-    if (this.amount.value.length < 1) {
+
+    if (this.formGroup.controls['amount'].value.length < 1) {
       this.isAmountEntered = false;
-    this.isButtonEnabled = false;
-    }else{
+      this.isButtonEnabled = false;
+    } else {
       this.isAmountEntered = true;
-    this.isButtonEnabled = true;
+      this.isButtonEnabled = true;
     }
   }
   onNickName(event) {
-    if (this.nickname.value.length < 2) {
+    if (this.formGroup.controls['nickname'].value.length < 2) {
       this.isNickNameEntered = false;
-    }else{
+    } else {
       this.isNickNameEntered = true;
-    }   
+    }
   }
-  // OnViewPlans(subscriptionId, operatorId, circleId, nname) {
   OnViewPlans() {
+    let subscriptionId = this.formGroup.controls['subscriptionId'];
+    let nickname = this.formGroup.controls['nickname'];
+    let circleId = this.formGroup.controls['circleId'];
+    let operatorId = this.formGroup.controls['operatorId'];
     this.showConfirm = false;
     //this.navCtrl.push(BasicPage, { 'OperatorId':operatorId,'ParentId':this.ParentId});
     // this.navCtrl.push(BasicPage, { 'OperatorId': operatorId, 'CircleId': circleId, 'ParentId': this.ParentId, 'SubscriptionId': subscriptionId, 'nname': nname });
-    this.navCtrl.push(BasicPage, { 'OperatorId': this.operatorId.value, 'CircleId': this.circleId.value, 'ParentId': this.ParentId, 'SubscriptionId': this.subscriptionId.value, 'nname': this.nickname.value });
+    this.navCtrl.push(BasicPage, { 'OperatorId': operatorId.value, 'CircleId': circleId.value, 'ParentId': this.ParentId, 'SubscriptionId': subscriptionId.value, 'nname': nickname.value });
 
   }
   //rechargeModel: RechargeModel;
@@ -1066,10 +835,6 @@ export class MobileRechargePage implements OnInit {
       content: 'Recharging...'
     });
     loading.present();
-    //  var  DigiPartyId=JSON.parse(StorageService.GetDigiParty()).DigiPartyId;
-    //  var PartyMastId=JSON.parse(StorageService.GetDigiParty()).PartyMastId;
-    var DigiPartyId = StorageService.GetDigiParty().DigiPartyId;
-    var PartyMastId = StorageService.GetDigiParty().PartyMastId;
     switch (this.OSResponseNew[0].ParentId) {
       case "S1":
         this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1)).OperatorId;
@@ -1093,7 +858,7 @@ export class MobileRechargePage implements OnInit {
         this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7)).OperatorId;
     }
     //this.OperatorId=JSON.parse(StorageService.GetItem("Favourite")).OperatorId;
-    var rechargeModel:RechargeModel = {
+    var rechargeModel: RechargeModel = {
       TenantId: this.ActiveTenantId,
       DigiPartyId: this.GetDigiPartyandPartyMastID(this.ActiveTenantId).DigiPartyId,
       PartyMastId: this.GetDigiPartyandPartyMastID(this.ActiveTenantId).PartyMastId,
@@ -1102,9 +867,9 @@ export class MobileRechargePage implements OnInit {
       // Amount: this.rechargeitem.Amount,
       // OperatorId: this.rechargeitem.OperatorId,
       // SubscriptionId: this.rechargeitem.SubscriptionId,
-      Amount: this.amount.value,
-      OperatorId: this.operatorId.value,
-      SubscriptionId: this.subscriptionId.value,
+      Amount: this.formGroup.controls['amount'].value,
+      OperatorId: this.formGroup.controls['operatorId'].value,
+      SubscriptionId: this.formGroup.controls['subscriptionId'].value,
       LocId: this.GetSelfCareAcByTenantID(this.ActiveTenantId).LocId
     }
     this.registerService.PostRecharge(rechargeModel).subscribe((data: any) => {
@@ -1112,15 +877,11 @@ export class MobileRechargePage implements OnInit {
       this.showConfirm = false;
       this.toastr.success('Recharge is successful with ' + this.tranResponse.StatusCode, 'Success!');
       this.showSuccess = true;
-
-      //},(err) => {console.log(err)});
-      //},(error) => {this.toastr.error(error.error.ExceptionMessage, 'Error!')
+      loading.dismiss();
     }, (error) => {
       this.toastr.error(error.message, 'Error!')
-
+      loading.dismiss();
     });
-
-    loading.dismiss();
   }
 
 

@@ -11,7 +11,6 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class BalanceEnquiryPage implements OnInit {
 
-    ActiveTenantId = StorageService.GetUser().ActiveTenantId;
     constructor(public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
     }
     ActiveBankName: string;
@@ -24,23 +23,22 @@ export class BalanceEnquiryPage implements OnInit {
         this.ActiveBankName = StorageService.GetActiveBankName();
         this.SelfCareAcsBasedOnTenantID = StorageService.GetSelfCareAcsBasedOnTenantID();
     }
-    statementRequest: StatementRequest;
     balance: string;
     OnGetAccountBalance(AcHeadId, AcSubId) {
         let loading = this.loadingController.create({
             content: 'Loading the Account Balance..'
         });
         loading.present();
-        this.statementRequest = {
+        var statementRequest = {
             AcMastId: AcHeadId,
             AcSubId: AcSubId,
-            TenantId: this.ActiveTenantId
+            TenantId: StorageService.GetUser().ActiveTenantId
         }
-        this.registerService.GetAccountBalance(this.statementRequest).subscribe((data: any) => {
+        this.registerService.GetAccountBalance(statementRequest).subscribe((data: any) => {
             this.balance = data;
+            loading.dismiss();
         });
         this.ShowHide = false;
         this.HideMsg = false;
-        loading.dismiss();
     }
 }

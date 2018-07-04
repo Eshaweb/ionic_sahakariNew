@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, Events, LoadingController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { RegisterService } from '../services/app-data.service';
 import { Tenant } from '../LocalStorageTables/Tenant';
@@ -25,146 +25,96 @@ const idle = new Idle()
   //.do(() => { this.navCtrl.setRoot(LoginPage);})  //Need to call LoginPage
   .start();
 
-
-
 @Component({
   selector: 'page-change-bank',
   templateUrl: 'change-bank.html'
 })
 export class ChangeBankPage implements OnInit {
-
-  singleDigiParty: DigiParty;
   tenants: Tenant;
-
+  ActiveTenantId: string;
   // constructor(private autoLogoutService: AutoLogoutService,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
-  constructor(private toastrService: ToastrService, private events: Events, private registerService: RegisterService, public navCtrl: NavController) {
+  constructor(public loadingController: LoadingController, private toastrService: ToastrService, private events: Events, private registerService: RegisterService, public navCtrl: NavController) {
 
   }
   tenant: Tenant;
   ActiveBankName: string;
   Active: number;
   ngOnInit() {
-    this.resetForm();
-    var ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-    this.Active = +ActiveTenantId;
+    let loading = this.loadingController.create({
+      content: 'Please wait till we get the Registered Banks'
+    });
+    loading.present();
+    this.ActiveTenantId = StorageService.GetUser().ActiveTenantId;
     //StorageService.SetItem('lastAction', Date.now().toString());
-    this.mobno = StorageService.GetUser().UserName;
+    let mobno = StorageService.GetUser().UserName;
     this.tenants = StorageService.GetTenant();
-    this.tenant = this.tenants.find(function (obj) { return obj.Id === ActiveTenantId; });
+    this.tenant = this.tenants.find(function (obj) { return obj.Id === StorageService.GetUser().ActiveTenantId});
     this.ActiveBankName = this.tenant.Name;
-
-    this.registerService.GetTenantsByMobile(this.mobno).subscribe((data: any) => {
-      this.addedTenantRecord = StorageService.GetTenant();
-      this.tenantList = data;    //got tenantlist from server
-      var tenlist = data;
-      this.tenantList.Id = data[0].Id;
-      StorageService.SetTenant(JSON.stringify(this.tenantList));  //Works, But not as of reqment
-      if (this.tenants.length < tenlist.length) {
-        for (var i = 0; i < tenlist.length; i++) {
-          this.OnAddBankSelection(tenlist[i].Id);
+    this.registerService.GetTenantsByMobile(mobno).subscribe((data: any) => {
+      let tenantList = data;    //got tenantlist from server
+      StorageService.SetTenant(JSON.stringify(tenantList)); //Works, But not as of reqment
+      if (this.tenants.length < tenantList.length) {
+        for (var i = 0; i < tenantList.length; i++) {
+          this.OnAddBankSelection(tenantList[i].Id);
         }
       }
-
+      this.tenants = StorageService.GetTenant();
     });
-
+    loading.dismiss();
   }
   tenantList: Tenant;
   filterByString(tenantlist, ActiveTenantId) {
     return this.tenantList.filter(e => e.Id == ActiveTenantId);
   }
-  mobno: string;
-  //showHide:boolean;
-  addedTenantRecord: Tenant;
-  //selectboxoptions: Tenant;
-  //Options: boolean;
-  //NoOptions: boolean;
-  // OnAddBank(){
-  //   this.mobno=JSON.parse(StorageService.GetUser()).UserName;
-  //   this.showHide=true;   
-  //   this.regService.GetTenantsByMobile(this.mobno).subscribe((data : any)=>{
-  //     this.addedTenantRecord=JSON.parse(StorageService.GetTenant());
-  //     this.tenantList = data;    //got tenantlist from server
-  //     this.tenantList.Id=data[0].Id;
-  //     this.selectboxoptions={
-  //       Id:"",
-  //       Name:"",
-  //       Address:"",
-  //       IconHtml:""
-  //     };
-
-  //     this.selectboxoptions=this.tenantList.filter(o=>!this.addedTenantRecord.find(o2=>o.Id===o2.Id));
-  //     this.Options=true;
-  //     if(this.selectboxoptions.length==0){
-  //       this.Options=false;
-  //       this.NoOptions=true;
-  //     }
-  //     else{
-  //       this.NoOptions=false;
-  //     }
-  //   },(error) => {this.toastr.error(error.message, 'Error!')
-
-  // });
-  // }
-  addBankRequest: AddBankRequest;
-  singletenant: Tenant;
-  addBankResponse: AddBankResponse;
-  user: User;
-  digiParty: DigiParty;
-  singleSelfCareAC: SelfCareAc;
   OnAddBankSelection(Id) {
-    this.mobno = StorageService.GetUser().UserName;
-    this.singletenant = this.tenantList.filter(function (obj) { return obj.Id === Id; });
-    this.addBankRequest = {
+    const addBankRequest = {
       TenantId: Id,
       MobileNo: StorageService.GetUser().UserName
     }
-    this.registerService.AddBank(this.addBankRequest).subscribe((data: any) => {
-      this.addBankResponse = data;
-      this.tenant = {
-        Id: this.addBankResponse.Tenant.Id,
-        Name: this.addBankResponse.Tenant.Name,
-        Address: this.addBankResponse.Tenant.Address,
-        IconHtml: this.addBankResponse.Tenant.IconHtml
+    this.registerService.AddBank(addBankRequest).subscribe((data: any) => {
+      const tenant = {
+        Id: data.Tenant.Id,
+        Name: data.Tenant.Name,
+        Address: data.Tenant.Address,
+        IconHtml: data.Tenant.IconHtml
       }
-      // var existingTenant=JSON.parse(StorageService.GetTenant());
-      // existingTenant.push(this.tenant);
-      // StorageService.SetTenant(JSON.stringify(existingTenant));
 
       this.tenants = StorageService.GetTenant();
 
-      this.digiParty = {
-        Id: this.addBankResponse.DigiPartyId,
-        DigiPartyId: this.addBankResponse.DigiPartyId,
-        PartyMastId: this.addBankResponse.PartyMastId,
-        MobileNo: this.addBankResponse.MobileNo,
-        TenantId: this.addBankResponse.TenantId,  //ActiveTenantId
-        Name: this.addBankResponse.Name
+      const digiParty = {
+        Id: data.DigiPartyId,
+        DigiPartyId: data.DigiPartyId,
+        PartyMastId: data.PartyMastId,
+        MobileNo: data.MobileNo,
+        TenantId: data.TenantId,  //ActiveTenantId
+        Name: data.Name
       }
       var existingDigiParty = StorageService.GetDigiParty();
-      var TenantId = this.tenant.Id;
-      this.singleDigiParty = existingDigiParty.find(function (obj) { return obj.TenantId === TenantId; });
-      if (this.singleDigiParty == null) {
-        existingDigiParty.push(this.digiParty);
+      var TenantId = tenant.Id;
+      let singleDigiParty = existingDigiParty.find(function (obj) { return obj.TenantId === TenantId; });
+      if (singleDigiParty == null) {
+        existingDigiParty.push(digiParty);
         StorageService.SetDigiParty(JSON.stringify(existingDigiParty));
       }
 
       var existingSelfCareAcs = StorageService.GetSelfCareAc();
-      this.singleSelfCareAC = existingSelfCareAcs.find(function (obj) { return obj.TenantId === TenantId; });
-      if (this.singleSelfCareAC == null) {
-        this.singleSelfCareAC = {
-          AcActId: this.addBankResponse.SelfCareAcs[0].AcActId,
-          AcHeadId: this.addBankResponse.SelfCareAcs[0].AcHeadId,
-          AcNo: this.addBankResponse.SelfCareAcs[0].AcNo,
-          AcSubId: this.addBankResponse.SelfCareAcs[0].AcSubId,
-          HeadName: this.addBankResponse.SelfCareAcs[0].HeadName,
-          LocId: this.addBankResponse.SelfCareAcs[0].LocId,
-          TenantId: this.addBankResponse.SelfCareAcs[0].TenantId
+      
+      let singleSelfCareAC = existingSelfCareAcs.filter(function (obj) { return obj.TenantId === TenantId; });
+      if (singleSelfCareAC.length == 0) {  
+        for(var j=0;j<data.SelfCareAcs.length;j++){
+          const singleSelfCareAC = {
+                AcActId: data.SelfCareAcs[j].AcActId,
+                AcHeadId: data.SelfCareAcs[j].AcHeadId,
+                AcNo: data.SelfCareAcs[j].AcNo,
+                AcSubId: data.SelfCareAcs[j].AcSubId,
+                HeadName: data.SelfCareAcs[j].HeadName,
+                LocId: data.SelfCareAcs[j].LocId,
+                TenantId: data.SelfCareAcs[j].TenantId
+              }
+              existingSelfCareAcs.push(singleSelfCareAC);
         }
-        existingSelfCareAcs.push(this.singleSelfCareAC);
-        //existingSelfCareAcs.push(this.addbankresponse.SelfCareAcs);
         StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs));
       }
-      //this.OnAddBank();
       this.events.publish('REFRESH_DIGIPARTYNAME');
     }, (error) => {
       this.toastrService.error(error.message, 'Error!')
@@ -172,55 +122,15 @@ export class ChangeBankPage implements OnInit {
     });
 
   }
-
+  user: User;
   OnSelect(order) {
-    this.mobno = StorageService.GetUser().UserName;
-    this.user = StorageService.GetUser();
-    this.user.ActiveTenantId = order.Id;
-    StorageService.SetUser(JSON.stringify(this.user));
+    var user = StorageService.GetUser();
+    user.ActiveTenantId = order.Id;
+    StorageService.SetUser(JSON.stringify(user));
     var ActiveTenantId = StorageService.GetUser().ActiveTenantId;
     this.Active = +ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
     this.navCtrl.setRoot(PagePage);
     this.events.publish('REFRESH_DIGIPARTYNAME');
-
   }
-
-  // OnRemove(Id){
-  // this.Tenants=JSON.parse(StorageService.GetTenant());
-  // this.Tenants=this.Tenants.filter(function( obj ) {
-  //   return obj.Id !== Id;
-  // });
-  // StorageService.SetTenant(JSON.stringify(this.Tenants));  
-
-  // var existingDigiParty=JSON.parse(StorageService.GetDigiParty());
-  // existingDigiParty=existingDigiParty.filter(function( obj ) {
-  //   return obj.TenantId !== Id;
-  // });
-  // StorageService.SetDigiParty(JSON.stringify(existingDigiParty));  
-
-  // var existingSelfCareAcs=JSON.parse(StorageService.GetSelfCareAc());
-  // existingSelfCareAcs=existingSelfCareAcs.filter(function( obj ) {
-  //   return obj.TenantId !== Id;
-  // });
-  // StorageService.SetSelfCareAc(JSON.stringify(existingSelfCareAcs))
-  // //this.OnAddBank();
-  // }
-
-  reqForDigiParty: RequestForDigiParty;
-  resetForm(form?: NgForm) {
-    if (form != null)
-      form.reset();
-    this.reqForDigiParty = {
-      TenantId: '',
-      MobileNo: ''
-    }
-    this.tenant = {
-      Id: '',
-      Name: '',
-      Address: '',
-      IconHtml: ''
-    }
-  }
-
 }

@@ -29,7 +29,6 @@ export class FavouritesPage implements OnInit {
   ActiveBankName: string;
   ParentId: string;
   favourites: Favourites;
-  nkname: string;
 
   ngOnInit() {
     this.ParentId = this.navParams.get('ParentId');
@@ -62,23 +61,16 @@ export class FavouritesPage implements OnInit {
         this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
     }
 
-    if (StorageService.GetItem("Favourite") != null) {
-      this.nkname = JSON.parse(StorageService.GetItem("Favourite")).NickName;
-    }
+    // if (StorageService.GetItem("Favourite") != null) {
+    //   this.nkname = JSON.parse(StorageService.GetItem("Favourite")).NickName;
+    // }
   }
-  OnNewRecharge(ParentId) {
-    // this.navCtrl.push(SelectOperatorPage,{ 'Id': this.Id });
+  OnNewRecharge() {
     this.navCtrl.push(MobileRechargePage, { 'ParentId': this.ParentId });
   }
 
   OnNickName(order) {
-    let loading = this.loadingController.create({
-      content: 'Recharging...'
-    });
-    loading.present();
-    // this.navCtrl.push(SelectOperatorPage,{ 'Id': this.Id });
-    this.navCtrl.push(MobileRechargePage, { 'OperatorId': order.OperatorId, 'ParentId': order.ParentId, 'Id': order.Id, 'nname': order.NickName, 'SubscriptionId': order.SubscriptionId, 'CircleId': order.CircleId });
-    loading.dismiss();
+      this.navCtrl.push(MobileRechargePage, { 'OperatorId': order.OperatorId, 'ParentId': order.ParentId, 'Id': order.Id, 'nname': order.NickName, 'SubscriptionId': order.SubscriptionId, 'CircleId': order.CircleId });
   }
 
   OnDelete(order) {

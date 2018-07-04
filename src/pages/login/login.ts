@@ -22,15 +22,13 @@ import { RegisterPage } from '../register/register';
 export class LoginPage implements OnInit {
   passwordMessage: string;
   formGroup: FormGroup;
-  password: AbstractControl;
 
   constructor(private uiService: UISercice, public navParams: NavParams, private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
     this.formGroup = formbuilder.group({
       password: ['', [Validators.required, Validators.minLength(4)]]
     });
-    this.password = this.formGroup.controls['password'];
-    const userControl = this.formGroup.get('password');
-    userControl.valueChanges.subscribe(value => this.setErrorMessage(userControl));
+    const passwordControl = this.formGroup.get('password');
+    passwordControl.valueChanges.subscribe(value => this.setErrorMessage(passwordControl));
   }
   setErrorMessage(c: AbstractControl): void {
     this.passwordMessage = '';
@@ -52,10 +50,7 @@ export class LoginPage implements OnInit {
     }
 
   }
-  SelfCareAcs: SelfCareAc;
-  DigiParties: DigiParty;
-  tenant: Tenant;
-  tenants: Tenant;
+  
   userName = StorageService.GetUser().UserName;
   uniqueKey = StorageService.GetUser().UniqueKey;
   OnLogin() {
@@ -64,11 +59,9 @@ export class LoginPage implements OnInit {
     });
     loading.present();
     var OS = StorageService.GetOS();
-    var SelfCareAc = StorageService.GetSelfCareAc();
-    this.registerService.loginbyHttpClient(this.userName, this.password.value, this.uniqueKey).subscribe((data: any) => {
-      var userTokenData = data;
-      this.registerService.userToken = userTokenData.access_token;
-      StorageService.SetItem('userToken', userTokenData.access_token);
+    this.registerService.loginbyHttpClient(this.userName, this.formGroup.get('password').value, this.uniqueKey).subscribe((data: any) => {
+      this.registerService.userToken = data.access_token;
+      StorageService.SetItem('userToken', data.access_token);
 
       if (OS == null) {
         let loading = this.loadingController.create({
@@ -82,14 +75,10 @@ export class LoginPage implements OnInit {
         loading.dismiss();
       }
 
-      // var ActiveTenantId=this.regService.TenantId;
-      this.tenants = StorageService.GetTenant();
-      // this.Tenant= this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      this.DigiParties = StorageService.GetDigiParty();
-      // this.DigiParty=this.DigiParties.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      this.SelfCareAcs = StorageService.GetSelfCareAc();
-      // this.SelfCareAc=this.SelfCareAcs.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      if (this.tenants == null || this.DigiParties == null || this.SelfCareAcs == null) {
+      let tenants = StorageService.GetTenant();
+      let DigiParties = StorageService.GetDigiParty();
+      let SelfCareAcs = StorageService.GetSelfCareAc();
+      if (tenants == null || DigiParties == null || SelfCareAcs == null) {
         let loadingnew = this.loadingController.create({
           content: 'Syncing Accounts'
         });
@@ -97,66 +86,53 @@ export class LoginPage implements OnInit {
         this.callservices();
         loadingnew.dismiss();
       }
-      // if(this.Tenant==null||this.DigiParty==null||this.SelfCareAc==null){
-      //      this.callservices();
-      //   }
-      //  setTimeout(() => {
-      //  loading.dismiss();
-      //  }, 2000);
-
-      //this.navCtrl.push(PagePage);
+      else{
+        this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
+      }
     }, (error) => {
       this.toastrService.error(error.error.ExceptionMessage, 'Error!')
-
     });
-    //this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
     loading.dismiss();
   }
 
-  addBankResponse: AddBankResponse;
-  addBankRequest: AddBankRequest;
-  digiParty: DigiParty;
-
   callservices() {
-    this.addBankRequest = {
+    var addBankRequest = {
       TenantId: StorageService.GetUser().ActiveTenantId,
       MobileNo: StorageService.GetUser().UserName
     }
-    this.registerService.AddBank(this.addBankRequest).subscribe((data: any) => {
-      this.addBankResponse = data;
+    this.registerService.AddBank(addBankRequest).subscribe((data: any) => {
 
-      this.tenant = {
-        Id: this.addBankResponse.Tenant.Id,
-        Name: this.addBankResponse.Tenant.Name,
-        Address: this.addBankResponse.Tenant.Address,
-        IconHtml: this.addBankResponse.Tenant.IconHtml
+      var tenant = {
+        Id: data.Tenant.Id,
+        Name: data.Tenant.Name,
+        Address: data.Tenant.Address,
+        IconHtml: data.Tenant.IconHtml
       }
-      StorageService.SetTenant(JSON.stringify([this.tenant]));
+      StorageService.SetTenant(JSON.stringify([tenant]));
 
-      this.digiParty = {
-        Id: this.addBankResponse.DigiPartyId,
-        DigiPartyId: this.addBankResponse.DigiPartyId,
-        PartyMastId: this.addBankResponse.PartyMastId,
-        MobileNo: this.addBankResponse.MobileNo,
-        TenantId: this.addBankResponse.TenantId,  //ActiveTenantId
-        Name: this.addBankResponse.Name
+      var digiParty = {
+        Id: data.DigiPartyId,
+        DigiPartyId: data.DigiPartyId,
+        PartyMastId: data.PartyMastId,
+        MobileNo: data.MobileNo,
+        TenantId: data.TenantId,  //ActiveTenantId
+        Name: data.Name
       }
-      StorageService.SetDigiParty(JSON.stringify([this.digiParty]));
+      StorageService.SetDigiParty(JSON.stringify([digiParty]));
 
-      StorageService.SetSelfCareAc(JSON.stringify(this.addBankResponse.SelfCareAcs));
+      StorageService.SetSelfCareAc(JSON.stringify(data.SelfCareAcs));
 
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
     }, (error) => {
       this.toastrService.error(error.error.ExceptionMessage, 'Error!')
-
     });
 
   }
-  isForgotten: boolean=false;
-  OnForgot(){
-    this.isForgotten=true;
-    this.navCtrl.push(RegisterPage,{'isForgotPassword':this.isForgotten});
+  isForgotten: boolean = false;
+  OnForgot() {
+    this.isForgotten = true;
+    this.navCtrl.push(RegisterPage, { 'isForgotPassword': this.isForgotten });
   }
   goToHome(params) {
     if (!params) params = {};

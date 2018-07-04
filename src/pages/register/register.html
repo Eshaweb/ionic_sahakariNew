@@ -12,7 +12,7 @@
         <ion-input formControlName="mobilenum" type="number" placeholder=""></ion-input>
       </ion-item>
       <!-- <p style="color:black;" *ngIf="mobilenum.hasError('required') && mobilenum.touched">*MobileNumber is required</p> -->
-      <p style="color:darkorange">{{userMessage}}</p>
+      <p style="color:darkorange">{{mobilenum_Message}}</p>
     </ion-list>
     <button [disabled]="registrationForm.invalid" id="register-button7" ion-button color="positive" block>
       Search Bank
@@ -53,8 +53,8 @@
       </ion-label>
       <ion-input formControlName="mobilenumforOTP" type="number" placeholder=""></ion-input>
     </ion-item>
-    <!-- <p style="color:black;" *ngIf="mobilenum.hasError('required') && mobilenum.touched">*MobileNumber is required</p> -->
-    
+    <p style="color:darkorange">{{mobilenumforOTP_Message}}</p>
+
   </ion-list>
   <button [disabled]="AskingMobNoForOTPForm.invalid" id="register-button7" ion-button color="positive" block>
     Send OTP
