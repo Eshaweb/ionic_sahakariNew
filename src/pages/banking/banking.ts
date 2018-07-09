@@ -10,27 +10,27 @@ import { MiniStatementPage } from '../mini-statement/mini-statement';
   selector: 'page-banking',
   templateUrl: 'banking.html'
 })
-export class BankingPage implements OnInit{
+export class BankingPage implements OnInit {
   ActiveBankName: string;
   // constructor(public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-    constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController) {
 
-  //StorageService.SetItem('lastAction', Date.now().toString());
+    //StorageService.SetItem('lastAction', Date.now().toString());
 
   }
 
-  ngOnInit(){
-       this.ActiveBankName=StorageService.GetActiveBankName();
+  ngOnInit() {
+    this.ActiveBankName = StorageService.GetActiveBankName();
   }
-  OnFundTransfer(){
+  OnFundTransfer() {
     this.navCtrl.push(FundTransferPage);
   }
-  
-  OnBalanceEnquiry(){
+
+  OnBalanceEnquiry() {
     this.navCtrl.push(BalanceEnquiryPage);
   }
 
-  OnMiniStatement(){
+  OnMiniStatement() {
     this.navCtrl.push(MiniStatementPage);
   }
 }
