@@ -1,9 +1,11 @@
+import { Device } from '@ionic-native/device';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { Toast } from '@ionic-native/toast';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import {TranslateService} from '@ngx-translate/core';
 //import { environment } from '../environments/environment';
 
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -38,6 +40,9 @@ import { AuthInterceptor } from '../pages/auth/auth.interceptor';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { StorageService } from '../pages/services/Storage_Service';
+
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 //import { IonicPageModule } from 'ionic-angular';
 import { ConstantService } from '../pages/services/Constants';
 import { AutoLogoutService } from '../pages/services/AutoLogOutService';
@@ -89,6 +94,13 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
       positionClass: 'toast-top-center',
       preventDuplicates: true,
     }),
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: (HttpLoaderFactory),
+          deps: [HttpClient]
+      }
+  }),
     IonicModule.forRoot(MyApp),
     RouterModule.forRoot(appRoutes),
     //environment.production ? ServiceWorkerModule.register('ngsw-worker.js') : []
@@ -124,7 +136,7 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
     RechargeReportPage,
     PrepaidConfirmPage
   ],
-  providers: [AuthGuard,Toast, {
+  providers: [AuthGuard,Toast,Device, {
     provide : HTTP_INTERCEPTORS,
     useClass : AuthInterceptor,
     multi : true
@@ -140,3 +152,7 @@ import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
   ]
 })
 export class AppModule {}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}

@@ -5,6 +5,8 @@ import { StorageService } from '../services/Storage_Service';
 import { Favourites } from '../LocalStorageTables/Favourites';
 import { ConstantService } from '../services/Constants';
 import { RechargePage } from '../recharge/recharge';
+import { Device } from '@ionic-native/device';
+
 
 @Component({
   selector: 'page-favourites',
@@ -14,9 +16,13 @@ export class FavouritesPage implements OnInit{
   title: string;
   @ViewChild(Navbar) navBar: Navbar;
 
-  constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
+  public platformType:any;
+  public versionType:any;
 
-  }
+   constructor(public device: Device,public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
+  //  constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
+
+    }
   ionViewDidLoad() {
     this.setBackButtonAction()
 }
@@ -34,7 +40,9 @@ setBackButtonAction(){
 ngOnInit(){
   this.ParentId=this.navParams.get('ParentId');
   this.ActiveBankName=StorageService.GetActiveBankName();  
-     
+  this.platformType = this.device.platform;
+    this.versionType = this.device.version;
+   
      switch (this.ParentId) {
     case "S1":
     this.favourites=JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));      

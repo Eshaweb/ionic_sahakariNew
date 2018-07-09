@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, Nav, Events } from 'ionic-angular';
+import {TranslateService} from '@ngx-translate/core';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MobileRechargePage } from '../pages/mobile-recharge/mobile-recharge';
@@ -24,7 +25,7 @@ export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
-  constructor(private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
+  constructor(private translate: TranslateService,private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
     this.event.subscribe('UNAUTHORIZED', () => {
       this.navCtrl.push(LoginPage);
     });
@@ -34,7 +35,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-
+      translate.setDefaultLang('ka');
       //localStorage.clear();
       
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
@@ -53,7 +54,10 @@ export class MyApp {
         }
     });
   }
-
+  changeLanguage(language:string)
+  {
+    this.translate.use(language);
+  }
   goToPage(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(PagePage);

@@ -73,7 +73,7 @@
       <div *ngIf="prepaid">
       <ion-item id="mobileRecharge-input4">
         <ion-label floating>
-          Mobile No
+          {{'recharge.mobile no' | translate}}
         </ion-label>
         <!-- <ion-input type="text" placeholder="" name="SubscriptionId" #SubscriptionId="ngModel" [(ngModel)]="rechargeitem.SubscriptionId" (ngModelChange)="OnMobileNo($event)" maxlength="10"></ion-input> -->
         <!-- <ion-input type="text" placeholder="" name="SubscriptionId" #SubscriptionId="ngModel" [(ngModel)]="rechargeitem.SubscriptionId" (change)="OnMobileNo($event.target.value)" maxlength="10"></ion-input>      -->
@@ -84,7 +84,7 @@
       </div>
       </ion-item>
       <ion-item id="mobileRecharge-select1">
-        <ion-label>Operator</ion-label>
+        <ion-label>{{'recharge.operator' | translate}}</ion-label>
           <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" (ngModelChange)="OperatorChanged($event)">
             <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
         </ion-select>
@@ -107,15 +107,15 @@
     <div *ngIf="postpaid">
       <ion-item id="mobileRecharge-input4">
         <ion-label floating>
-          Mobile No
+          {{'recharge.mobile no' | translate}}
         </ion-label>
         <ion-input type="text" placeholder="" name="SubscriptionId" #SubscriptionId="ngModel" [(ngModel)]="rechargeitem.SubscriptionId" (keyup)="OnMobileNo($event.target.value)" maxlength="10"></ion-input>     
         <div *ngIf="showerrortext">
-        <p style="color:red;">Please Enter 10 Digits of Registered Mobile No</p>
+        <p style="color:red;">{{'recharge.registered monile no' | translate}}</p>
       </div>
       </ion-item>
       <ion-item id="mobileRecharge-select1">
-        <ion-label>Operator</ion-label>
+        <ion-label>{{'recharge.operator' | translate}}</ion-label>
           <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" (ngModelChange)="OperatorChanged($event)">
             <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
         </ion-select>
@@ -139,7 +139,7 @@
           </ion-item>
         <ion-item id="mobileRecharge-input4">
           <ion-label *ngIf="ShowLabel" floating>
-            Subsriber ID
+            {{'recharge.subscriber id' | translate}}
           </ion-label>
           <ion-label floating>
            {{label}}
@@ -150,7 +150,7 @@
       </div>
       <div *ngIf="ElectricityConsumerNo">
           <ion-item id="mobileRecharge-select1">
-              <ion-label>Operator</ion-label>
+              <ion-label>{{'recharge.operator' | translate}}</ion-label>
               <!-- <ion-select id="mobileRecharge-input3" interface="popover" formControlName="mobno" #selectoperator ngModel name="selectoperator" (ngModelChange)="ObjChanged($event)"> -->
                 <ion-select id="mobileRecharge-input3" interface="popover" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" name="OperatorId" (ngModelChange)="ObjChanged($event)">
                 <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
@@ -158,7 +158,7 @@
           </ion-item>
           <ion-item id="mobileRecharge-input4">
             <ion-label floating>
-              Consumer Number
+              {{'recharge.consumer no' | translate}}
             </ion-label>
             <ion-input type="text" placeholder="" name="SubscriptionId" #SubscriptionId="ngModel" [(ngModel)]="rechargeitem.SubscriptionId" (keyup)="OnSubscriberID($event.target.value)"></ion-input>
             <!-- <ion-input type="text" placeholder="" formControlName="mobno" #MobileNo ngModel name="MobileNo"></ion-input> -->
@@ -166,7 +166,7 @@
         </div>
       <ion-item id="mobileRecharge-input6">
         <ion-label floating>
-          Amount
+          {{'recharge.amount' | translate}}
         </ion-label>
         <ion-input type="text" placeholder="" name="Amount" #Amount="ngModel" [(ngModel)]="rechargeitem.Amount" (keyup)="onAmount($event)" minlength="4"></ion-input>
         <button *ngIf="prepaid" ion-button clear item-end (click)="OnViewPlans(rechargeitem.SubscriptionId,rechargeitem.OperatorId,rechargeitem.CircleId,rechargeitem.NickName)" type="button" [disabled]="!isStateEnabled||!isOperatorEnabled">View Plans</button>
@@ -191,7 +191,7 @@
       <!-- <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isStateEnabled||!isOperatorEnabled"> -->
         <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled">
           <!-- <button id="mobileRecharge-button3" ion-button color="positive" block> -->
-          Next
+            {{'recharge.continue' | translate}}
       </button>
   </form>
     <button ion-button clear item-centre (click)="OnGoBack()">GoBack</button>       
