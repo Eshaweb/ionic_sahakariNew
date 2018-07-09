@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { OS } from '../View Models/OS';
 import { StorageService } from '../services/Storage_Service';
 import { RegisterService } from '../services/app-data.service';
@@ -23,7 +23,7 @@ export class RechargeReportPage implements OnInit {
   ActiveTenantId: string;
   // categories: OS[] = [];
   categories: OS;
-  constructor(public loadingController: LoadingController, private toastr: ToastrService, private registerService: RegisterService, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private alertCtrl: AlertController, public loadingController: LoadingController, private toastr: ToastrService, private registerService: RegisterService, public navCtrl: NavController, public navParams: NavParams) {
 
   }
   ngOnInit() {
@@ -49,7 +49,13 @@ export class RechargeReportPage implements OnInit {
       this.rRResponse = data;
 
     }, (error) => {
-      this.toastr.error(error.message, 'Error!')
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
     });
     loading.dismiss();
   }

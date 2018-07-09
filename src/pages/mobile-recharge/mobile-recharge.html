@@ -137,12 +137,9 @@
           : While we support most recharges, we request you to verify with your operator once before proceding
         </p>
       </div>
-        <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled">
+        <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isStateEnabled||!isOperatorEnabled||!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled">
           Next
       </button>
   </form>
     <button ion-button clear item-centre (click)="OnGoBack()">GoBack</button>       
-<div *ngIf="showSuccess">
-<h1>Recharge is Successful...</h1>
-</div>
 </ion-content>

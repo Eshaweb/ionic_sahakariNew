@@ -20,33 +20,26 @@
       <div *ngIf="balance">
   <div class="spacer" style="width:300px;height:21px;" id="miniStatement-spacer3"></div>
   <ion-list id="miniStatement-list9">
-     <ion-item color="none" id="miniStatement-list-item42">
-      Account Balance :{{balance.Amount}}
+     <ion-item color="none" id="miniStatement-list-item42" *ngIf="(balance.Amount)<0" style="color: rebeccapurple">
+      Account Balance : {{balance.Amount|currency:'INR'}} Debit
     </ion-item>
-  </ion-list>
-  <div class="spacer" style="width:300px;height:21px;" id="miniStatement-spacer4"></div>
-  
+    <ion-item color="none" id="miniStatement-list-item42" *ngIf="(balance.Amount)>0" style="color: rebeccapurple">
+      Account Balance : {{balance.Amount|currency:'INR'}} Credit
+    </ion-item>
+  </ion-list>  
   <ion-card id="miniStatement-card22" *ngFor="let order of statementItem">
       <ion-list id="miniStatement-list10">
 
-
-       </ion-list>
-       
-      <ion-list >
-
       <ion-item color="none" id="miniStatement-list-item46">
-        {{order.Dt|date:'mediumDate'}}
-        <ion-note item-end>
-          Credited : {{order.Dr}}
+        <ion-note item-start>
+          <p>{{order.Dt|date:'dd/MM/yyyy'}}</p>
+         <p *ngIf="(order.Cr)==0" style="color: red">Debited : {{order.Dr|currency:'INR'}}</p>
+         <p *ngIf="(order.Dr)==0" style="color: green;">Credited : {{order.Cr|currency:'INR'}}</p>
+          <p style="margin-top:0px;color:#000000;">
+              Remark: {{order.Remark}}
+            </p>
           </ion-note>
       </ion-item>
-      <ion-item id="miniStatement-list-item-container6">
-        <div id="miniStatement-markdown7" class="show-list-numbers-and-dots">
-          <p style="margin-top:0px;color:#000000;">
-            Remark: {{order.Remark}}
-          </p>
-        </div>
-         </ion-item>
     </ion-list>
   
   </ion-card>

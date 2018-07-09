@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, Navbar, ViewController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Navbar, ViewController, AlertController } from 'ionic-angular';
 import { RegisterService } from '../services/app-data.service';
 import { StorageService } from '../services/Storage_Service';
 import { OSRequest } from '../View Models/OSRequest';
@@ -22,6 +22,7 @@ import { FavouritesPage } from '../favourites/favourites';
 import { PrepaidConfirmPage } from '../prepaid-confirm/prepaid-confirm';
 import { PagePage } from '../page/page';
 import { UISercice } from '../services/UIService';
+import { delay } from 'rxjs/operator/delay';
 @Component({
   selector: 'page-mobile-recharge',
   templateUrl: 'mobile-recharge.html'
@@ -39,7 +40,7 @@ export class MobileRechargePage implements OnInit {
   ActiveTenantId = StorageService.GetUser().ActiveTenantId;
 
 
-  constructor(private uiService: UISercice, public viewCtrl: ViewController, private toastr: ToastrService, public constant: ConstantService, private registerService: RegisterService, public loadingController: LoadingController, public navParams: NavParams, public navCtrl: NavController, public formbuilder: FormBuilder) {
+  constructor(private alertCtrl: AlertController, private uiService: UISercice, public viewCtrl: ViewController, private toastr: ToastrService, public constant: ConstantService, private registerService: RegisterService, public loadingController: LoadingController, public navParams: NavParams, public navCtrl: NavController, public formbuilder: FormBuilder) {
     this.formGroup = formbuilder.group({
       //selectoperator:['',[Validators.required,Validators.minLength(2)]],
       subscriptionId: ['', [Validators.required, Validators.minLength(10)]],
@@ -204,6 +205,7 @@ export class MobileRechargePage implements OnInit {
         this.DTHNo = this.rechargeitem.SubscriptionId;
         this.title = "DTH RECHARGE";
         this.ShowLabel = true;
+        this.isStateEnabled = true;
         this.isOperatorEnabled = true;
         this.isNickNameEntered = true;
         this.isMobileNoEntered = true;
@@ -225,6 +227,7 @@ export class MobileRechargePage implements OnInit {
         this.rechargeitem = this.favourites.find(function (obj) { return obj.Id === PId; });
         this.ElectricityConsumerNo = this.rechargeitem.SubscriptionId;
         this.title = "ELECTRICITY BILL";
+        this.isStateEnabled = true;
         this.isOperatorEnabled = true;
         this.isNickNameEntered = true;
         this.isMobileNoEntered = true;
@@ -247,29 +250,38 @@ export class MobileRechargePage implements OnInit {
     }
     this.registerService.GetOperators(oSRequest).subscribe((data: any) => {
       this.OSResponseNew = data;
+      var OSResponseNew = data;
 
-      switch (this.OSResponseNew[0].ParentId) {
+      switch (OSResponseNew[0].ParentId) {
         case "S1":
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S1, JSON.stringify(this.OSResponseNew));
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S1, JSON.stringify(OSResponseNew));
           break;
         case "S2":
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S2, JSON.stringify(this.OSResponseNew))
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S2, JSON.stringify(OSResponseNew))
           break;
         case "S3":
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S3, JSON.stringify(this.OSResponseNew))
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S3, JSON.stringify(OSResponseNew))
           break;
         case "S4":
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S4, JSON.stringify(this.OSResponseNew))
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S4, JSON.stringify(OSResponseNew))
           break;
         case "S5":
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S5, JSON.stringify(this.OSResponseNew))
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S5, JSON.stringify(OSResponseNew))
           break;
         case "S6":
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S6, JSON.stringify(this.OSResponseNew))
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S6, JSON.stringify(OSResponseNew))
           break;
         default:
-          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S7, JSON.stringify(this.OSResponseNew))
+          StorageService.SetItem(this.constant.osBasedOnParentId.OS_S7, JSON.stringify(OSResponseNew))
       }
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
     });
     this.rechargeitem = {
       Id: '',
@@ -403,30 +415,30 @@ export class MobileRechargePage implements OnInit {
       switch (this.OSResponseNew[0].ParentId) {
         case "S1":
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S1", 'Operator': this.operator, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S1", 'Operator': this.operator, 'OperatorId':operatorId.value,'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
           break;
         case "S2":
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S2", 'Operator': this.operator, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S2", 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
           // this.ShowEntryForm = false;
           // this.showConfirm = true;
           break;
         case "S3":
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
           // this.navCtrl.push(PrepaidConfirmPage, { 'ParentId':"S3",'Operator': this.operator, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S3", 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S3", 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           // this.ShowEntryForm = false;
           // this.showConfirm = true;
           break;
         case "S4":
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S4", 'Operator': this.operator, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S4", 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
           // this.ShowEntryForm = false;
           // this.showConfirm = true;
           break;
         case "S5":
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S5", 'Operator': this.operator, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': "S5", 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': this.rechargeitem.SubscriptionId, 'Amount': this.rechargeitem.Amount });
           // this.ShowEntryForm = false;
           // this.showConfirm = true;
           break;
@@ -461,7 +473,7 @@ export class MobileRechargePage implements OnInit {
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'OperatorId':operatorId.value,'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S2":
           var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
@@ -480,7 +492,7 @@ export class MobileRechargePage implements OnInit {
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S2, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S3":
           var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
@@ -499,7 +511,7 @@ export class MobileRechargePage implements OnInit {
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S3, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S4":
           var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
@@ -518,7 +530,7 @@ export class MobileRechargePage implements OnInit {
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S4, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S5":
           var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
@@ -536,7 +548,7 @@ export class MobileRechargePage implements OnInit {
           }
           favouriteNew.push(duplicateFavourite);
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S5, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         case "S6":
           var favouriteNew: Favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
@@ -555,7 +567,7 @@ export class MobileRechargePage implements OnInit {
           favouriteNew.push(duplicateFavourite);
 
           StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S6, JSON.stringify(favouriteNew));
-          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
+          this.navCtrl.push(PrepaidConfirmPage, { 'ParentId': this.OSResponseNew[0].ParentId, 'Operator': this.operator, 'OperatorId':operatorId.value, 'SubscriptionId': subscriptionId.value, 'Amount': amount.value });
           break;
         default:
           this.favouriteNew = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
@@ -675,21 +687,39 @@ export class MobileRechargePage implements OnInit {
       }
       this.registerService.GetOperaterCircle(operaterCircleQuery).subscribe((data: any) => {
         this.operaterCircle = data;
-        var operator = this.operaterCircle.operator;
+        
+        if(data.ResponseMessage==null){
+          var operator = this.operaterCircle.operator;
         //this.operatorname = this.operaterCircle.operator;
-        this.singleosrespone = this.OSResponseNew.find(function (obj) { return obj.Operator === operator; });
+        const OSResponseNew=this.OSResponseNew;
+        this.singleosrespone = OSResponseNew.find(function (obj) { return obj.Operator === operator; });
         this.oid = this.singleosrespone.Id;
         this.rechargeitem.OperatorId = this.oid;
+        //setTimeout(()=>{ this.rechargeitem.OperatorId = this.oid; }, 8000);
 
         var circle = this.operaterCircle.circle;
         this.statename = this.operaterCircle.circle;
         this.singleState = this.StatesOfIndia.find(function (obj) { return obj.Name === circle })
         this.sid = this.singleState.Id;
         this.rechargeitem.CircleId = this.sid;
+        this.isStateEnabled = true;
+        this.isOperatorEnabled = true;
+        this.isMobileNoEntered = true;
+        }else{
+          this.isStateEnabled = false;
+          this.isOperatorEnabled = false;
+          this.isMobileNoEntered = true;
+        }
+      }, (error) => {
+        this.toastr.error(error.message, 'Error!');
+        var alert = this.alertCtrl.create({
+          title: "Error Message",
+          subTitle: error.message,
+          buttons: ['OK']
+        });
+        alert.present();        
       });
-      this.isStateEnabled = true;
-      this.isOperatorEnabled = true;
-      this.isMobileNoEntered = true;
+     
     }
   }
 
@@ -712,7 +742,9 @@ export class MobileRechargePage implements OnInit {
   ObjChanged(event) {
     this.ShowLabel = false;
     this.isOperatorEnabled = true;
-    this.GetOperatorBasedOnID(event);
+    if(event!=null){
+      this.GetOperatorBasedOnID(event);
+    }
   }
   OnGoBack() {
     this.navCtrl.setRoot(PagePage);
@@ -795,6 +827,8 @@ export class MobileRechargePage implements OnInit {
       this.isMobileNoEntered = false;
     } else {
       this.isMobileNoEntered = true;
+      this.isOperatorEnabled = true;
+      this.isStateEnabled = true;
     }
   }
   onAmount(event) {
@@ -825,65 +859,7 @@ export class MobileRechargePage implements OnInit {
     this.navCtrl.push(BasicPage, { 'OperatorId': operatorId.value, 'CircleId': circleId.value, 'ParentId': this.ParentId, 'SubscriptionId': subscriptionId.value, 'nname': nickname.value });
 
   }
-  //rechargeModel: RechargeModel;
-  tranResponse: TranResponse;
-  showSuccess: boolean;
-  OperatorId: string;
-
-  OnConfirm() {
-    let loading = this.loadingController.create({
-      content: 'Recharging...'
-    });
-    loading.present();
-    switch (this.OSResponseNew[0].ParentId) {
-      case "S1":
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1)).OperatorId;
-        break;
-      case "S2":
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2)).OperatorId;
-        break;
-      case "S3":
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3)).OperatorId;
-        break;
-      case "S4":
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4)).OperatorId;
-        break;
-      case "S5":
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5)).OperatorId;
-        break;
-      case "S6":
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6)).OperatorId;
-        break;
-      default:
-        this.OperatorId = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7)).OperatorId;
-    }
-    //this.OperatorId=JSON.parse(StorageService.GetItem("Favourite")).OperatorId;
-    var rechargeModel: RechargeModel = {
-      TenantId: this.ActiveTenantId,
-      DigiPartyId: this.GetDigiPartyandPartyMastID(this.ActiveTenantId).DigiPartyId,
-      PartyMastId: this.GetDigiPartyandPartyMastID(this.ActiveTenantId).PartyMastId,
-      AcMastId: this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcHeadId,
-      AcSubId: this.GetSelfCareAcByTenantID(this.ActiveTenantId).AcSubId,
-      // Amount: this.rechargeitem.Amount,
-      // OperatorId: this.rechargeitem.OperatorId,
-      // SubscriptionId: this.rechargeitem.SubscriptionId,
-      Amount: this.formGroup.controls['amount'].value,
-      OperatorId: this.formGroup.controls['operatorId'].value,
-      SubscriptionId: this.formGroup.controls['subscriptionId'].value,
-      LocId: this.GetSelfCareAcByTenantID(this.ActiveTenantId).LocId
-    }
-    this.registerService.PostRecharge(rechargeModel).subscribe((data: any) => {
-      this.tranResponse = data;
-      this.showConfirm = false;
-      this.toastr.success('Recharge is successful with ' + this.tranResponse.StatusCode, 'Success!');
-      this.showSuccess = true;
-      loading.dismiss();
-    }, (error) => {
-      this.toastr.error(error.message, 'Error!')
-      loading.dismiss();
-    });
-  }
-
+  
 
   guid() {
     function s4() {

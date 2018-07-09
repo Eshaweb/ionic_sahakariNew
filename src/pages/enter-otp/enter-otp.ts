@@ -1,5 +1,5 @@
 import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { LoadingController, NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
@@ -33,7 +33,7 @@ export class EnterOTPPage implements OnInit {
   mobilenoMessage: string;
   oldPasswordMessage: string;
   isForgotten: boolean;
-  constructor(private uiService: UISercice, private toastrService: ToastrService, public navParams: NavParams, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private registerService: RegisterService) {
+  constructor(private alertCtrl: AlertController, private uiService: UISercice, private toastrService: ToastrService, public navParams: NavParams, public loadingController: LoadingController, private fb: FormBuilder, public navCtrl: NavController, private registerService: RegisterService) {
     this.formgroup = this.fb.group({
       otp: ['', [Validators.required, Validators.minLength(4)]]
     });
@@ -187,7 +187,14 @@ export class EnterOTPPage implements OnInit {
         this.toastrService.error("OTP is Invalid", 'Error!')
         this.formgroup.get('otp').reset();
       }
-    })
+    }, (error) => {
+      this.toastrService.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();    });
     loading.dismiss();
   }
 
@@ -206,8 +213,14 @@ export class EnterOTPPage implements OnInit {
       this.toastrService.success('OTP Sent to ' + data.MobileNo + ' with Reference No. ' + data.OTPRefNo, 'Success!');
       loading.dismiss();
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
-    });
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
+        });
   }
 
   OnSavePassword() {
@@ -241,8 +254,13 @@ export class EnterOTPPage implements OnInit {
       loading.dismiss();
 
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
-
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
     });
 
   }
@@ -265,11 +283,18 @@ export class EnterOTPPage implements OnInit {
       }
       else {
         this.toastrService.success('Please login with the New Password', 'Success!');
+        alert("Please login with the New Password");
         this.navCtrl.push(LoginPage);
       }
       loading.dismiss();
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
 
     });
 

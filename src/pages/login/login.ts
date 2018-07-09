@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, NavParams } from 'ionic-angular';
+import { NavController, LoadingController, NavParams, AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
@@ -23,7 +23,7 @@ export class LoginPage implements OnInit {
   passwordMessage: string;
   formGroup: FormGroup;
 
-  constructor(private uiService: UISercice, public navParams: NavParams, private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
+  constructor(private alertCtrl: AlertController, private uiService: UISercice, public navParams: NavParams, private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
     this.formGroup = formbuilder.group({
       password: ['', [Validators.required, Validators.minLength(4)]]
     });
@@ -50,7 +50,7 @@ export class LoginPage implements OnInit {
     }
 
   }
-  
+
   userName = StorageService.GetUser().UserName;
   uniqueKey = StorageService.GetUser().UniqueKey;
   OnLogin() {
@@ -71,8 +71,19 @@ export class LoginPage implements OnInit {
         this.registerService.GetServices().subscribe((data: any) => {
           var oS = JSON.stringify(data);
           StorageService.SetOS(oS);
+          loading.dismiss();
+        }, (error) => {
+          this.toastrService.error(error.message, 'Error!');
+          loading.dismiss();
+          var alert = this.alertCtrl.create({
+            title: "Error Message",
+            subTitle: error.message,
+            buttons: ['OK']
+          });
+          alert.present();
+
         });
-        loading.dismiss();
+
       }
 
       let tenants = StorageService.GetTenant();
@@ -86,13 +97,14 @@ export class LoginPage implements OnInit {
         this.callservices();
         loadingnew.dismiss();
       }
-      else{
+      else {
         this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
       }
+      loading.dismiss();
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      loading.dismiss();
     });
-    loading.dismiss();
   }
 
   callservices() {
@@ -125,7 +137,13 @@ export class LoginPage implements OnInit {
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
     });
 
   }

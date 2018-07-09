@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { StatementRequest } from '../View Models/StatementRequest';
 import { RegisterService } from '../services/app-data.service';
 import { MiniStatement } from '../View Models/MiniStatement';
 import { StatementItem } from '../View Models/StatementItem';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'page-mini-statement',
@@ -13,7 +14,10 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class MiniStatementPage implements OnInit {
   ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-  constructor(public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
+  label: string;
+  showCredited: boolean;
+  ShowDebited: boolean;
+  constructor(private alertCtrl: AlertController, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
 
   }
   ActiveBankName: string;
@@ -44,6 +48,19 @@ export class MiniStatementPage implements OnInit {
       this.balance = data;
       this.miniStatement = data;
       this.statementItem = data.StatementItems;
+      // this.ShowDebited=true;
+      // if(data.StatementItems.Dr==0){
+      //   this.showCredited=true;
+      //   this.ShowDebited=false;
+      // }
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
     });
     this.ShowHide = false;
     this.HideMsg=false;

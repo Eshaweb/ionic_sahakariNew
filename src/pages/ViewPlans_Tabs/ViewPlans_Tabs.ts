@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Platform, LoadingController, NavParams, NavController, Tabs, Navbar, Slides, Segment, SegmentButton, ViewController } from 'ionic-angular';
+import { Platform, LoadingController, NavParams, NavController, Tabs, Navbar, Slides, Segment, SegmentButton, ViewController, AlertController } from 'ionic-angular';
 import { ToastrService } from 'ngx-toastr';
 import { ConstantService } from '../services/Constants';
 import { RegisterService } from '../services/app-data.service';
@@ -24,7 +24,7 @@ export class BasicPage implements OnInit {
   planResponse: PlanDet;
   isAndroid: boolean = false;
   isButtonEnabled: boolean = false;
-  constructor(private viewCtrl: ViewController, private toastr: ToastrService, public constant: ConstantService, private registerService: RegisterService, public loadingController: LoadingController, public navParams: NavParams, public navCtrl: NavController, platform: Platform) {
+  constructor(private alertCtrl: AlertController, private viewCtrl: ViewController, private toastr: ToastrService, public constant: ConstantService, private registerService: RegisterService, public loadingController: LoadingController, public navParams: NavParams, public navCtrl: NavController, platform: Platform) {
     this.active_Segmant = "0";
     var FTT = "FullTalkTime";
     var LSC = "LSC";
@@ -51,7 +51,13 @@ export class BasicPage implements OnInit {
     this.registerService.GetPlans(planRequest).subscribe((data: any) => {
       this.planResponse = data;
     }, (error) => {
-      this.toastr.error(error.message, 'Error!')
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
     });
     loading.dismiss();
   }
@@ -92,7 +98,13 @@ export class BasicPage implements OnInit {
     this.registerService.GetPlans(planRequest).subscribe((data: any) => {
       this.planResponse = data;
     }, (error) => {
-      this.toastr.error(error.message, 'Error!')
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
     });
     loading.dismiss();
   }

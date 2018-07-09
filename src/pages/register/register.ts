@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, NavController, Form, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, Form, NavParams, AlertController } from 'ionic-angular';
 import { EnterOTPPage } from '../enter-otp/enter-otp';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
@@ -24,7 +24,7 @@ export class RegisterPage implements OnInit {
   formgroup2: FormGroup;
   isForgotPassword: boolean;
   formgroup1: FormGroup;
-  constructor(private uiService: UISercice, public navParams: NavParams, public loadingController: LoadingController, public formbuilder: FormBuilder, private toastrService: ToastrService, private regService: RegisterService, public navCtrl: NavController) {
+  constructor(private alertCtrl: AlertController, private uiService: UISercice, public navParams: NavParams, public loadingController: LoadingController, public formbuilder: FormBuilder, private toastrService: ToastrService, private regService: RegisterService, public navCtrl: NavController) {
     this.formgroup1 = formbuilder.group({
       mobilenum: ['', [Validators.required, Validators.minLength(10)]]
     });
@@ -105,7 +105,13 @@ if(this.isForgotPassword==true){
       }
       loading.dismiss();
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
     });
 
   }
@@ -132,7 +138,13 @@ if(this.isForgotPassword==true){
       loading.dismiss();
        this.navCtrl.push(EnterOTPPage, { 'OTPRefNo': data.OTPRef, 'TenantId': Id, 'MobileNo': mobilenum.value, 'DigiPartyId': data.DigiPartyId});
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
     });
   }
 
@@ -155,7 +167,13 @@ if(this.isForgotPassword==true){
       this.toastrService.success('OTP Sent to ' + mobilenumforOTP.value + ' with Reference No. ' + data.OTPRef, 'Success!');
       this.navCtrl.push(EnterOTPPage, { 'OTPRefNo': data.OTPRef, 'TenantId': ActiveTenantId, 'MobileNo': mobilenumforOTP.value, 'DigiPartyId':data.DigiPartyId});
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
     });
 
   }

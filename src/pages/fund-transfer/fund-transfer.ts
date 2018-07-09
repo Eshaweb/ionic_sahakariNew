@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 //import { AutoLogoutService } from '../services/AutoLogOutService';
 import { StorageService } from '../services/Storage_Service';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
@@ -24,7 +24,7 @@ export class FundTransferPage implements OnInit {
 
 
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-  constructor(private uiService: UISercice, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public formbuilder: FormBuilder, public navCtrl: NavController) {
+  constructor(private alertCtrl: AlertController, private uiService: UISercice, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public formbuilder: FormBuilder, public navCtrl: NavController) {
 
     //StorageService.SetItem('lastAction', Date.now().toString());
     this.formgroup1 = formbuilder.group({
@@ -115,7 +115,15 @@ export class FundTransferPage implements OnInit {
     this.registerService.GetFTAccount(fundTransferRequest).subscribe((data: any) => {
       this.fundTransferResponse = data;
       this.disablenextwithoutToAccount = false;
-    });
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present(); 
+   });
     loading.dismiss();
   }
 
@@ -148,7 +156,21 @@ export class FundTransferPage implements OnInit {
     this.registerService.FundTransfer(doFundTransfer).subscribe((data: any) => {
       this.confirm = null;
       this.toastr.success('Fund Transferred with ' + data.Status, 'Success!');
+      var alert = this.alertCtrl.create({
+        title: "Success Message",
+        subTitle: "Fund Transferred",
+        buttons: ['OK']
+      });
+      alert.present(); 
       this.showstatus = true;
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present(); 
     });
     loading.dismiss();
   }

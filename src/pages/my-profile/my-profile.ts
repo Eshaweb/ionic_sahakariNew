@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { EnterOTPPage } from '../enter-otp/enter-otp';
@@ -32,9 +32,16 @@ export class MyProfilePage implements OnInit{
       this.tenantList = data;  
       StorageService.SetTenant(JSON.stringify(this.tenantList)); 
       this.tenants = StorageService.GetTenant(); 
+    }, (error) => {
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
     });
   }
-  constructor(private storageService: StorageService,private registerService: RegisterService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private alertCtrl: AlertController, private storageService: StorageService,private registerService: RegisterService,public navCtrl: NavController, public navParams: NavParams) {
   }
   OnChange(){
     var ischangePassword:boolean=true;

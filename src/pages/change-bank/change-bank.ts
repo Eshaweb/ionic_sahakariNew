@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Events, LoadingController } from 'ionic-angular';
+import { NavController, Events, LoadingController, AlertController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { RegisterService } from '../services/app-data.service';
 import { Tenant } from '../LocalStorageTables/Tenant';
@@ -32,13 +32,14 @@ const idle = new Idle()
 export class ChangeBankPage implements OnInit {
   tenants: Tenant;
   ActiveTenantId: string;
+  Active: boolean;
   // constructor(private autoLogoutService: AutoLogoutService,private regService : RegisterService,public constant:ConstantService,public navCtrl: NavController) {
-  constructor(public loadingController: LoadingController, private toastrService: ToastrService, private events: Events, private registerService: RegisterService, public navCtrl: NavController) {
+  constructor(private alertCtrl: AlertController, private toastr: ToastrService, public loadingController: LoadingController, private toastrService: ToastrService, private events: Events, private registerService: RegisterService, public navCtrl: NavController) {
 
   }
   tenant: Tenant;
   ActiveBankName: string;
-  Active: number;
+  //Active: number;
   ngOnInit() {
     let loading = this.loadingController.create({
       content: 'Please wait till we get the Registered Banks'
@@ -59,9 +60,13 @@ export class ChangeBankPage implements OnInit {
         }
       }
       this.tenants = StorageService.GetTenant();
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      alert(error.message);
     });
     loading.dismiss();
   }
+  
   tenantList: Tenant;
   filterByString(tenantlist, ActiveTenantId) {
     return this.tenantList.filter(e => e.Id == ActiveTenantId);
@@ -78,7 +83,13 @@ export class ChangeBankPage implements OnInit {
         Address: data.Tenant.Address,
         IconHtml: data.Tenant.IconHtml
       }
-
+for(var i=0;i<data.Tenant.length;i++){
+if(tenant.IconHtml==""){
+this.Active=true;
+}else{
+this.Active=false;
+}
+}
       this.tenants = StorageService.GetTenant();
 
       const digiParty = {
@@ -118,9 +129,13 @@ export class ChangeBankPage implements OnInit {
       this.events.publish('REFRESH_DIGIPARTYNAME');
     }, (error) => {
       this.toastrService.error(error.message, 'Error!')
-
-    });
-
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
+  });
   }
   user: User;
   OnSelect(order) {
@@ -128,7 +143,7 @@ export class ChangeBankPage implements OnInit {
     user.ActiveTenantId = order.Id;
     StorageService.SetUser(JSON.stringify(user));
     var ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-    this.Active = +ActiveTenantId;
+    //this.Active = +ActiveTenantId;
     this.ActiveBankName = StorageService.GetActiveBankName();
     this.navCtrl.setRoot(PagePage);
     this.events.publish('REFRESH_DIGIPARTYNAME');
