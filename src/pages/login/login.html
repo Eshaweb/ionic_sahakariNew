@@ -10,24 +10,19 @@
 </ion-header>
 <ion-content class="back-image" padding id="page6">
   <div class="spacer" style="width:300px;height:199px;" id="enterOTP-spacer11"></div>
-  <!-- <div style="width:100%;height:220px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-    <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-  </div>
-  <div class="spacer" style="width:300px;height:46px;" id="login-spacer2"></div> -->
-  <form [formGroup]="formGroup" id="login-form1" #loginForm="ngForm" (ngSubmit)="OnLogin(Password.value)">
-    <!-- <div style="width:100%;height:220px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-    </div> -->
+  <!-- <form [formGroup]="formGroup" id="login-form1" #loginForm="ngForm" (ngSubmit)="OnLogin(Password.value)"> -->
+    <form [formGroup]="formGroup" id="login-form1" #loginForm="ngForm" (ngSubmit)="OnLogin()">
     <ion-list id="login-list5">
       <ion-item id="login-input2">
         <ion-label floating>
           Password
         </ion-label>
-        <ion-input formControlName="pword" type="password" #Password ngModel name="Password" placeholder=""></ion-input>
+        <!-- <ion-input formControlName="pword" type="password" #Password ngModel name="Password" placeholder=""></ion-input> -->
+        <ion-input formControlName="password" type="password" placeholder=""></ion-input>
       </ion-item>
-      <ion-item *ngIf="pword.hasError('required') && pword.touched">
-        <p style="color:red;"> *Please Enter Password</p>
-      </ion-item>
+      <a style="color:darkorange;" (click)="OnForgot()">Forgot password?</a>
+      <!-- <p style="color:red;" *ngIf="password.hasError('required') && password.touched"> *Please Enter Password</p> -->
+      <p style="color:darkorange;">{{passwordMessage}}</p>
     </ion-list>
     <div class="spacer" style="height:40px;" id="login-spacer1"></div>
     <button [disabled]="loginForm.invalid" id="login-button1" ion-button color="assertive" block on-click="goToHome()">
@@ -37,4 +32,5 @@
       Reset Password
     </button> -->
   </form>
+ 
 </ion-content>

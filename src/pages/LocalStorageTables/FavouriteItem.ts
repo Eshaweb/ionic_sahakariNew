@@ -1,4 +1,10 @@
 export class FavouriteItem{
+  // find(arg0: any): any {
+  //   throw new Error("Method not implemented.");
+  // }
+  // push(arg0: any): any {
+  //   throw new Error("Method not implemented.");
+  // }
   
   [x: string]: any;
         Id:any;

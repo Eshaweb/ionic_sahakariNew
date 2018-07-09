@@ -1,6 +1,6 @@
 export class UserPost
 {
-    //DigiPartyId: string;
+    DigiPartyId: string;
     TenantId: string;
     PIN: string;
     //PartyMastId: string;

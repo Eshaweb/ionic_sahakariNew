@@ -1,5 +1,14 @@
 export class SelfCareAc{
-  [x: string]: any;
+  push(arg0: any): any {
+    throw new Error("Method not implemented.");
+  }
+  find(arg0: any): any {
+    throw new Error("Method not implemented.");
+  }
+    filter(arg0: any): any {
+        throw new Error("Method not implemented.");
+    }
+  //[x: string]: any;
     //Id:any;
     AcActId:string;
     HeadName:string;

@@ -1,0 +1,42 @@
+<!--
+  Generated template for the MyProfilePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+    <ion-title>My Profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list id="miniStatement-list9">
+    <ion-item color="none" id="miniStatement-list-item42">
+     Name :{{digipartyname}}
+   </ion-item>
+   <ion-item color="none" id="miniStatement-list-item42">
+    Mobile Number :{{mobileno}}
+  </ion-item>
+  Linked Bank Accounts
+<ion-item *ngFor="let order of tenants">
+        
+        
+        <h2 style="text-transform:capitalize;">{{ order.Name }}</h2>
+        <p>Branch:{{ order.Address }}</p>
+  
+</ion-item>
+<ion-item>
+    <a style="color:darkorange;" (click)="OnChange()">Change password?</a>
+</ion-item>
+<ion-item>
+    <a style="color:darkorange;" (click)="OnLogOut()">LogOut</a>
+</ion-item>
+ </ion-list>
+</ion-content>

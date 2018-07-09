@@ -13,6 +13,7 @@ import { StorageService } from '../pages/services/Storage_Service';
 import { RegisterService } from '../pages/services/app-data.service';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
+import { MyProfilePage } from '../pages/my-profile/my-profile';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class MyApp {
   ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
+  showProfileAndChangeBank: boolean;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
   constructor(private translate: TranslateService,private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
     this.event.subscribe('UNAUTHORIZED', () => {
@@ -37,20 +39,27 @@ export class MyApp {
       splashScreen.hide();
       translate.setDefaultLang('ka');
       //localStorage.clear();
-      
+      //localStorage.removeItem('userToken');
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.digipartyname = StorageService.Getdigipartyname();
-      });
+          this.showProfileAndChangeBank=true;
+        });
       if (StorageService.GetUser() == null) {
         this.rootPage = RegisterPage;
         
 
       }
-      else {
+      else if (StorageService.GetUser() != null&&localStorage.getItem('userToken') != null){
         this.rootPage = PagePage;
         this.ActiveBankName = StorageService.GetActiveBankName();
           this.digipartyname = StorageService.Getdigipartyname();
+          this.showProfileAndChangeBank=true;
+        }
+        else{
+          this.rootPage=LoginPage;
+          this.showProfileAndChangeBank=false;
+
         }
     });
   }
@@ -77,5 +86,9 @@ export class MyApp {
   goToChangeBank(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(ChangeBankPage);
+  }
+  goToMyProfile(params) {
+    if (!params) params = {};
+    this.navCtrl.setRoot(MyProfilePage);
   }
 }

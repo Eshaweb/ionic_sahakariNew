@@ -10,10 +10,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title *ngIf="showTitle">
-      Confirm Prepaid -{{ActiveBankName}}
+      Confirm {{OperatorService}} Recharge-{{ActiveBankName}}
     </ion-title>
-    <ion-title *ngIf="showSuccess">
-      Prepaid Recharge -{{ActiveBankName}}
+    <ion-title *ngIf="showSuccess||showPending||showInit||showFailure||showRefund||showBlocked">
+        <!-- <ion-title *ngIf="showSuccess"> -->
+      {{OperatorService}} Recharge -{{ActiveBankName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -36,6 +37,26 @@
     </button>
   </div>
   <div *ngIf="showSuccess">
-  <h1>Recharge is Successful...</h1>
+  <h1 style="color: green;">Recharge is Successful...</h1>
+  <p>Transaction ID: {{tranResponse.VendorExtCode}}</p>
+  </div>
+  <div *ngIf="showPending">
+    <h1 style="color: darkorange;">Recharge is Pending...</h1>
+    <p>Transaction ID: {{tranResponse.VendorExtCode}}</p>
+  </div>
+  <div *ngIf="showInit">
+    <h1>Recharge is Initiated...Please wait for a minute..</h1>
+    <p>Transaction ID: {{tranResponse.VendorExtCode}}</p>
+  </div>
+  <div *ngIf="showFailure">
+    <h1 style="color: red;">Sorry, Recharge is Unsuccessful...</h1>
+    <p>Transaction ID: {{tranResponse.VendorExtCode}}</p>
+  </div>
+  <div *ngIf="showRefund">
+    <h1>Recharge is Refunded due to some issues...</h1>
+    <p>Transaction ID: {{tranResponse.VendorExtCode}}</p>
+  </div>
+  <div *ngIf="showBlocked">
+    <h1>Recharge is Blocked due to some issues...</h1>
   </div>
 </ion-content>

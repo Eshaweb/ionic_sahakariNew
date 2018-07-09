@@ -60,23 +60,18 @@
             </ion-card-header>
           <br/>
             <ion-card-content>
-                <form [formGroup]="formgroup1" id="register-form3" #fundtransferForm1="ngForm" (ngSubmit)="OnSearchingAccount(MobileNo.value)">
+                <form [formGroup]="formgroup1" id="register-form3" #fundtransferForm1="ngForm" (ngSubmit)="OnSearchingAccount()">
 
               <ion-list id="register-list11">
                 <ion-item id="register-input8">
                   <ion-label floating>
                     Enter Phone Number/Account Number
                   </ion-label>
-
-                  <ion-input formControlName="mobilenum" type="text" #MobileNo ngModel name="MobileNo"></ion-input>
-
-                  
-
+                  <ion-input formControlName="mobilenum" type="text"></ion-input>
                   <!-- <ion-input type="text" placeholder="" name="MobileNo" #MobileNo="ngModel" [(ngModel)]="rechargeitem.MobileNo"></ion-input> -->
                 </ion-item>
-                <ion-item *ngIf="mobilenum.hasError('required') && mobilenum.touched">
-                    <p style="color:red;"> *MobileNumber is required</p>
-                  </ion-item>
+                <!-- <p style="color:red;" *ngIf="mobilenum.hasError('required') && mobilenum.touched"> *MobileNumber is required</p> -->
+                <p style="color:darkorange;">{{mobileMessage}}</p>
               </ion-list> 
               <button [disabled]="fundtransferForm1.invalid" id="register-button7" ion-button color="positive" block>
                   Search
@@ -96,15 +91,15 @@
         <ion-card>
 
           <ion-card-content>
-              <form [formGroup]="formgroup2" id="register-form4" #fundtransferForm2="ngForm" (ngSubmit)="OnNext(Amount.value)">
+              <form [formGroup]="formgroup2" id="register-form4" #fundtransferForm2="ngForm" (ngSubmit)="OnNext()">
             <ion-list id="register-list11">
               <ion-item id="register-input8">
                 <ion-label floating>
                   Amount
                 </ion-label>
-                <ion-input formControlName="amount" type="text" #Amount ngModel name="Amount" placeholder=""></ion-input>
+                <ion-input formControlName="amount" type="text" placeholder=""></ion-input>
               </ion-item>
-            
+              <p style="color:darkorange;">{{amountMessage}}</p>
             </ion-list>
             <button [disabled]="fundtransferForm2.invalid || disablenextwithoutFromAccount || disablenextwithoutToAccount" id="register-button8" ion-button color="positive" block>
                 Next

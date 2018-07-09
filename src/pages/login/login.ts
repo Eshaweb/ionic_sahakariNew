@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, NavParams, AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
@@ -13,128 +13,145 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { DigiParty } from '../LocalStorageTables/DigiParty';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { ToastrService } from 'ngx-toastr';
+import { UISercice } from '../services/UIService';
+import { RegisterPage } from '../register/register';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
-export class LoginPage implements OnInit { 
+export class LoginPage implements OnInit {
+  passwordMessage: string;
   formGroup: FormGroup;
-  pword: AbstractControl;
 
-  constructor(private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
+  constructor(private alertCtrl: AlertController, private uiService: UISercice, public navParams: NavParams, private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
     this.formGroup = formbuilder.group({
-      pword: ['', [Validators.required, Validators.minLength(4)]]
-
+      password: ['', [Validators.required, Validators.minLength(4)]]
     });
-    this.pword = this.formGroup.controls['pword'];
+    const passwordControl = this.formGroup.get('password');
+    passwordControl.valueChanges.subscribe(value => this.setErrorMessage(passwordControl));
   }
-
+  setErrorMessage(c: AbstractControl): void {
+    this.passwordMessage = '';
+    let control = this.uiService.getControlName(c);
+    if ((c.touched || c.dirty) && c.errors) {
+      if (control === 'password') {
+        this.passwordMessage = Object.keys(c.errors).map(key => this.validationMessages[control + '_' + key]).join(' ');
+      }
+    }
+  }
+  private validationMessages = {
+    password_required: '*Enter Password',
+    password_minlength: 'Password cannot be less than 4 character'
+  };
   ActiveBankName: string;
   ngOnInit() {
-    if (StorageService.GetTenant()!= null) {
+    if (StorageService.GetTenant() != null) {
       this.ActiveBankName = StorageService.GetActiveBankName();
     }
 
   }
-  SelfCareAcs: SelfCareAc;
-  DigiParties: DigiParty;
-  tenant: Tenant;
-  tenants: Tenant;
-  userName = JSON.parse(StorageService.GetUser()).UserName;
-  uniqueKey = JSON.parse(StorageService.GetUser()).UniqueKey;
-  userTokenData: any;
-  oS: string;
-  OnLogin(password) {
+
+  userName = StorageService.GetUser().UserName;
+  uniqueKey = StorageService.GetUser().UniqueKey;
+  OnLogin() {
     let loading = this.loadingController.create({
       content: 'Wait for a second..'
-    });  
+    });
     loading.present();
-    var OS = JSON.parse(StorageService.GetOS());
-    var SelfCareAc = JSON.parse(StorageService.GetSelfCareAc());
-    this.registerService.loginbyHttpClient(this.userName, password, this.uniqueKey).subscribe((data: any) => {
-      this.userTokenData = data;
-      this.registerService.userToken = this.userTokenData.access_token;
-      StorageService.SetItem('userToken', this.userTokenData.access_token);
+    var OS = StorageService.GetOS();
+    this.registerService.loginbyHttpClient(this.userName, this.formGroup.get('password').value, this.uniqueKey).subscribe((data: any) => {
+      this.registerService.userToken = data.access_token;
+      StorageService.SetItem('userToken', data.access_token);
 
       if (OS == null) {
         let loading = this.loadingController.create({
           content: 'Syncing Operators and Services'
-        });  
+        });
         loading.present();
         this.registerService.GetServices().subscribe((data: any) => {
-          this.oS = JSON.stringify(data);
-          StorageService.SetOS(this.oS);
+          var oS = JSON.stringify(data);
+          StorageService.SetOS(oS);
+          loading.dismiss();
+        }, (error) => {
+          this.toastrService.error(error.message, 'Error!');
+          loading.dismiss();
+          var alert = this.alertCtrl.create({
+            title: "Error Message",
+            subTitle: error.message,
+            buttons: ['OK']
+          });
+          alert.present();
+
         });
-        loading.dismiss();
+
       }
-      
-      // var ActiveTenantId=this.regService.TenantId;
-      this.tenants = JSON.parse(StorageService.GetTenant());
-      // this.Tenant= this.Tenants.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      this.DigiParties = JSON.parse(StorageService.GetDigiParty());
-      // this.DigiParty=this.DigiParties.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      this.SelfCareAcs = JSON.parse(StorageService.GetSelfCareAc());
-      // this.SelfCareAc=this.SelfCareAcs.filter(function (obj) { return obj.Id === ActiveTenantId; });
-      if (this.tenants == null || this.DigiParties == null || this.SelfCareAcs == null) {
+
+      let tenants = StorageService.GetTenant();
+      let DigiParties = StorageService.GetDigiParty();
+      let SelfCareAcs = StorageService.GetSelfCareAc();
+      if (tenants == null || DigiParties == null || SelfCareAcs == null) {
         let loadingnew = this.loadingController.create({
           content: 'Syncing Accounts'
         });
         loadingnew.present();
         this.callservices();
-          loadingnew.dismiss();
+        loadingnew.dismiss();
       }
-      // if(this.Tenant==null||this.DigiParty==null||this.SelfCareAc==null){
-      //      this.callservices();
-      //   }
-      //  setTimeout(() => {
-      //  loading.dismiss();
-      //  }, 2000);
-      
-        //this.navCtrl.push(PagePage);
-    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
-
-  });
-      //this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
-       loading.dismiss();
+      else {
+        this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
+      }
+      loading.dismiss();
+    }, (error) => {
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      loading.dismiss();
+    });
   }
-
- addBankResponse: AddBankResponse;
- addBankRequest: AddBankRequest;
- digiParty: DigiParty;
 
   callservices() {
-    this.addBankRequest = {
-      TenantId: JSON.parse(StorageService.GetUser()).ActiveTenantId,
-      MobileNo: JSON.parse(StorageService.GetUser()).UserName
+    var addBankRequest = {
+      TenantId: StorageService.GetUser().ActiveTenantId,
+      MobileNo: StorageService.GetUser().UserName
     }
-    this.registerService.AddBank(this.addBankRequest).subscribe((data: any) => {
-      this.addBankResponse = data;
-      this.tenant = {
-        Id: this.addBankResponse.Tenant.Id,
-        //TenantId:this.addbankresponse.Tenant.TenantId,   //ActiveTenantId
-        Name: this.addBankResponse.Tenant.Name,
-        Address: this.addBankResponse.Tenant.Address,
-        IconHtml: this.addBankResponse.Tenant.IconHtml
+    this.registerService.AddBank(addBankRequest).subscribe((data: any) => {
+
+      var tenant = {
+        Id: data.Tenant.Id,
+        Name: data.Tenant.Name,
+        Address: data.Tenant.Address,
+        IconHtml: data.Tenant.IconHtml
       }
-      StorageService.SetTenant(JSON.stringify([this.tenant]));
-      this.digiParty = {
-        Id: this.addBankResponse.DigiPartyId,
-        DigiPartyId: this.addBankResponse.DigiPartyId,
-        PartyMastId: this.addBankResponse.PartyMastId,
-        MobileNo: this.addBankResponse.MobileNo,
-        TenantId: this.addBankResponse.TenantId,  //ActiveTenantId
-        Name: this.addBankResponse.Name
+      StorageService.SetTenant(JSON.stringify([tenant]));
+
+      var digiParty = {
+        Id: data.DigiPartyId,
+        DigiPartyId: data.DigiPartyId,
+        PartyMastId: data.PartyMastId,
+        MobileNo: data.MobileNo,
+        TenantId: data.TenantId,  //ActiveTenantId
+        Name: data.Name
       }
-      StorageService.SetDigiParty(JSON.stringify([this.digiParty]));
-      StorageService.SetSelfCareAc(JSON.stringify(this.addBankResponse.SelfCareAcs));
+      StorageService.SetDigiParty(JSON.stringify([digiParty]));
+
+      StorageService.SetSelfCareAc(JSON.stringify(data.SelfCareAcs));
+
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
-    },(error) => {this.toastrService.error(error.error.ExceptionMessage, 'Error!')
-
-  });
+    }, (error) => {
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
+    });
 
   }
-
+  isForgotten: boolean = false;
+  OnForgot() {
+    this.isForgotten = true;
+    this.navCtrl.push(RegisterPage, { 'isForgotPassword': this.isForgotten });
+  }
   goToHome(params) {
     if (!params) params = {};
     this.navCtrl.push(HomePage);

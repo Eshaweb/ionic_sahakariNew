@@ -24,23 +24,13 @@
 </ion-item>
 </ion-list>
 <ion-list *ngFor="let order of rRResponse" >
-  <ion-item color="none" id="miniStatement-list-item46">
-    Date: {{order.Date|date:'mediumDate'}}
-  </ion-item>
-  <ion-item color="assertive" id="miniStatement-list-item47">
-    Amount : {{order.Amount}} 
-    TranId: {{order.TranId}}
-  </ion-item>
-  <ion-item id="miniStatement-list-item-container6">
-    <div id="miniStatement-markdown7" class="show-list-numbers-and-dots">
-      <p style="margin-top:0px;color:#000000;">
-        Remark: {{order.Status}}
-        <!-- SubStatus: {{order.SubStatus}} -->
+  <ion-item color="none" id="miniStatement-list-item46" >
+   <p>Date: {{order.Date|date:'dd/MM/yyyy'}}</p>
+   <p>Transaction Id: {{order.TranId}}</p>
+    <p>Amount : {{order.Amount|currency:'INR'}}</p> 
+    <p style="margin-top:0px;color:#000000;">
+        Status: {{order.Status}}
       </p>
-    </div>
-    <!-- <div style="width:100%;height:50px;margin:0px 0px;line-height:250px;background-color:#e8ebef;text-align:center;">
-      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-    </div> -->
   </ion-item>
 </ion-list>
 </ion-content>
