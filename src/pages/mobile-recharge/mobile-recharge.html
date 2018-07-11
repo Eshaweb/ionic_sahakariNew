@@ -31,16 +31,8 @@
       </ion-item>
       <p style="color:red;">{{subscriptionIdMessage}}</p>
       <ion-item id="mobileRecharge-select1">
-<<<<<<< HEAD
         <ion-label>{{'recharge.operator' | translate}}</ion-label>
           <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" (ngModelChange)="OperatorChanged($event)">
-=======
-        <ion-label>Operator</ion-label>
-          <!-- <ion-select id="mobileRecharge-input3" interface="popover" name="OperatorId" #OperatorId="ngModel" [(ngModel)]="rechargeitem.OperatorId" (ngModelChange)="OperatorChanged($event)">
-            <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
-        </ion-select> -->
-        <ion-select id="mobileRecharge-input3" interface="popover" formControlName="operatorId" [(ngModel)]="rechargeitem.OperatorId" (ngModelChange)="OperatorChanged($event)">
->>>>>>> e856dff4d73f7235f4ea66de82f3f6bfa1d5259c
             <ion-option *ngFor="let order of OSResponseNew" [value]="order.Id">{{order.Operator}}</ion-option>
         </ion-select>
     </ion-item>
@@ -146,15 +138,10 @@
           : While we support most recharges, we request you to verify with your operator once before proceding
         </p>
       </div>
-<<<<<<< HEAD
       <!-- <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isStateEnabled||!isOperatorEnabled"> -->
         <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled">
           <!-- <button id="mobileRecharge-button3" ion-button color="positive" block> -->
             {{'recharge.continue' | translate}}
-=======
-        <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isStateEnabled||!isOperatorEnabled||!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled">
-          Next
->>>>>>> e856dff4d73f7235f4ea66de82f3f6bfa1d5259c
       </button>
   </form>
     <button ion-button clear item-centre (click)="OnGoBack()">GoBack</button>       

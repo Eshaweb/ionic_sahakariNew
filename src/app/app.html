@@ -35,12 +35,14 @@
         <ion-icon name="mail" item-left></ion-icon>
         {{'contactus' | translate}}
       </ion-item>
-      <button ion-button (click)="changeLanguage('ka')" >{{ 'demo.kannada'| translate }}</button>
-      <button ion-button (click)="changeLanguage('en')">{{ 'demo.english'| translate }}</button>
       <ion-item color="positive" menuClose="" on-click="goToMyProfile()" id="menu-list-item12" *ngIf="showProfileAndChangeBank">
         <ion-icon name="mail" item-left></ion-icon>
         My Account
       </ion-item>
+      <ion-item>
+      <button ion-button (click)="changeLanguage('ka')" >{{ 'demo.kannada'| translate }}</button>
+      <button ion-button (click)="changeLanguage('en')">{{ 'demo.english'| translate }}</button>
+    </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
