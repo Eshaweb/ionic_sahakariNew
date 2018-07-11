@@ -1,42 +1,60 @@
-<!--
-  Generated template for the MyProfilePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
     <ion-navbar color="primary">
-        <button ion-button menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
-    <ion-title>My Profile</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-  <ion-list id="miniStatement-list9">
-    <ion-item color="none" id="miniStatement-list-item42">
-     Name :{{digipartyname}}
-   </ion-item>
-   <ion-item color="none" id="miniStatement-list-item42">
-    Mobile Number :{{mobileno}}
-  </ion-item>
-  Linked Bank Accounts
-<ion-item *ngFor="let order of tenants">
-        
-        
-        <h2 style="text-transform:capitalize;">{{ order.Name }}</h2>
-        <p>Branch:{{ order.Address }}</p>
-  
-</ion-item>
-<ion-item>
-    <a style="color:darkorange;" (click)="OnChange()">Change password?</a>
-</ion-item>
-<ion-item>
-    <a style="color:darkorange;" (click)="OnLogOut()">LogOut</a>
-</ion-item>
- </ion-list>
-</ion-content>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>
+        My Profile
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content padding id="page1">
+    <ion-card id="home-card21">
+      <ion-list>
+        <ion-item color="none" id="home-list-item6">
+          <ion-icon name="person" item-left></ion-icon>
+           {{digipartyname}}
+        </ion-item>
+        <div style="width:100%;background-color:#e8ebef;text-align:center;">
+          <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+        </div>
+        <ion-item color="none" id="home-list-item7">
+          <ion-icon name="phone-portrait" item-left></ion-icon>
+         {{mobileno}}
+        </ion-item>
+      </ion-list>
+    </ion-card>
+    <ion-card id="home-card25">
+      <ion-list>
+    <ion-list-header>
+      Linked Bank Accounts
+    </ion-list-header>
+        <ion-item color="none" id="home-list-item18" *ngFor="let order of tenants">
+          <h2 style="text-transform:capitalize;">{{ order.Name }}</h2>
+      <p>Branch:{{ order.Address }}</p>
+        </ion-item>
+        </ion-list>
+    </ion-card>
+    <ion-card id="home-card26">
+      <ion-list>
+        <div style="width:100%; background-color:#e8ebef;text-align:center;">
+          <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+        </div>
+        <ion-item color="none" id="home-list-item21">
+          <ion-icon name="lock" item-left></ion-icon>
+          <a style="color:darkorange;" (click)="OnChange()">Change password?</a>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+    <ion-card id="home-card27">
+      <ion-list>
+        <div style="width:100%;background-color:#e8ebef;text-align:center;">
+          <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+        </div>
+        <ion-item color="assertive" id="home-list-item23">
+          <ion-icon name="log-out" item-left></ion-icon>
+          <a style="color:darkorange;" (click)="OnLogOut()">Log out</a>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </ion-content>
