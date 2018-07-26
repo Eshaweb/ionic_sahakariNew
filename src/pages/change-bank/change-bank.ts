@@ -69,7 +69,6 @@ export class ChangeBankPage implements OnInit {
       loading.dismiss();
     });
   }
-
   tenantList: Tenant;
   filterByString(tenantlist, ActiveTenantId) {
     return this.tenantList.filter(e => e.Id == ActiveTenantId);

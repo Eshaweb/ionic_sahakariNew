@@ -5,6 +5,8 @@ import { StorageService } from '../services/Storage_Service';
 import { Favourites } from '../LocalStorageTables/Favourites';
 import { ConstantService } from '../services/Constants';
 import { RechargePage } from '../recharge/recharge';
+import { Device } from '@ionic-native/device';
+
 
 @Component({
   selector: 'page-favourites',
@@ -16,7 +18,10 @@ export class FavouritesPage implements OnInit {
 
   constructor(private storageService:StorageService, public loadingController: LoadingController, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
 
-  }
+   constructor(public device: Device,public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
+  //  constructor(public loadingController: LoadingController,public constant:ConstantService,public navCtrl: NavController, public navParams: NavParams) {
+
+    }
   ionViewDidLoad() {
     this.setBackButtonAction()
   }

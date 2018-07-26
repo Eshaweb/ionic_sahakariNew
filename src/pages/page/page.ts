@@ -14,6 +14,8 @@ export class PagePage implements OnInit {
   ActiveBankName: string;
   constructor(private storageService:StorageService, public viewCtrl:ViewController,private events: Events,public navCtrl: NavController,public navParams: NavParams) {
   }
+
+  
 ngOnInit(){
      this.ActiveBankName=this.storageService.GetActiveBankName();
      this.events.publish('REFRESH_DIGIPARTYNAME');

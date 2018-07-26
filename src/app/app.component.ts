@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Platform, Nav, Events } from 'ionic-angular';
+import {TranslateService} from '@ngx-translate/core';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MobileRechargePage } from '../pages/mobile-recharge/mobile-recharge';
@@ -37,7 +38,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-
+      translate.setDefaultLang('ka');
       //localStorage.clear();
       //localStorage.removeItem('userToken');
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
@@ -61,7 +62,10 @@ export class MyApp {
         }
     });
   }
-
+  changeLanguage(language:string)
+  {
+    this.translate.use(language);
+  }
   goToPage(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(PagePage);

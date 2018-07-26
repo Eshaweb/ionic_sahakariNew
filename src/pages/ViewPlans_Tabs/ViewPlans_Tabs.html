@@ -63,9 +63,20 @@
  
 </ion-header>
 
-<ion-content padding id="page5">
-  <ion-slides #slider (ionSlideDidChange)="slideChanged()">
-    <ion-slide>
+  <ion-content padding id="page5">
+    
+<!-- <ion-tabs #paymentTabs class="tabs-basic" [selectedIndex]="0" tabsPlacement="top">
+  <ion-tab tabTitle={{FTT}} [root]="FTTPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{TUP}} [root]="TUPPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{LSC}} [root]="LSCPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{SMS}} [root]="SMSPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{OTR}} [root]="OTRPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+    <ion-tab tabTitle={{RMG}} [root]="RMGPage" tabsHideOnSubPages="true" [rootParams]="navparams"></ion-tab>
+  </ion-tabs> -->
+  
+
+  <ion-slides #slider (ionSlideDidChange)="slideChanged()"> 
+   <ion-slide>
       <p> Select the plans you want</p>
       <ion-list *ngFor="let order of planResponse" (click)="OnAmount(order.amount)">
         <ion-item style="border: 1px solid lightgrey; padding: 15px; margin: 5px 0;background-color: bisque">

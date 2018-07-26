@@ -9,6 +9,19 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+    <ion-grid>
+        <ion-row>
+         <ion-col>
+           <h1>Platform Type: {{platformType}}</h1>
+         </ion-col>
+        </ion-row>
+        <ion-row>
+         <ion-col>
+          <h1>OS Version: {{versionType}}</h1>
+         </ion-col>
+        </ion-row>
+      </ion-grid>
+
   <ion-list>
       <ion-item color="assertive" id="favourites-list-item28" (click)="OnNewRecharge()">
           <ion-thumbnail item-start>
