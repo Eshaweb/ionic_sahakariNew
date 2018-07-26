@@ -27,6 +27,10 @@ import { OperaterCircleQuery } from '../View Models/OperaterCircleQuery';
 import { Tenant } from '../LocalStorageTables/Tenant';
 import { ChangePassword } from '../View Models/ChangePassword';
 import { ChangePasswordResult } from '../View Models/ChangePasswordResult';
+import { AddBankResponse } from '../View Models/AddBankResponse';
+import { FundTransferResponse } from '../View Models/FundTransferResponse';
+import { BankBranch } from '../View Models/BankBranch';
+import { CheckVoucher } from '../View Models/CheckVoucher';
 
 @Injectable()
 export class RegisterService {
@@ -39,7 +43,10 @@ export class RegisterService {
 
 
     }
-
+GetToken(Token:string){
+    this.userToken=Token;
+    return "true";
+}
     GetTenantsByMobile(mobno: any) {
         this.MobileNo = mobno;
         var data = "MobileNo=" + mobno;
@@ -83,7 +90,7 @@ export class RegisterService {
     }
 
     AddBank(addBankRequest: AddBankRequest) {
-        return this.httpclient.post<AddBankRequest>(this.uIHelperService.CallWebAPIUrlNew("/Banking/AddBank"), addBankRequest);
+        return this.httpclient.post<AddBankResponse>(this.uIHelperService.CallWebAPIUrlNew("/Banking/AddBank"), addBankRequest);
     }
     GetOperators(oSRequest: OSRequest) {
         return this.httpclient.post<OSResponse>(this.uIHelperService.CallWebAPIUrlNew("/Operator/GetOperators"), oSRequest);
@@ -103,7 +110,7 @@ export class RegisterService {
 
     GetFTAccount(fundTransferRequest: FundTransferRequest) {
        
-        return this.httpclient.post<TranResponse>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetFTAccount"), fundTransferRequest);
+        return this.httpclient.post<FundTransferResponse>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetFTAccount"), fundTransferRequest);
 
     }
 
@@ -131,6 +138,16 @@ export class RegisterService {
     GetRechargeReport(rRRequest: RRRequest) {
        
         return this.httpclient.post<StatementRequest>(this.uIHelperService.CallWebAPIUrlNew("/Recharge/GetRechargeReport"), rRRequest);
+    }
+    GetLocations(TenantId) {
+        // var data = "MobileNo=" + mobno;
+        // var url = this.uIHelperService.CallWebAPIUrlNew("/Tenant/GetTenantsByMobile") + "?" + data;
+        // return this.httpclient.get<Tenant>(url);
+        return this.httpclient.get<BankBranch>(this.uIHelperService.CallWebAPIUrlNew("/Banking/GetLocations?TenantId="+TenantId));
+    }
+    GetReversedVoucher(checkVoucher: CheckVoucher) {
+       
+        return this.httpclient.post<StatementRequest>(this.uIHelperService.CallWebAPIUrlNew("/Recharge/GetReversedVoucher"), checkVoucher);
     }
     countDown;
     //counter = 30*60;

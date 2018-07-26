@@ -14,7 +14,7 @@ export class FavouritesPage implements OnInit {
   title: string;
   @ViewChild(Navbar) navBar: Navbar;
 
-  constructor(public loadingController: LoadingController, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private storageService:StorageService, public loadingController: LoadingController, public constant: ConstantService, public navCtrl: NavController, public navParams: NavParams) {
 
   }
   ionViewDidLoad() {
@@ -32,35 +32,31 @@ export class FavouritesPage implements OnInit {
 
   ngOnInit() {
     this.ParentId = this.navParams.get('ParentId');
-    this.ActiveBankName = StorageService.GetActiveBankName();
-
+    this.ActiveBankName = this.storageService.GetActiveBankName();
+    var ParentId=this.ParentId;
     switch (this.ParentId) {
       case "S1":
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
         this.title = "Recharge";
         break;
       case "S2":
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
         this.title = "Postpaid Bill";
         break;
       case "S3":
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
         this.title = "DTH Recharge";
         break;
       case "S4":
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
         break;
       case "S5":
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
         this.title = "Electricity Bill";
         break;
       case "S6":
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
         break;
       default:
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
     }
-
+    var xx: Favourites = this.storageService.GetFavourite();
+    if(xx!=null){
+      this.favourites = xx.filter(function (obj) {return obj.ParentId===ParentId;})
+    }
     // if (StorageService.GetItem("Favourite") != null) {
     //   this.nkname = JSON.parse(StorageService.GetItem("Favourite")).NickName;
     // }
@@ -74,40 +70,14 @@ export class FavouritesPage implements OnInit {
   }
 
   OnDelete(order) {
+    var xx: Favourites = this.storageService.GetFavourite();
     var PId = order.Id;
+    xx = xx.filter(function (obj) {
+      return obj.Id !== PId;
+    });
     this.favourites = this.favourites.filter(function (obj) {
       return obj.Id !== PId;
     });
-
-    switch (this.ParentId) {
-      case "S1":
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S1, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S1));
-        break;
-      case "S2":
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S2, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S2));
-        break;
-      case "S3":
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S3, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S3));
-        break;
-      case "S4":
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S4, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S4));
-        break;
-      case "S5":
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S5, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S5));
-        break;
-      case "S6":
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S6, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S6));
-        break;
-      default:
-        StorageService.SetItem(this.constant.favouriteBasedOnParentId.Favourite_S7, JSON.stringify(this.favourites));
-        this.favourites = JSON.parse(StorageService.GetItem(this.constant.favouriteBasedOnParentId.Favourite_S7));
-    }
-
+    this.storageService.SetFavourite(JSON.stringify(xx));
   }
 }

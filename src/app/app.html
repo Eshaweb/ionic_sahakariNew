@@ -1,4 +1,4 @@
-<ion-menu [content]="mainContent">
+<ion-menu [content]="mainContent" *ngIf="showMenuOptions">
 
 
 
@@ -14,7 +14,7 @@
     <ion-list id="menu-list1">
       <ion-item-sliding>
 
-        <ion-item color="positive" menuClose="" on-click="goToPage()" id="menu-list-item1">
+        <ion-item color="positive" menuClose="" on-click="goToPage()" id="menu-list-item1" >
 
           <ion-icon name="home" item-left></ion-icon>
           Home
@@ -23,11 +23,11 @@
           <button ion-button color="positive"></button>
         </ion-item-options>
       </ion-item-sliding>
-      <ion-item color="positive" menuClose="" on-click="goToSetting()" id="menu-list-item2">
+      <ion-item color="positive" menuClose="" on-click="goToSetting()" id="menu-list-item2" *ngIf="showMenuOptions">
         <ion-icon name="settings" item-left></ion-icon>
         Settings
       </ion-item>
-      <ion-item color="positive" menuClose="" on-click="goToChangeBank()" id="menu-list-item3" *ngIf="showProfileAndChangeBank">
+      <ion-item color="positive" menuClose="" on-click="goToChangeBank()" id="menu-list-item3" *ngIf="showMenuOptions">
         <ion-icon name="repeat" item-left></ion-icon>
         Change Bank
       </ion-item>
@@ -35,9 +35,13 @@
         <ion-icon name="mail" item-left></ion-icon>
         Contact Us
       </ion-item>
-      <ion-item color="positive" menuClose="" on-click="goToMyProfile()" id="menu-list-item12" *ngIf="showProfileAndChangeBank">
+      <ion-item color="positive" menuClose="" on-click="goToMyProfile()" id="menu-list-item12" *ngIf="showMenuOptions">
         <ion-icon name="mail" item-left></ion-icon>
         My Account
+      </ion-item>
+      <ion-item color="positive" menuClose="" on-click="goToBankBranches()" id="menu-list-item12" *ngIf="showMenuOptions">
+        <ion-icon name="mail" item-left></ion-icon>
+        Bank Branches
       </ion-item>
     </ion-list>
   </ion-content>

@@ -1,0 +1,58 @@
+<!--
+  Generated template for the FundTransferConfirmPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title *ngIf="showConfirm">Confirm Fund Transfer </ion-title>
+    <ion-title *ngIf="showstatus">Fund Transfered </ion-title>
+    <ion-title *ngIf="showFailure">Fund Transfer Failured</ion-title>
+  </ion-navbar>
+  
+</ion-header>
+
+
+<ion-content padding>
+  <div *ngIf="showConfirm">
+      <div>
+    <ion-card>
+
+      <ion-card-header style="background-color:red">
+        From Account
+      </ion-card-header>
+      <ion-card-content>
+        Account Name: {{HeadName}}
+        <br/>
+        Acount No: {{AcNo}}
+      </ion-card-content>
+    </ion-card>
+    <br/>
+    <ion-card>
+
+      <ion-card-header style="background-color:red">
+        To Account
+      </ion-card-header>
+    <br/>
+    <ion-card-content>
+      Name: {{ToName}}
+      <br/>
+      Acount No: {{ToAcNo}}
+      <br/>
+      Amount: {{navparams.doFundTransfer.Amount}}
+    </ion-card-content>
+      <button id="register-button9" (click)="OnConfirm()" ion-button color="positive" block>
+        Confirm
+      </button>
+  </ion-card>
+  </div>
+  </div>
+  <div *ngIf="showstatus">
+    <h1>Fund transferred with Success</h1>
+  </div>
+  <div *ngIf="showFailure">
+    <h1>Fund transfer failured</h1>
+  </div>
+</ion-content>

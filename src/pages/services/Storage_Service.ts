@@ -6,6 +6,9 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { User } from '../LocalStorageTables/User';
 import { OS } from '../View Models/OS';
 import { ConstantService } from './Constants';
+import { OSResponse } from '../View Models/OSResponse';
+import { FavouriteItem } from '../LocalStorageTables/FavouriteItem';
+import { Favourites } from '../LocalStorageTables/Favourites';
 //import { OS } from '../LocalStorageTables/OS';
 
 
@@ -14,13 +17,13 @@ export class StorageService {
     constructor(public constant: ConstantService) {
 
     }
-    static SelfCareAcsBasedOnTenantID: SelfCareAc;
-    static SelfCareACs: SelfCareAc;
-    static digipartyname: string;
-    static digiparty: DigiParty;
-    static DigiParties: DigiParty;
-    static Tenant: Tenant;
-    static Tenants: Tenant;
+    // static SelfCareAcsBasedOnTenantID: SelfCareAc;
+    // static SelfCareACs: SelfCareAc;
+    // static digipartyname: string;
+    // //digiparty: DigiParty;
+    // static DigiParties: DigiParty;
+    Tenant: Tenant;
+    // static Tenants: Tenant;
     static SetAuthorizationData(auth: TokenParams): void {
         localStorage.setItem('userToken', JSON.stringify(auth));
 
@@ -42,92 +45,94 @@ export class StorageService {
 
         localStorage.removeItem(param);
     }
-    static GetActiveBankName(): string {
+     GetActiveBankName(): string {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
         var Tenants = this.GetTenant();
         //let x=Object.assign({},this.Tenants);
         this.Tenant = Tenants.find(function (obj: Tenant) { return obj.Id === ActiveTenantId; });
         return this.Tenant.Name;
     }
-    static Getdigipartyname(): string {
+    GetDigipartyBasedOnActiveTenantId(): DigiParty {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
-        var DigiParties = StorageService.GetDigiParty();
-        this.digiparty = DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-        return this.digiparty.Name;
+        var DigiParties = this.GetDigiParty();
+        return DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
     }
+    
     // static GetOSBasedOnParentID(param): OS {
     //     var GetOSBasedOnParentID=localStorage.getItem("OS("+param+")");
     //     return this.SelfCareAcsBasedOnTenantID = SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
     // }
     
-    static GetSelfCareAcsBasedOnTenantID(): SelfCareAc {
+     GetSelfCareAcsBasedOnTenantID(): SelfCareAc {
         var ActiveTenantId = this.GetUser().ActiveTenantId;
         var SelfCareACs = this.GetSelfCareAc();
-        return this.SelfCareAcsBasedOnTenantID = SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; })
+        return SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId; });
     }
-    static GetDigiPartyID(): string {
-        var ActiveTenantId = this.GetUser().ActiveTenantId;
-        var DigiParties = StorageService.GetDigiParty();
-        this.digiparty = DigiParties.find(function (obj) { return obj.TenantId === ActiveTenantId; });
-        return this.digiparty.DigiPartyId;
-    }
-
-    static GetUser(): User {
+    
+    GetUser(): User {
         return JSON.parse(localStorage.getItem("User")) as User;
     }
-    static GetTenant(): Tenant {
+    // static GetUser(): User {
+    //     return JSON.parse(localStorage.getItem("User")) as User;
+    // }
+    GetTenant(): Tenant {
         return JSON.parse(localStorage.getItem("Tenant")) as Tenant;
     }
-    static GetDigiParty(): DigiParty {
+    // static GetDigiParty(): DigiParty {
+    //     return JSON.parse(localStorage.getItem("DigiParty")) as DigiParty;
+    // }
+    GetDigiParty(): DigiParty {
         return JSON.parse(localStorage.getItem("DigiParty")) as DigiParty;
     }
-    static GetOS(): OS {
+    GetOS(): OS {
         return JSON.parse(localStorage.getItem("OS")) as OS;
     }
-    static GetSelfCareAc(): SelfCareAc {
+     GetSelfCareAc(): SelfCareAc {
         return JSON.parse(localStorage.getItem("SelfCareAc")) as SelfCareAc;
     }
-
-
-
-    static SetUser(param) {
+    GetOSResponse(): OSResponse {
+        return JSON.parse(localStorage.getItem("OSResponse")) as OSResponse;
+    }
+    // GetFavourite(): FavouriteItem {
+    //     return JSON.parse(localStorage.getItem("Favourite")) as FavouriteItem;
+    // }
+    GetFavourite(): Favourites {
+        return JSON.parse(localStorage.getItem("Favourite")) as Favourites;
+    }
+    SetUser(param) {
         localStorage.setItem("User", param);
     }
-    static SetTenant(param) {
+    SetTenant(param) {
         localStorage.setItem("Tenant", param);
     }
-    static SetDigiParty(param) {
+    SetDigiParty(param) {
         localStorage.setItem("DigiParty", param);
     }
-    static SetOS(param) {
+    SetOS(param) {
         localStorage.setItem("OS", param);
     }
-    static SetSelfCareAc(param) {
+    SetSelfCareAc(param) {
         localStorage.setItem("SelfCareAc", param);
     }
-
+    SetOSResponse(param) {
+        localStorage.setItem("OSResponse", param);
+    }
+    SetFavourite(param) {
+        localStorage.setItem("Favourite", param);
+    }
     RemoveRecordsForLogout() {
         localStorage.removeItem("OS");
         localStorage.removeItem("Tenant");
         localStorage.removeItem("DigiParty");
         StorageService.RemoveItem("SelfCareAc");
-        localStorage.removeItem("userToken");
 
-        localStorage.removeItem(this.constant.favouriteBasedOnParentId.Favourite_S1);
-        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S2);
-        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S3);
-        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S4);
-        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S5);
-        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S6);
-        StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S7);
-
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S1);
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S2);
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S3);
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S4);
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S5);
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S6);
-        StorageService.RemoveItem(this.constant.osBasedOnParentId.OS_S7);
+        //localStorage.removeItem(this.constant.favouriteBasedOnParentId.Favourite_S1);
+        // StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S2);
+        // StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S3);
+        // StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S4);
+        // StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S5);
+        // StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S6);
+        // StorageService.RemoveItem(this.constant.favouriteBasedOnParentId.Favourite_S7);
 
     }
 }

@@ -48,6 +48,9 @@ import { RechargeReportPage } from '../pages/recharge-report/recharge-report';
 import { PrepaidConfirmPage } from '../pages/prepaid-confirm/prepaid-confirm';
 import { UISercice } from '../pages/services/UIService';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
+import { BankBranchesPage } from '../pages/bank-branches/bank-branches';
+import { FundTransferConfirmPage } from '../pages/fund-transfer-confirm/fund-transfer-confirm';
+import { ModalPage } from '../pages/modal/modal';
 
 @NgModule({
   declarations: [
@@ -73,7 +76,10 @@ import { MyProfilePage } from '../pages/my-profile/my-profile';
     RechargeReportPage,
     PrepaidConfirmPage,
     FormatTimePipe,
-    MyProfilePage
+    MyProfilePage,
+    BankBranchesPage,
+    FundTransferConfirmPage,
+    ModalPage
   ],
   imports: [HttpModule,HttpClientModule,BrowserAnimationsModule,
     BrowserModule,
@@ -111,7 +117,10 @@ import { MyProfilePage } from '../pages/my-profile/my-profile';
     BasicPage,
     RechargeReportPage,
     PrepaidConfirmPage,
-    MyProfilePage
+    MyProfilePage,
+    BankBranchesPage,
+    FundTransferConfirmPage,
+    ModalPage
   ],
   providers: [AuthGuard,Toast, {
     provide : HTTP_INTERCEPTORS,

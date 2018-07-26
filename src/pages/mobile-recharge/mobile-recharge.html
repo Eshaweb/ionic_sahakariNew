@@ -102,9 +102,12 @@
             </ion-select>  
           </ion-item>
           <ion-item id="mobileRecharge-input4">
-            <ion-label floating>
+            <ion-label *ngIf="ShowLabel" floating>
               Consumer Number
             </ion-label>
+            <ion-label floating>
+              {{label}}
+             </ion-label>
             <ion-input type="text" placeholder="" formControlName="subscriptionId" maxlength="10" [(ngModel)]="rechargeitem.SubscriptionId" (keyup)="OnSubscriberID($event.target.value)"></ion-input>     
           </ion-item>
           <p style="color:red;">{{subscriptionIdMessage}}</p>
@@ -115,16 +118,19 @@
         <ion-label floating>
           Amount
         </ion-label>
-        <ion-input type="text" placeholder="" formControlName="amount" [(ngModel)]="rechargeitem.Amount" (keyup)="onAmount($event)" minlength="4"></ion-input>
+        <!-- <ion-input type="text" placeholder="" formControlName="amount" [(ngModel)]="rechargeitem.Amount" (keyup)="onAmount($event)" minlength="4"></ion-input> -->
+        <ion-input type="text" placeholder="" formControlName="amount" [(ngModel)]="rechargeitem.Amount"></ion-input>
         <button *ngIf="prepaid" ion-button clear item-end (click)="OnViewPlans()" type="button" [disabled]="!isStateEnabled||!isOperatorEnabled">View Plans</button>
         <!-- <ion-card-content item-end>of {{operatorname}}-{{statename}}</ion-card-content> -->
     </ion-item>
+    <p style="color:red;">{{amountMessage}}</p>
 
       <ion-item id="mobileRecharge-input7">
         <ion-label floating>
           Nick Name
         </ion-label>
-        <ion-input type="text" placeholder="" formControlName="nickname" [(ngModel)]="rechargeitem.NickName" (keyup)="onNickName($event)" minlength="2"></ion-input>
+        <!-- <ion-input type="text" placeholder="" formControlName="nickname" [(ngModel)]="rechargeitem.NickName" (keyup)="onNickName($event)" minlength="2"></ion-input> -->
+        <ion-input type="text" placeholder="" formControlName="nickname" [(ngModel)]="rechargeitem.NickName"></ion-input>
       </ion-item>
       <p style="color:red;">{{nicknameMessage}}</p>
       
@@ -137,12 +143,10 @@
           : While we support most recharges, we request you to verify with your operator once before proceding
         </p>
       </div>
-        <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled">
+        <!-- <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isStateEnabled||!isOperatorEnabled||!isMobileNoEntered||!isNickNameEntered||!isAmountEntered||!isButtonEnabled"> -->
+          <button id="mobileRecharge-button3" ion-button color="positive" block [disabled]="!isStateEnabled||!isOperatorEnabled||!isMobileNoEntered||MobileRechargeform.invalid"> 
           Next
       </button>
   </form>
     <button ion-button clear item-centre (click)="OnGoBack()">GoBack</button>       
-<div *ngIf="showSuccess">
-<h1>Recharge is Successful...</h1>
-</div>
 </ion-content>

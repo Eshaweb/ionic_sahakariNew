@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 //import { AutoLogoutService } from '../services/AutoLogOutService';
 import { StorageService } from '../services/Storage_Service';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
@@ -11,6 +11,9 @@ import { FundTransferDone } from '../View Models/FundTransferDone';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 import { ToastrService } from 'ngx-toastr';
 import { UISercice } from '../services/UIService';
+import { ChangeBankPage } from '../change-bank/change-bank';
+import { BankingPage } from '../banking/banking';
+import { FundTransferConfirmPage } from '../fund-transfer-confirm/fund-transfer-confirm';
 
 @Component({
   selector: 'page-fund-transfer',
@@ -21,10 +24,15 @@ export class FundTransferPage implements OnInit {
   mobileMessage: string;
   formgroup2: FormGroup;
   formgroup1: FormGroup;
+  Showthis: boolean;
+  HeadName: string;
+  AcNo: string;
+  ToName: string;
+  ToAcNo: string;
 
 
   // constructor(private regService : RegisterService, public formbuilder:FormBuilder,public constant:ConstantService,private autoLogoutService: AutoLogoutService,public navCtrl: NavController) {
-  constructor(private uiService: UISercice, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public formbuilder: FormBuilder, public navCtrl: NavController) {
+  constructor(private storageService:StorageService, private alertCtrl: AlertController, private uiService: UISercice, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public formbuilder: FormBuilder, public navCtrl: NavController) {
 
     //StorageService.SetItem('lastAction', Date.now().toString());
     this.formgroup1 = formbuilder.group({
@@ -61,42 +69,51 @@ export class FundTransferPage implements OnInit {
 
   ShowHide: boolean;
   disablenextwithoutToAccount: boolean;
-  disablenextwithoutFromAccount: boolean;
   ActiveBankName: string;
   selfCareAC: SelfCareAc;
   SelfCareACs: SelfCareAc;
-  ShowManyAccounts: boolean;
-  SelfCareAcsBasedOnTenantID: SelfCareAc;
+  SelfCareAcBasedOnTenantID: SelfCareAc;
   ngOnInit() {
+    this.Showthis=true;
     this.ShowHide = true;
-    this.disablenextwithoutFromAccount = true;
     this.disablenextwithoutToAccount = true;
-    var ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-    this.ActiveBankName = StorageService.GetActiveBankName();
-    var SelfCareACs = StorageService.GetSelfCareAc();
-    this.SelfCareAcsBasedOnTenantID = SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId && obj.AcActId == "#SB"; })
-    this.ShowManyAccounts = true;
-  }
-
-  errormsg: string;
-  AcSubId: string;
-  OnFromAccount(AcSubId) {
-    this.AcSubId = AcSubId;
-    this.errormsg = null;
-    var SelfCareACs = StorageService.GetSelfCareAc();
-    this.selfCareAC = SelfCareACs.find(function (obj) { return obj.AcSubId === AcSubId && obj.AcActId == "#SB"; });
-    if (this.selfCareAC == null) {
-      this.errormsg = "Through Pigmy Account Fund can not be transferred";
-    } else {
-      this.ShowManyAccounts = false;
-      this.disablenextwithoutFromAccount = false;
-      return this.selfCareAC;
+    var ActiveTenantId = this.storageService.GetUser().ActiveTenantId;
+    this.ActiveBankName = this.storageService.GetActiveBankName();
+    var SelfCareACs = this.storageService.GetSelfCareAc();
+    var SelfCareAcBasedOnTenantID = SelfCareACs.filter(function (obj) { return obj.TenantId === ActiveTenantId && obj.AcActId == "#SB"; })
+    if (SelfCareAcBasedOnTenantID.length==0) {
+      this.Showthis = false;
+      this.ShowHide=false;
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: "Fund Transfer is not Available Since there is no SB Account",
+        buttons: [{
+          text: 'OK',
+          handler: () => {this.navCtrl.pop();}
+        }]
+      });
+      alert.present();
+    }
+    else{
+      this.SelfCareAcBasedOnTenantID=SelfCareAcBasedOnTenantID;
+      this.HeadName=this.SelfCareAcBasedOnTenantID[0].HeadName;
+      this.AcNo=this.SelfCareAcBasedOnTenantID[0].AcNo;
     }
   }
-
+  OnBack(){
+    this.navCtrl.push(BankingPage);
+  }
+  OnChangeBank(){
+    var isFromFundTransfer:boolean=true;
+    //this.navCtrl.push(ChangeBankPage,{'isFromFundTransfer':isFromFundTransfer});
+    this.navCtrl.push(ChangeBankPage,{'isFromFundTransfer':isFromFundTransfer}).then(() => {
+      const startIndex = this.navCtrl.getActive().index - 1;
+      this.navCtrl.remove(startIndex, 1);
+    });
+  }
   GetSelfCareAcByTenantID(ActiveTenantId) {
-    var AcSubId = this.AcSubId;
-    var SelfCareACs = StorageService.GetSelfCareAc();
+    var AcSubId = this.SelfCareAcBasedOnTenantID[0].AcSubId;
+    var SelfCareACs = this.storageService.GetSelfCareAc();
     // this.selfCareAC=this.SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId&&obj.AcActId=="#SB"&&obj.AcSubId===this.AcSubId; });
     this.selfCareAC = SelfCareACs.find(function (obj) { return obj.TenantId === ActiveTenantId && obj.AcSubId === AcSubId; });
     return this.selfCareAC;
@@ -109,33 +126,33 @@ export class FundTransferPage implements OnInit {
     });
     loading.present();
     var fundTransferRequest = {
-      TenantId: StorageService.GetUser().ActiveTenantId,
+      TenantId: this.storageService.GetUser().ActiveTenantId,
       MobileNo: this.formgroup1.get('mobilenum').value
     }
     this.registerService.GetFTAccount(fundTransferRequest).subscribe((data: any) => {
       this.fundTransferResponse = data;
+      this.ToName=this.fundTransferResponse.Name;
+      this.ToAcNo=this.fundTransferResponse.AcNo;
       this.disablenextwithoutToAccount = false;
-    });
-    loading.dismiss();
+      loading.dismiss();
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present(); 
+      loading.dismiss();
+   });
+    
   }
 
-  Rs: string;
-  confirm: FundTransferResponse;
   OnNext() {
-    this.confirm = this.fundTransferResponse;
-    this.Rs = this.formgroup2.get('amount').value;
-    this.ShowHide = false;
-  }
-  showstatus: boolean;
-  OnConfirm() {
-    let ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-    let loading = this.loadingController.create({
-      content: 'Transferring the Fund..'
-    });
-    loading.present();
+    var ActiveTenantId = this.storageService.GetUser().ActiveTenantId;
     const doFundTransfer = {
       TenantId: ActiveTenantId,
-      DigiPartyId: StorageService.GetDigiPartyID(),
+      DigiPartyId: this.storageService.GetDigipartyBasedOnActiveTenantId().DigiPartyId,
       FromAcMastId: this.GetSelfCareAcByTenantID(ActiveTenantId).AcHeadId,
       FromAcSubId: this.GetSelfCareAcByTenantID(ActiveTenantId).AcSubId,
       FromLocId: this.GetSelfCareAcByTenantID(ActiveTenantId).LocId,
@@ -145,11 +162,8 @@ export class FundTransferPage implements OnInit {
       Amount: this.formgroup2.get('amount').value,
       ToAcNo: this.fundTransferResponse.AcNo
     }
-    this.registerService.FundTransfer(doFundTransfer).subscribe((data: any) => {
-      this.confirm = null;
-      this.toastr.success('Fund Transferred with ' + data.Status, 'Success!');
-      this.showstatus = true;
-    });
-    loading.dismiss();
+     this.navCtrl.push(FundTransferConfirmPage,{doFundTransfer,'AcSubId':this.SelfCareAcBasedOnTenantID[0].AcSubId,'HeadName':this.HeadName,'AcNo':this.AcNo,'ToName':this.ToName,'ToAcNo':this.ToAcNo});
+    // this.navCtrl.push(FundTransferConfirmPage,{'doFundTransfer':doFundTransfer});
   }
+  
 }

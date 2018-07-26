@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Close</button>
+    </ion-buttons>
+    <ion-title>Reversed Voucher Detail</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div [hidden]="!myParam">
+    <p>Reversal Transaction ID: {{VendorExtCode}}</p>
+    <p>Amount: {{Amount|currency:'INR'}}</p>
+    <p>Date: {{Date|date:'dd/MM/yyyy'}}</p>
+    <p>Remarks: {{Remarks}}</p>
+  </div>
+  <div [hidden]="myParam">
+    <p>No parameters passed.</p>
+  </div>
+  <button ion-button color="danger" full (click)="dismiss()">Close</button>
+
+</ion-content>

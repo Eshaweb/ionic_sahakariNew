@@ -13,6 +13,7 @@ import { RegisterService } from '../pages/services/app-data.service';
 import { PagePage } from '../pages/page/page';
 import { ConstantService } from '../pages/services/Constants';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
+import { BankBranchesPage } from '../pages/bank-branches/bank-branches';
 
 
 @Component({
@@ -24,9 +25,9 @@ export class MyApp {
   ActiveBankName: string;
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any;
-  showProfileAndChangeBank: boolean;
+  showMenuOptions: boolean;
   // constructor(platform: Platform, statusBar: StatusBar, private reg:RegisterPage, log:LoginPage, splashScreen: SplashScreen) {
-  constructor(private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
+  constructor(private storageService:StorageService, private event: Events, public constant: ConstantService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private regService: RegisterService) {
     this.event.subscribe('UNAUTHORIZED', () => {
       this.navCtrl.push(LoginPage);
     });
@@ -40,24 +41,22 @@ export class MyApp {
       //localStorage.clear();
       //localStorage.removeItem('userToken');
       this.event.subscribe('REFRESH_DIGIPARTYNAME', () => {  
-        this.ActiveBankName = StorageService.GetActiveBankName();
-          this.digipartyname = StorageService.Getdigipartyname();
-          this.showProfileAndChangeBank=true;
+        this.ActiveBankName = this.storageService.GetActiveBankName();
+          this.digipartyname = this.storageService.GetDigipartyBasedOnActiveTenantId().Name;
+          this.showMenuOptions=true;
         });
-      if (StorageService.GetUser() == null) {
+      if (this.storageService.GetUser() == null) {
         this.rootPage = RegisterPage;
-        
-
       }
-      else if (StorageService.GetUser() != null&&localStorage.getItem('userToken') != null){
-        this.rootPage = PagePage;
-        this.ActiveBankName = StorageService.GetActiveBankName();
-          this.digipartyname = StorageService.Getdigipartyname();
-          this.showProfileAndChangeBank=true;
-        }
+      // else if (this.storageService.GetUser() != null&&localStorage.getItem('userToken') != null){
+      //   this.rootPage = PagePage;
+      //   this.ActiveBankName = this.storageService.GetActiveBankName();
+      //     this.digipartyname = this.storageService.GetDigipartyBasedOnActiveTenantId().Name;
+      //     this.showProfileAndChangeBank=true;
+      //   }
         else{
           this.rootPage=LoginPage;
-          this.showProfileAndChangeBank=false;
+          this.showMenuOptions=false;
 
         }
     });
@@ -86,5 +85,9 @@ export class MyApp {
   goToMyProfile(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(MyProfilePage);
+  }
+  goToBankBranches(params) {
+    if (!params) params = {};
+    this.navCtrl.setRoot(BankBranchesPage);
   }
 }

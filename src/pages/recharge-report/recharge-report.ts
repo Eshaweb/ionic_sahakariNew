@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { OS } from '../View Models/OS';
 import { StorageService } from '../services/Storage_Service';
 import { RegisterService } from '../services/app-data.service';
 import { RRRequest } from '../View Models/RRRequest';
 import { RRResponse } from '../View Models/RRResponse';
 import { ToastrService } from 'ngx-toastr';
+import { CheckVoucherResult } from '../View Models/CheckVoucherResult';
+import { ModalPage } from '../modal/modal';
 
 /**
  * Generated class for the RechargeReportPage page.
@@ -23,18 +25,23 @@ export class RechargeReportPage implements OnInit {
   ActiveTenantId: string;
   // categories: OS[] = [];
   categories: OS;
-  constructor(public loadingController: LoadingController, private toastr: ToastrService, private registerService: RegisterService, public navCtrl: NavController, public navParams: NavParams) {
+  showFailureButton: boolean;
+  checkVoucherResult: CheckVoucherResult;
+  showReport: boolean;
+  showReversal: boolean;
+  constructor(private storageService:StorageService, public modalCtrl: ModalController,private alertCtrl: AlertController, public loadingController: LoadingController, private toastr: ToastrService, private registerService: RegisterService, public navCtrl: NavController, public navParams: NavParams) {
 
   }
   ngOnInit() {
-    this.categories = StorageService.GetOS();
-    this.ActiveBankName = StorageService.GetActiveBankName();
+    this.categories = this.storageService.GetOS();
+    this.ActiveBankName = this.storageService.GetActiveBankName();
+    this.showReport=true;
   }
   rRResponse: RRResponse;
 
   ObjChanged(event) {
-    var ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-    var digiPartyId = StorageService.GetDigiPartyID();
+    var ActiveTenantId = this.storageService.GetUser().ActiveTenantId;
+    var digiPartyId = this.storageService.GetDigipartyBasedOnActiveTenantId().DigiPartyId;
     let loading = this.loadingController.create({
       content: 'Please wait till the screen loads'
     });
@@ -47,12 +54,48 @@ export class RechargeReportPage implements OnInit {
     }
     this.registerService.GetRechargeReport(rRRequest).subscribe((data: any) => {
       this.rRResponse = data;
-
+      loading.dismiss();
     }, (error) => {
-      this.toastr.error(error.message, 'Error!')
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
+      loading.dismiss();
     });
-    loading.dismiss();
   }
+  OnShowReverse(Id){
+    //this.showReport=false;
+    var ActiveTenantId = this.storageService.GetUser().ActiveTenantId;
+    let loading = this.loadingController.create({
+      content: 'Please wait till the screen loads'
+    });
+    loading.present();
+    const checkVoucher = {
+      TenantId: ActiveTenantId,
+      DigiTranLogId:Id
+    }
+    this.registerService.GetReversedVoucher(checkVoucher).subscribe((data: any) => {
+      this.checkVoucherResult = data;
+//this.showReversal=true;
 
-
+this.openModalWithParams();
+      loading.dismiss();
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
+      loading.dismiss();
+    });
+  }
+  openModalWithParams() {
+    let myModal = this.modalCtrl.create(ModalPage, { 'myParam': this.checkVoucherResult });
+    myModal.present();
+  }
 }

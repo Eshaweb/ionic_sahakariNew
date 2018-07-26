@@ -5,17 +5,17 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { StorageService } from '../services/Storage_Service';
 import { NavController, Events } from "ionic-angular";
+import { RegisterService } from "../services/app-data.service";
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(private event: Events,private router: Router, private localstorageService:StorageService) { 
+    constructor(private registerService: RegisterService, private storageService:StorageService,private event: Events,private router: Router, private localstorageService:StorageService) { 
 
 
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log("Hi, I'm interceptor");
-        console.log(req);
+       // console.log(req);
         if (req.headers.get('No-Auth') == "True"){
             return next.handle(req.clone());
         }
@@ -33,9 +33,12 @@ export class AuthInterceptor implements HttpInterceptor {
         // }
 
 
-        if (localStorage.getItem('userToken') != null) {
-            const clonedreq = req.clone({
-                headers: req.headers.set("Authorization", "Bearer " + localStorage.getItem('userToken'))
+        //if (localStorage.getItem('userToken') != null) {
+       if (this.registerService.userToken != null) {  
+        const clonedreq = req.clone({
+                // headers: req.headers.set("Authorization", "Bearer " + localStorage.getItem('userToken'))
+                headers: req.headers.set("Authorization", "Bearer " + this.registerService.userToken)
+
             });
             return next.handle(clonedreq)
                 .do(
@@ -48,7 +51,9 @@ export class AuthInterceptor implements HttpInterceptor {
                     }
                 );
         }
-        else if(localStorage.getItem('User')==null&&localStorage.getItem('userToken')== null){
+        //else if(localStorage.getItem('User')==null&&localStorage.getItem('userToken')== null){
+        else if(this.storageService.GetUser()==null&&this.registerService.userToken== null){
+            
             const clonedreq = req.clone({
                 headers: req.headers.set("Authorization", "Bearer ")
             });

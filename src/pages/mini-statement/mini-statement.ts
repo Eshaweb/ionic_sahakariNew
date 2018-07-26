@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { StatementRequest } from '../View Models/StatementRequest';
 import { RegisterService } from '../services/app-data.service';
 import { MiniStatement } from '../View Models/MiniStatement';
 import { StatementItem } from '../View Models/StatementItem';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'page-mini-statement',
   templateUrl: 'mini-statement.html'
 })
 export class MiniStatementPage implements OnInit {
-  ActiveTenantId = StorageService.GetUser().ActiveTenantId;
-  constructor(public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
+  ActiveTenantId = this.storageService.GetUser().ActiveTenantId;
+  label: string;
+  showCredited: boolean;
+  ShowDebited: boolean;
+  constructor(private storageService:StorageService, private alertCtrl: AlertController, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
 
   }
   ActiveBankName: string;
@@ -23,8 +27,8 @@ export class MiniStatementPage implements OnInit {
   ngOnInit() {
     this.ShowHide = true;
     this.HideMsg=true;
-    this.ActiveBankName =StorageService.GetActiveBankName();
-    this.SelfCareAcsBasedOnTenantID =StorageService.GetSelfCareAcsBasedOnTenantID();
+    this.ActiveBankName =this.storageService.GetActiveBankName();
+    this.SelfCareAcsBasedOnTenantID =this.storageService.GetSelfCareAcsBasedOnTenantID();
   }
 
   statementItem: StatementItem;
@@ -44,10 +48,19 @@ export class MiniStatementPage implements OnInit {
       this.balance = data;
       this.miniStatement = data;
       this.statementItem = data.StatementItems;
+      loading.dismiss();
+    }, (error) => {
+      this.toastr.error(error.message, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.message,
+        buttons: ['OK']
+      });
+      alert.present();
+      loading.dismiss();
     });
     this.ShowHide = false;
     this.HideMsg=false;
-    loading.dismiss();
   }
 
 }

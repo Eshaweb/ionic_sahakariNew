@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { StorageService } from '../services/Storage_Service';
 import { StatementRequest } from '../View Models/StatementRequest';
 import { RegisterService } from '../services/app-data.service';
 import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'page-balance-enquiry',
@@ -11,7 +12,7 @@ import { SelfCareAc } from '../LocalStorageTables/SelfCareAc';
 })
 export class BalanceEnquiryPage implements OnInit {
 
-    constructor(public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
+    constructor(private storageService:StorageService, private alertCtrl: AlertController, private toastr: ToastrService, public loadingController: LoadingController, private registerService: RegisterService, public navCtrl: NavController) {
     }
     ActiveBankName: string;
     HideMsg: boolean;
@@ -20,8 +21,8 @@ export class BalanceEnquiryPage implements OnInit {
     ngOnInit() {
         this.HideMsg = true;
         this.ShowHide = true;
-        this.ActiveBankName = StorageService.GetActiveBankName();
-        this.SelfCareAcsBasedOnTenantID = StorageService.GetSelfCareAcsBasedOnTenantID();
+        this.ActiveBankName = this.storageService.GetActiveBankName();
+        this.SelfCareAcsBasedOnTenantID = this.storageService.GetSelfCareAcsBasedOnTenantID();
     }
     balance: string;
     OnGetAccountBalance(AcHeadId, AcSubId) {
@@ -32,12 +33,22 @@ export class BalanceEnquiryPage implements OnInit {
         var statementRequest = {
             AcMastId: AcHeadId,
             AcSubId: AcSubId,
-            TenantId: StorageService.GetUser().ActiveTenantId
+            TenantId: this.storageService.GetUser().ActiveTenantId
         }
         this.registerService.GetAccountBalance(statementRequest).subscribe((data: any) => {
             this.balance = data;
+            //alert(data.Balance);
             loading.dismiss();
-        });
+        }, (error) => {
+            this.toastr.error(error.message, 'Error!');
+            var alert = this.alertCtrl.create({
+                title: "Error Message",
+                subTitle: error.message,
+                buttons: ['OK']
+              });
+              alert.present();
+              loading.dismiss();
+          });
         this.ShowHide = false;
         this.HideMsg = false;
     }

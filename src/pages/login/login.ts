@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, NavParams } from 'ionic-angular';
+import { NavController, LoadingController, NavParams, AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { MobileRechargePage } from '../mobile-recharge/mobile-recharge';
 import { BankingPage } from '../banking/banking';
@@ -23,7 +23,7 @@ export class LoginPage implements OnInit {
   passwordMessage: string;
   formGroup: FormGroup;
 
-  constructor(private uiService: UISercice, public navParams: NavParams, private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
+  constructor(private storageService:StorageService, private alertCtrl: AlertController, private uiService: UISercice, public navParams: NavParams, private toastrService: ToastrService, public loadingController: LoadingController, public formbuilder: FormBuilder, private registerService: RegisterService, public navCtrl: NavController) {
     this.formGroup = formbuilder.group({
       password: ['', [Validators.required, Validators.minLength(4)]]
     });
@@ -45,24 +45,24 @@ export class LoginPage implements OnInit {
   };
   ActiveBankName: string;
   ngOnInit() {
-    if (StorageService.GetTenant() != null) {
-      this.ActiveBankName = StorageService.GetActiveBankName();
+    if (this.storageService.GetTenant() != null) {
+      this.ActiveBankName = this.storageService.GetActiveBankName();
     }
 
   }
-  
-  userName = StorageService.GetUser().UserName;
-  uniqueKey = StorageService.GetUser().UniqueKey;
+
+  userName = this.storageService.GetUser().UserName;
+  uniqueKey = this.storageService.GetUser().UniqueKey;
   OnLogin() {
     let loading = this.loadingController.create({
       content: 'Wait for a second..'
     });
     loading.present();
-    var OS = StorageService.GetOS();
+    var OS = this.storageService.GetOS();
     this.registerService.loginbyHttpClient(this.userName, this.formGroup.get('password').value, this.uniqueKey).subscribe((data: any) => {
       this.registerService.userToken = data.access_token;
-      StorageService.SetItem('userToken', data.access_token);
-
+      //StorageService.SetItem('userToken', data.access_token);
+      this.sendToken(data.access_token);
       if (OS == null) {
         let loading = this.loadingController.create({
           content: 'Syncing Operators and Services'
@@ -70,14 +70,25 @@ export class LoginPage implements OnInit {
         loading.present();
         this.registerService.GetServices().subscribe((data: any) => {
           var oS = JSON.stringify(data);
-          StorageService.SetOS(oS);
+          this.storageService.SetOS(oS);
+          loading.dismiss();
+        }, (error) => {
+          this.toastrService.error(error.message, 'Error!');
+          loading.dismiss();
+          var alert = this.alertCtrl.create({
+            title: "Error Message",
+            subTitle: error.message,
+            buttons: ['OK']
+          });
+          alert.present();
+
         });
-        loading.dismiss();
+
       }
 
-      let tenants = StorageService.GetTenant();
-      let DigiParties = StorageService.GetDigiParty();
-      let SelfCareAcs = StorageService.GetSelfCareAc();
+      let tenants = this.storageService.GetTenant();
+      let DigiParties = this.storageService.GetDigiParty();
+      let SelfCareAcs = this.storageService.GetSelfCareAc();
       if (tenants == null || DigiParties == null || SelfCareAcs == null) {
         let loadingnew = this.loadingController.create({
           content: 'Syncing Accounts'
@@ -86,19 +97,32 @@ export class LoginPage implements OnInit {
         this.callservices();
         loadingnew.dismiss();
       }
-      else{
+      else {
         this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
       }
+      loading.dismiss();
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      //this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: 'Incorrect Password',
+        buttons: ['OK']
+      });
+      alert.present();
+      loading.dismiss();
+      this.navCtrl.setRoot(LoginPage);   
     });
-    loading.dismiss();
   }
-
+sendToken(token:string){
+  // this.registerService.GetToken(token).subscribe((data:any)=>{
+    
+  // });
+  this.registerService.GetToken(token);
+}
   callservices() {
     var addBankRequest = {
-      TenantId: StorageService.GetUser().ActiveTenantId,
-      MobileNo: StorageService.GetUser().UserName
+      TenantId: this.storageService.GetUser().ActiveTenantId,
+      MobileNo: this.storageService.GetUser().UserName
     }
     this.registerService.AddBank(addBankRequest).subscribe((data: any) => {
 
@@ -108,7 +132,7 @@ export class LoginPage implements OnInit {
         Address: data.Tenant.Address,
         IconHtml: data.Tenant.IconHtml
       }
-      StorageService.SetTenant(JSON.stringify([tenant]));
+      this.storageService.SetTenant(JSON.stringify([tenant]));
 
       var digiParty = {
         Id: data.DigiPartyId,
@@ -118,14 +142,20 @@ export class LoginPage implements OnInit {
         TenantId: data.TenantId,  //ActiveTenantId
         Name: data.Name
       }
-      StorageService.SetDigiParty(JSON.stringify([digiParty]));
+      this.storageService.SetDigiParty(JSON.stringify([digiParty]));
 
-      StorageService.SetSelfCareAc(JSON.stringify(data.SelfCareAcs));
+      this.storageService.SetSelfCareAc(JSON.stringify(data.SelfCareAcs));
 
       this.navCtrl.setRoot(PagePage, { 'ActiveBankName': this.ActiveBankName });
 
     }, (error) => {
-      this.toastrService.error(error.error.ExceptionMessage, 'Error!')
+      this.toastrService.error(error.error.ExceptionMessage, 'Error!');
+      var alert = this.alertCtrl.create({
+        title: "Error Message",
+        subTitle: error.error.ExceptionMessage,
+        buttons: ['OK']
+      });
+      alert.present();
     });
 
   }

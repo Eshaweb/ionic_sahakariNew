@@ -15,7 +15,7 @@ export class RechargePage implements OnInit {
 
   ActiveBankName: string;
   NewCategories:OS;
-  constructor(public constant:ConstantService,public navCtrl: NavController) {
+  constructor(private storageService:StorageService, public constant:ConstantService,public navCtrl: NavController) {
   }
   ionViewDidLoad() {
     this.setBackButtonAction()
@@ -26,10 +26,10 @@ export class RechargePage implements OnInit {
    }
   }
   ngOnInit(){
-var categories=StorageService.GetOS();
+var categories=this.storageService.GetOS();
 this.NewCategories=categories.filter(function (obj) { return obj.Id === "S1"||obj.Id === "S2"||obj.Id === "S3"||obj.Id === "S5"; });
 
-   this.ActiveBankName=StorageService.GetActiveBankName();
+   this.ActiveBankName=this.storageService.GetActiveBankName();
   }
   //ParentId: string;
   OnOperatorSelection(ParentId){
